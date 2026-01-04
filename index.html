@@ -5,59 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>ARSLAN PRO — HUB</title>
 
-  <link rel="icon" type="image/png" href="./icon-192.png">
-  <link rel="manifest" href="./manifest.webmanifest">
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0b0f14">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+  <!-- ICON (logo) -->
+  <link rel="icon" type="image/png" href="icon-192.png">
+
   <style>
     :root{
-      --bg:#f5f7fb; --bg2:#eef3fb;
-      --glass: rgba(255,255,255,.72);
-      --panel: rgba(255,255,255,.94);
-      --text:#0b1220;
-      --muted:#51657a;
-      --line: rgba(12,18,32,.10);
-      --soft: rgba(12,18,32,.04);
-
-      --accent:#16a34a;  /* green */
-      --accent2:#0ea5e9; /* cyan */
-      --accent3:#8b5cf6; /* violet */
-
-      --shadow: 0 22px 70px rgba(2, 6, 23, .12);
-      --shadow2: 0 12px 34px rgba(2, 6, 23, .10);
-      --shadow3: 0 8px 18px rgba(2, 6, 23, .08);
-
-      --radius: 26px;
-      --radius2: 20px;
-      --radius3: 16px;
-
-      --focus: 0 0 0 4px rgba(14,165,233,.18);
-      --safeBottom: env(safe-area-inset-bottom, 0px);
-      --safeTop: env(safe-area-inset-top, 0px);
-
-      --toastBg: rgba(255,255,255,.85);
-      --toastText: var(--text);
-    }
-
-    [data-theme="night"]{
-      --bg:#070b11; --bg2:#0a1220;
-      --glass: rgba(15,23,42,.64);
-      --panel: rgba(15,23,42,.92);
-      --text:#eaf2ff;
-      --muted:#a7b6c8;
+      --bg:#0b0f14;
+      --panel: rgba(255,255,255,.06);
       --line: rgba(255,255,255,.10);
-      --soft: rgba(255,255,255,.05);
-
+      --text:#f2f6ff;
+      --muted: rgba(242,246,255,.65);
+      --accent: #16a34a;
+      --accent2:#0ea5e9;
       --shadow: 0 22px 70px rgba(0,0,0,.55);
-      --shadow2: 0 12px 34px rgba(0,0,0,.35);
-      --shadow3: 0 8px 18px rgba(0,0,0,.25);
-
-      --focus: 0 0 0 4px rgba(56,189,248,.20);
-
-      --toastBg: rgba(15,23,42,.86);
-      --toastText: var(--text);
+      --r: 22px;
+      --safeB: env(safe-area-inset-bottom, 0px);
+      --safeT: env(safe-area-inset-top, 0px);
+    }
+    [data-theme="day"]{
+      --bg:#f5f7fb;
+      --panel: rgba(255,255,255,.88);
+      --line: rgba(12,18,32,.12);
+      --text:#0b1220;
+      --muted: rgba(11,18,32,.62);
+      --shadow: 0 22px 70px rgba(2,6,23,.12);
     }
 
     *{box-sizing:border-box}
@@ -67,1164 +44,500 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color: var(--text);
       background:
-        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.22), transparent 58%),
-        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.18), transparent 56%),
-        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.14), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
+        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.18), transparent 60%),
+        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.16), transparent 60%),
+        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg));
     }
 
     .wrap{
       min-height:100%;
       display:grid;
       place-items:center;
-      padding: 16px 16px calc(16px + var(--safeBottom));
+      padding: 18px 18px calc(18px + var(--safeB));
     }
 
     .app{
-      width:min(1180px, 100%);
+      width:min(980px, 100%);
       border:1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--glass);
-      backdrop-filter: blur(14px);
+      background: var(--panel);
+      border-radius: 28px;
       box-shadow: var(--shadow);
       overflow:hidden;
-      position:relative;
+      backdrop-filter: blur(14px);
     }
 
-    .app::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(720px 160px at 18% 0%, rgba(14,165,233,.20), transparent 55%),
-        radial-gradient(720px 160px at 88% 0%, rgba(22,163,74,.18), transparent 55%);
-      pointer-events:none;
-      opacity:.9;
-    }
-    .app > *{position:relative; z-index:1;}
-
-    /* Header */
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:10;
+    .top{
+      padding: calc(16px + var(--safeT)) 16px 16px;
+      border-bottom: 1px solid var(--line);
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding: calc(14px + var(--safeTop)) 16px 14px;
-      border-bottom:1px solid var(--line);
-      background: linear-gradient(90deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
-      backdrop-filter: blur(14px);
     }
 
     .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width: 200px;
+      display:flex; align-items:center; gap:12px;
+      min-width: 220px;
     }
-    .logo{
+
+    .logoBox{
       width:44px; height:44px;
       border-radius: 16px;
-      overflow:hidden;
       border:1px solid var(--line);
-      background: linear-gradient(135deg, rgba(14,165,233,.25), rgba(22,163,74,.25));
-      box-shadow: var(--shadow3);
-      flex: 0 0 auto;
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
     }
-    .logo img{width:100%;height:100%;object-fit:cover;display:block;}
-    .brandText h1{
-      margin:0;
-      font-size:16px;
-      font-weight: 950;
+    .logoBox img{
+      width:100%; height:100%;
+      object-fit:cover; display:block;
+    }
+
+    .title{
+      display:flex; flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+    .title b{
+      font-size:15px;
       letter-spacing:.2px;
-      line-height:1.1;
     }
-    .brandText p{
-      margin:4px 0 0;
+    .title span{
       font-size:12px;
       color: var(--muted);
-      font-weight: 850;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
       max-width: 520px;
     }
 
     .actions{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
     }
-
-    .chip, .btn, .miniBtn{
+    .btn{
       border:1px solid var(--line);
-      background: var(--panel);
+      background: rgba(255,255,255,.06);
       color: var(--text);
-      font-weight: 950;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 13px;
       cursor:pointer;
-      box-shadow: var(--shadow3);
-      transition: transform .12s ease, opacity .12s ease;
       user-select:none;
-      white-space: nowrap;
+      transition: transform .12s ease, opacity .12s ease;
     }
-    .chip{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 12px;
-      border-radius: 999px;
-      font-size:12px;
-    }
-    .btn{ padding:11px 12px; border-radius: 16px; font-size:13px; }
-    .miniBtn{ padding:11px 12px; border-radius: 16px; font-size:13px; }
-
-    .chip:hover,.btn:hover,.miniBtn:hover{opacity:.95; transform: translateY(-1px)}
-    .chip:active,.btn:active,.miniBtn:active{transform: translateY(0px)}
-
+    [data-theme="day"] .btn{ background: rgba(0,0,0,.02); }
+    .btn:hover{opacity:.95; transform: translateY(-1px)}
+    .btn:active{transform: translateY(0px)}
     .btn.primary{
       border-color: transparent;
-      background: linear-gradient(135deg, rgba(14,165,233,.95), rgba(22,163,74,.95));
-      color:#041018;
-    }
-    .btn.ghost{
-      background: transparent;
+      background: linear-gradient(135deg, rgba(14,165,233,.92), rgba(22,163,74,.92));
+      color: #041018;
     }
 
-    /* Content */
     .content{
       padding: 16px;
-      padding-bottom: calc(104px + var(--safeBottom));
-    }
-
-    .kpis{
-      display:grid;
-      gap:12px;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      margin-bottom: 14px;
-    }
-    .kpi{
-      border:1px solid var(--line);
-      background: var(--panel);
-      border-radius: 20px;
-      padding:14px;
-      box-shadow: var(--shadow2);
-      position:relative;
-      overflow:hidden;
-      cursor:pointer;
-      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
-    }
-    .kpi:hover{
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-      border-color: rgba(14,165,233,.30);
-    }
-    .kpi::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(240px 120px at 15% 0%, rgba(14,165,233,.16), transparent 60%),
-        radial-gradient(240px 120px at 85% 0%, rgba(22,163,74,.14), transparent 60%);
-      opacity:.9;
-      pointer-events:none;
-    }
-    .kpi > *{position:relative; z-index:1}
-    .kpiTop{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-bottom: 10px;
-    }
-    .kpiIcon{
-      width:44px;height:44px;border-radius:16px;
-      display:grid; place-items:center;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      box-shadow: var(--shadow3);
-      font-size:20px;
-    }
-    .kpiTitle{font-weight:950; font-size:13px; margin:0;}
-    .kpiSub{color:var(--muted); font-weight:850; font-size:12px; margin:6px 0 0; line-height:1.25;}
-
-    /* Search row */
-    .toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      margin-bottom: 14px;
-    }
-    .search{
-      flex:1;
-      min-width:260px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:12px 14px;
-      border-radius: 18px;
-      border:1px solid var(--line);
-      background: var(--panel);
-      box-shadow: var(--shadow3);
-    }
-    .search .dot{
-      width:10px;height:10px;border-radius:999px;
-      background: linear-gradient(135deg, var(--accent2), var(--accent));
-      box-shadow: 0 6px 18px rgba(14,165,233,.20);
-    }
-    .search input{
-      border:none; outline:none;
-      background:transparent;
-      color: var(--text);
-      font-weight: 900;
-      width:100%;
-      font-size:14px;
-    }
-
-    .sectionHead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin: 12px 0 12px;
-    }
-    .sectionHead h2{
-      margin:0;
-      font-size:12px;
-      font-weight: 950;
-      letter-spacing:.28em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .pillCount{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      font-weight: 950;
-      font-size:12px;
-      color: var(--muted);
     }
 
     .grid{
       display:grid;
-      gap:14px;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    /* Badges colors */
-    .badge{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      font-weight:950;
-      font-size:12px;
-      color: var(--muted);
-      white-space:nowrap;
-    }
-    .badge .dot{width:8px;height:8px;border-radius:999px;}
-    .badge.blue{background: rgba(14,165,233,.08);}
-    .badge.blue .dot{background: linear-gradient(135deg, rgba(14,165,233,.95), rgba(56,189,248,.95));}
-    .badge.green{background: rgba(22,163,74,.10);}
-    .badge.green .dot{background: linear-gradient(135deg, rgba(22,163,74,.95), rgba(110,231,183,.95));}
-    .badge.violet{background: rgba(139,92,246,.10);}
-    .badge.violet .dot{background: linear-gradient(135deg, rgba(139,92,246,.95), rgba(14,165,233,.70));}
-
-    /* Cards */
     .card{
-      text-decoration:none;
-      color:inherit;
-      border-radius: 20px;
-      border:1px solid var(--line);
-      background: var(--panel);
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
-      position:relative;
-      outline:none;
-    }
-    .card:focus{ box-shadow: var(--shadow2), var(--focus); }
-    .card:hover{ transform: translateY(-3px); box-shadow: var(--shadow); border-color: rgba(14,165,233,.35); }
-
-    .cardTop{
-      padding:16px 16px 0;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-    }
-    .appIcon{
-      width:52px;height:52px;
-      border-radius:18px;
-      display:grid;
-      place-items:center;
-      border:1px solid var(--line);
-      background:
-        radial-gradient(60px 60px at 30% 25%, rgba(14,165,233,.22), transparent 60%),
-        radial-gradient(60px 60px at 85% 25%, rgba(22,163,74,.22), transparent 60%);
-      font-size:24px;
-      box-shadow: var(--shadow3);
-      flex:0 0 auto;
-    }
-    .cardTitle{margin:0;font-size:15px;font-weight:950;line-height:1.15;}
-    .cardDesc{
-      margin:10px 16px 0;
-      color: var(--muted);
-      font-weight: 850;
-      font-size:13px;
-      line-height:1.35;
-      min-height: 34px;
-    }
-    .cardMeta{
-      margin:12px 16px 0;
-      font-size:12px;
-      color: rgba(127,150,172,.9);
-      font-weight: 850;
-      word-break: break-all;
-    }
-    .cardBottom{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:14px 16px 16px;
-    }
-
-    .starBtn{
-      border:1px solid var(--line);
-      background: transparent;
-      padding:8px 10px;
-      border-radius: 999px;
-      cursor:pointer;
-      font-weight: 950;
-      font-size:12px;
-      color: var(--text);
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      transition: transform .12s ease, opacity .12s ease, background .12s ease;
-    }
-    .starBtn:hover{opacity:.95; transform: translateY(-1px)}
-    .starBtn:active{transform: translateY(0px)}
-    .starBtn.active{
-      background: linear-gradient(135deg, rgba(139,92,246,.10), rgba(14,165,233,.08));
-      border-color: rgba(139,92,246,.35);
-    }
-
-    .openBtn{
-      border:1px solid var(--line);
-      background: linear-gradient(135deg, rgba(14,165,233,.12), rgba(22,163,74,.10));
-      padding:8px 10px;
-      border-radius: 999px;
-      cursor:pointer;
-      font-weight: 950;
-      font-size:12px;
-      color: var(--text);
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      transition: transform .12s ease, opacity .12s ease;
-    }
-    .openBtn:hover{opacity:.95; transform: translateY(-1px)}
-    .openBtn:active{transform: translateY(0px)}
-
-    /* KIOSK mode: hide URLs + shorten text */
-    body[data-kiosk="1"] .cardMeta{display:none;}
-    body[data-kiosk="1"] .cardDesc{display:none;}
-    body[data-kiosk="1"] .brandText p{display:none;}
-    body[data-kiosk="1"] .kpiSub{display:none;}
-    body[data-kiosk="1"] .search{opacity:.98}
-
-    .favPanel{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.08);
-      border-radius: 22px;
-      padding:14px;
-      box-shadow: var(--shadow3);
-      margin-bottom: 12px;
-    }
-
-    .footer{
-      margin-top:16px;
-      border-top:1px solid var(--line);
-      padding-top:14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      color: var(--muted);
-      font-weight: 900;
-      font-size:12px;
-    }
-
-    /* Bottom Nav (mobile) */
-    .bottomNav{
-      position: fixed;
-      left: 12px;
-      right: 12px;
-      bottom: calc(10px + var(--safeBottom));
-      z-index: 50;
-      border-radius: 22px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.68);
-      backdrop-filter: blur(16px);
-      box-shadow: var(--shadow2);
-      display: none;
-      overflow:hidden;
-    }
-    [data-theme="night"] .bottomNav{ background: rgba(15,23,42,.66); }
-
-    .navRow{ display:grid; grid-template-columns: repeat(5, 1fr); }
-    .navBtn{
-      border:none;
-      background: transparent;
-      padding: 12px 8px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      color: var(--muted);
-      font-weight: 950;
-      font-size:11px;
-      cursor:pointer;
-      user-select:none;
-      transition: background .12s ease, color .12s ease;
-    }
-    .navBtn .ico{
-      width:34px;height:34px;
-      border-radius: 14px;
-      display:grid;
-      place-items:center;
       border:1px solid var(--line);
       background: rgba(255,255,255,.06);
-      box-shadow: var(--shadow3);
-      font-size:16px;
-      transition: transform .12s ease;
-    }
-    .navBtn.active{
-      color: var(--text);
-      background: rgba(14,165,233,.07);
-    }
-    .navBtn.active .ico{
-      background: linear-gradient(135deg, rgba(14,165,233,.18), rgba(22,163,74,.14));
-      transform: translateY(-1px);
-    }
-
-    /* Privacy pause (no PIN) */
-    .lock{
-      position:fixed; inset:0; display:none; place-items:center; padding:18px;
-      z-index:80;
-      background:
-        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.25), transparent 58%),
-        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.18), transparent 56%),
-        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.16), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-    }
-    .lock::before{
-      content:""; position:absolute; inset:0;
-      backdrop-filter: blur(14px);
-      background: rgba(0,0,0,.08);
-    }
-    [data-theme="night"] .lock::before{ background: rgba(0,0,0,.38); }
-
-    .lockCard{
-      width:min(680px, 100%);
-      border-radius: 28px;
-      border:1px solid var(--line);
-      background: var(--glass);
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-      z-index:1;
-    }
-    .lockTop{
-      padding:18px 18px 14px;
-      border-bottom:1px solid var(--line);
+      border-radius: var(--r);
+      padding: 14px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      background: linear-gradient(90deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+      cursor:pointer;
+      transition: transform .12s ease, opacity .12s ease;
     }
-    .lockTitle{display:flex; align-items:center; gap:12px; font-weight: 950; font-size:16px; margin:0;}
-    .lockSub{margin:0; color: var(--muted); font-weight: 900; font-size:12px;}
-    .lockBody{padding:18px; display:grid; gap:14px;}
-    .clock{
-      display:flex; align-items:baseline; justify-content:center; gap:10px;
-      padding:18px; border-radius: 22px; border:1px solid var(--line);
-      background: var(--panel); box-shadow: var(--shadow3);
+    [data-theme="day"] .card{ background: rgba(0,0,0,.02); }
+    .card:hover{opacity:.96; transform: translateY(-2px)}
+    .left{display:flex; align-items:center; gap:12px; min-width:0;}
+    .ico{
+      width:46px;height:46px;border-radius: 16px;
+      border:1px solid var(--line);
+      display:grid; place-items:center;
+      background: rgba(255,255,255,.05);
+      font-size: 20px;
+      flex:0 0 auto;
     }
-    .clock .time{font-size:42px; font-weight: 990; letter-spacing: -0.02em;}
-    .clock .date{font-size:12px; font-weight: 950; color: var(--muted); text-transform: uppercase; letter-spacing: .18em;}
-    .lockActions{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
-    .kbdRow{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; color: var(--muted); font-weight: 900; font-size:12px;}
-    .kbd{border:1px solid var(--line); background: var(--panel); padding:8px 10px; border-radius: 12px; box-shadow: var(--shadow3);}
-
-    /* Toast */
-    .toastWrap{
-      position: fixed;
-      left: 12px;
-      right: 12px;
-      bottom: calc(86px + var(--safeBottom));
-      z-index: 90;
-      display:flex;
-      justify-content:center;
-      pointer-events:none;
-    }
-    .toast{
-      pointer-events:none;
-      opacity:0;
-      transform: translateY(10px);
-      transition: opacity .18s ease, transform .18s ease;
-      border: 1px solid var(--line);
-      background: var(--toastBg);
-      color: var(--toastText);
-      border-radius: 999px;
-      padding: 10px 12px;
-      box-shadow: var(--shadow2);
+    .txt{min-width:0}
+    .txt b{display:block; font-size:14px; letter-spacing:.2px;}
+    .txt span{display:block; font-size:12px; color:var(--muted); font-weight:800; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow: ellipsis;}
+    .go{
       font-weight: 950;
-      font-size:12px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      max-width: 92vw;
+      color: rgba(242,246,255,.85);
+      border:1px solid var(--line);
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      font-size: 12px;
+      white-space: nowrap;
     }
-    .toast.show{ opacity:1; transform: translateY(0); }
-    .toast .tDot{ width:10px;height:10px;border-radius:999px;background: linear-gradient(135deg, var(--accent2), var(--accent)); }
+    [data-theme="day"] .go{ color: rgba(11,18,32,.80); background: rgba(0,0,0,.02); }
 
-    /* Responsive */
-    @media (max-width: 780px){
-      .brandText p{display:none}
-      .content{padding:14px; padding-bottom: calc(112px + var(--safeBottom));}
-      .kpis{grid-template-columns: repeat(2, minmax(0, 1fr));}
-      .bottomNav{display:block;}
-      .actions .btn.primary{display:none;}
+    .foot{
+      margin-top: 14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      border-top:1px solid var(--line);
+      padding-top: 14px;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12px;
     }
-    @media (max-width: 480px){
-      .kpis{grid-template-columns: 1fr;}
+
+    /* PAUSA / SALVAPANTALLAS */
+    .pause{
+      position:fixed; inset:0;
+      display:none;
+      place-items:center;
+      padding: 18px;
+      z-index: 999;
+      background:
+        radial-gradient(1000px 700px at 20% 15%, rgba(14,165,233,.20), transparent 60%),
+        radial-gradient(900px 650px at 80% 20%, rgba(22,163,74,.18), transparent 60%),
+        radial-gradient(900px 650px at 60% 85%, rgba(139,92,246,.14), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg));
+    }
+    .pause::before{
+      content:"";
+      position:absolute; inset:0;
+      backdrop-filter: blur(16px);
+      background: rgba(0,0,0,.30);
+    }
+    [data-theme="day"] .pause::before{ background: rgba(255,255,255,.28); }
+
+    .pauseInner{
+      position:relative;
+      width:min(900px, 100%);
+      border-radius: 30px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      padding: 26px 18px;
+      text-align:center;
+    }
+    [data-theme="day"] .pauseInner{ background: rgba(255,255,255,.72); }
+
+    /* Texto detrás (nombre del sistema) */
+    .bgName{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      pointer-events:none;
+      font-weight: 1000;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      font-size: clamp(42px, 8vw, 96px);
+      opacity: .14;
+      transform: translateY(-6px);
+      color: var(--text);
+    }
+
+    /* Kiwi grande (salvapantallas) */
+    .kiwiWrap{
+      position:relative;
+      display:grid;
+      place-items:center;
+      margin: 8px auto 14px;
+      width: min(220px, 55vw);
+      aspect-ratio: 1/1;
+      border-radius: 28px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      animation: floaty 4.6s ease-in-out infinite;
+    }
+    [data-theme="day"] .kiwiWrap{ background: rgba(0,0,0,.02); }
+    .kiwiWrap img{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+      filter: saturate(1.05);
+    }
+    @keyframes floaty{
+      0%{ transform: translateY(0px) }
+      50%{ transform: translateY(-8px) }
+      100%{ transform: translateY(0px) }
+    }
+
+    .clock{
+      position:relative;
+      font-size: clamp(44px, 6vw, 78px);
+      font-weight: 1000;
+      letter-spacing:-.02em;
+      margin-top: 2px;
+    }
+    .date{
+      position:relative;
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 900;
+      letter-spacing:.22em;
+      text-transform: uppercase;
+    }
+    .hint{
+      position:relative;
+      margin-top: 16px;
+      display:inline-flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+      color: var(--muted);
+      font-weight: 900;
+      font-size: 12px;
+    }
+    .kbd{
+      border:1px solid var(--line);
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+    }
+    [data-theme="day"] .kbd{ background: rgba(0,0,0,.02); }
+
+    /* Mobile */
+    @media (max-width: 720px){
+      .grid{ grid-template-columns: 1fr; }
+      .title span{display:none}
+      .actions .btn{ padding:10px 10px; }
     }
   </style>
 </head>
 
-<body data-theme="day" data-kiosk="0">
+<body data-theme="night">
 
-  <!-- Toast -->
-  <div class="toastWrap" aria-hidden="true">
-    <div id="toast" class="toast"><span class="tDot"></span><span id="toastTxt">Listo</span></div>
-  </div>
+  <!-- PAUSA -->
+  <div id="pause" class="pause" aria-hidden="true">
+    <div class="pauseInner">
+      <div class="bgName">ARSLAN PRO</div>
 
-  <!-- PRIVACY PAUSE (NO PIN) -->
-  <div id="lock" class="lock" aria-hidden="true">
-    <div class="lockCard">
-      <div class="lockTop">
-        <div>
-          <div class="lockTitle">
-            <span class="logo" style="width:36px;height:36px;border-radius:14px">
-              <img src="./icon-192.png" alt="Kiwi">
-            </span>
-            ARSLAN PRO — Privacidad
-          </div>
-          <p class="lockSub">Pantalla oculta · Sin contraseña · Pulsa “Desbloquear”</p>
-        </div>
-        <button id="unlockBtn" class="btn primary" type="button">🔓 Desbloquear</button>
+      <div class="kiwiWrap" aria-hidden="true">
+        <!-- Logo kiwi / salvapantallas -->
+        <img id="pauseKiwi" src="icon-512.png" alt="Kiwi">
       </div>
 
-      <div class="lockBody">
-        <div class="clock">
-          <div class="time" id="clockTime">--:--</div>
-          <div class="date" id="clockDate">----</div>
-        </div>
+      <div id="clock" class="clock">--:--</div>
+      <div id="date" class="date">----</div>
 
-        <div class="lockActions">
-          <button id="unlockBtn2" class="btn" type="button">Enter</button>
-          <button id="hideBtn" class="btn" type="button">Esc</button>
-        </div>
-
-        <div class="kbdRow">
-          <span class="kbd"><b>F</b> Facturas</span>
-          <span class="kbd"><b>L</b> Listas</span>
-          <span class="kbd"><b>B</b> B2B</span>
-          <span class="kbd"><b>G</b> GS</span>
-          <span class="kbd"><b>R</b> Último</span>
-          <span class="kbd"><b>K</b> Kiosko</span>
-          <span class="kbd"><b>/</b> Buscar</span>
-          <span class="kbd"><b>Esc</b> Pausa</span>
-          <span class="kbd"><b>Enter</b> Volver</span>
-        </div>
+      <div class="hint">
+        <span class="kbd"><b>Enter</b> volver</span>
+        <span class="kbd"><b>Esc</b> volver</span>
       </div>
     </div>
   </div>
 
-  <!-- APP -->
   <div class="wrap">
-    <div class="app" id="app">
-      <div class="topbar">
+    <div class="app">
+      <div class="top">
         <div class="brand">
-          <div class="logo" title="Kiwi">
-            <img src="./icon-192.png" alt="Kiwi">
+          <div class="logoBox">
+            <!-- LOGO: si falla, muestra emoji -->
+            <img id="logo" src="icon-192.png" alt="Kiwi"
+                 onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='grid';">
+            <div id="logoFallback" style="display:none; width:100%;height:100%; place-items:center; font-size:22px;">🥝</div>
           </div>
-          <div class="brandText">
-            <h1>ARSLAN PRO</h1>
-            <p>Centro único · Facturas · Listas · Contabilidad · Gestión</p>
+          <div class="title">
+            <b>ARSLAN PRO — HUB</b>
+            <span>Facturas · Listas · B2B · Gestión</span>
           </div>
         </div>
 
         <div class="actions">
-          <button class="btn" id="openLast" type="button">🟢 Abrir último</button>
-          <div class="chip" id="themeBtn" title="Cambiar modo día/noche">🌓 <span id="themeTxt">Día</span></div>
-          <div class="chip" id="openModeBtn" title="Abrir enlaces en nueva pestaña o en la misma">🔗 <span id="openModeTxt">Nueva pestaña</span></div>
-          <button class="btn primary" id="openMain" type="button">🚀 Abrir Facturas</button>
-          <button class="btn" id="kioskBtn" type="button">🧼 Kiosko</button>
-          <button class="btn" id="settingsBtn" type="button">⚙️ Ajustes</button>
-          <button class="btn" id="copyLinks" type="button">📋 Copiar</button>
-          <button class="btn" id="lockBtn" type="button">🙈 Pausa</button>
+          <button class="btn" id="themeBtn" type="button">🌓 Modo</button>
+          <button class="btn" id="openModeBtn" type="button">🔗 Nueva pestaña</button>
+          <button class="btn primary" id="lastBtn" type="button">🟢 Abrir último</button>
+          <button class="btn" id="copyBtn" type="button">📋 Copiar links</button>
+          <button class="btn" id="pauseBtn" type="button">🙈 Pausa</button>
         </div>
       </div>
 
       <div class="content">
-        <div class="kpis" id="kpiRow"></div>
-
-        <div class="toolbar">
-          <div class="search">
-            <span class="dot"></span>
-            <input id="searchInput" type="text" placeholder="Buscar… (pulsa /)" />
-          </div>
-          <button class="miniBtn" id="clearSearch" type="button">✖</button>
-        </div>
-
-        <div class="favPanel">
-          <div class="sectionHead">
-            <h2>Favoritos</h2>
-            <span class="pillCount" id="favBadge">⭐ 0</span>
-          </div>
-          <div class="grid" id="favGrid"></div>
-        </div>
-
-        <div class="sectionHead">
-          <h2>Todos los sistemas</h2>
-          <span class="pillCount" id="allBadge">📦 4</span>
-        </div>
         <div class="grid" id="grid"></div>
 
-        <div class="footer">
-          <div id="pwaHint">📲 Instalar: iPhone “Compartir → Añadir a pantalla de inicio” · Android “Instalar app”</div>
+        <div class="foot">
+          <div>Atajos: F Facturas · L Listas · B B2B · G GS · R Último · Esc Pausa</div>
           <div id="status">Listo</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Bottom nav (mobile) -->
-  <div class="bottomNav" id="bottomNav">
-    <div class="navRow">
-      <button class="navBtn" data-nav="facturas" type="button"><span class="ico">🧾</span><span>Facturas</span></button>
-      <button class="navBtn" data-nav="listas" type="button"><span class="ico">📝</span><span>Listas</span></button>
-      <button class="navBtn" data-nav="b2b" type="button"><span class="ico">📚</span><span>B2B</span></button>
-      <button class="navBtn" data-nav="gs" type="button"><span class="ico">🏪</span><span>GS</span></button>
-      <button class="navBtn active" data-nav="hub" type="button"><span class="ico">🏠</span><span>Hub</span></button>
-    </div>
-  </div>
-
 <script>
 /* ===============================
-   ARSLAN PRO — HUB (UPGRADE)
-   - Badges por color
-   - Abrir último (R)
-   - Modo Kiosko (K)
-   - Toast pro
-   - / para buscar
-   - Todo lo anterior intacto
+   HUB SIMPLE + PRO (NO PIN)
+   - Logo con fallback
+   - Pausa: reloj + ARSLAN PRO detrás + kiwi salvapantallas
 =============================== */
 
-let SEARCH = "";
-
-/* ===== Sistemas ===== */
 const SYSTEMS = [
-  { id:"facturas", icon:"🧾", name:"Facturas (ARSLANPRO)", desc:"Crear facturas y gestionar facturación.", url:"http://arslanpro.com/" },
-  { id:"listas",   icon:"📝", name:"Listas / Pedidos",       desc:"Listas, pedidos, TXT, totales.",        url:"https://shaniwaris80-crypto.github.io/pedidos/" },
-  { id:"b2b",      icon:"📚", name:"Contabilidad (B2B)",     desc:"Trazabilidad y contabilidad B2B.",      url:"https://shaniwaris80-crypto.github.io/b2b/" },
-  { id:"gs",       icon:"🏪", name:"Ventas / Gestión (GS)",  desc:"Ventas, gestión y reportes.",           url:"https://shaniwaris80-crypto.github.io/GS/" }
+  { id:"facturas", icon:"🧾", name:"Facturas", sub:"arslanpro.com", url:"http://arslanpro.com/" },
+  { id:"listas",   icon:"📝", name:"Listas / Pedidos", sub:"shaniwaris80-crypto.github.io/pedidos", url:"https://shaniwaris80-crypto.github.io/pedidos/" },
+  { id:"b2b",      icon:"📚", name:"B2B Contabilidad", sub:"shaniwaris80-crypto.github.io/b2b", url:"https://shaniwaris80-crypto.github.io/b2b/" },
+  { id:"gs",       icon:"🏪", name:"GS Gestión / Ventas", sub:"shaniwaris80-crypto.github.io/GS", url:"https://shaniwaris80-crypto.github.io/GS/" }
 ];
 
-/* ===== Keys ===== */
 const K_THEME="ARSLAN_HUB_THEME";
 const K_OPENMODE="ARSLAN_HUB_OPENMODE";
-const K_FAVS="ARSLAN_HUB_FAVORITES";
-const K_CONFIRM_LOCK="ARSLAN_HUB_CONFIRMLOCK";
-const K_CLEAR_ON_CLOSE="ARSLAN_HUB_CLEARONCLOSE";
-const K_LAST_OPEN="ARSLAN_HUB_LASTOPEN";
-const K_SESSION="ARSLAN_HUB_SESSION"; // compat
-const K_ACTIVE_TAB="ARSLAN_HUB_ACTIVE_TAB";
-const K_KIOSK="ARSLAN_HUB_KIOSK";
+const K_LAST="ARSLAN_HUB_LAST";
 
-const $ = (s)=>document.querySelector(s);
-function safeParse(json, fallback){ try{return JSON.parse(json);}catch{return fallback;} }
+const $ = s => document.querySelector(s);
 
-/* Toast */
-let toastTimer=null;
-function toast(msg){
-  const t=$("#toast"), txt=$("#toastTxt");
-  if(!t || !txt) return;
-  txt.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove("show"), 1200);
-}
-
-/* Theme */
-function getTheme(){ return localStorage.getItem(K_THEME) || "day"; }
+function getTheme(){ return localStorage.getItem(K_THEME) || "night"; }
 function setTheme(t){
   localStorage.setItem(K_THEME, t);
   document.body.setAttribute("data-theme", t);
-  const el = $("#themeTxt");
-  if(el) el.textContent = (t==="night") ? "Noche" : "Día";
 }
-
-/* Kiosk */
-function getKiosk(){ return localStorage.getItem(K_KIOSK) === "1"; }
-function setKiosk(v){
-  localStorage.setItem(K_KIOSK, v ? "1":"0");
-  document.body.setAttribute("data-kiosk", v ? "1":"0");
-  toast(v ? "Kiosko: ON" : "Kiosko: OFF");
-  renderAll();
-}
-
-/* Open mode */
 function getOpenMode(){ return localStorage.getItem(K_OPENMODE) || "new"; }
 function setOpenMode(m){
   localStorage.setItem(K_OPENMODE, m);
-  const el = $("#openModeTxt");
-  if(el) el.textContent=(m==="new")?"Nueva pestaña":"Misma pestaña";
-  renderAll();
+  $("#openModeBtn").textContent = (m==="new") ? "🔗 Nueva pestaña" : "🔗 Misma pestaña";
 }
-
-/* Options */
-function getConfirmLock(){ return localStorage.getItem(K_CONFIRM_LOCK) !== "0"; }
-function setConfirmLock(v){ localStorage.setItem(K_CONFIRM_LOCK, v ? "1":"0"); }
-function getClearOnClose(){ return localStorage.getItem(K_CLEAR_ON_CLOSE) === "1"; }
-function setClearOnClose(v){ localStorage.setItem(K_CLEAR_ON_CLOSE, v ? "1":"0"); }
-
-/* Favorites */
-function getFavs(){
-  const arr = safeParse(localStorage.getItem(K_FAVS) || "[]", []);
-  const valid = arr.filter(id => SYSTEMS.some(s=>s.id===id));
-  return Array.from(new Set(valid));
-}
-function setFavs(arr){
-  const unique = Array.from(new Set(arr));
-  localStorage.setItem(K_FAVS, JSON.stringify(unique));
-  renderAll();
-}
-function isFav(id){ return getFavs().includes(id); }
-function toggleFav(id){
-  const f = getFavs();
-  const next = f.includes(id) ? f.filter(x=>x!==id) : [id, ...f];
-  localStorage.setItem(K_FAVS, JSON.stringify(next));
-  toast(f.includes(id) ? "Quitado de favoritos" : "Añadido a favoritos");
-  renderAll();
-}
-
-/* Elements */
-const lockEl = $("#lock");
-const unlockBtn = $("#unlockBtn");
-const unlockBtn2 = $("#unlockBtn2");
-const hideBtn = $("#hideBtn");
-const lockBtn = $("#lockBtn");
-
-const openMainBtn = $("#openMain");
-const openLastBtn = $("#openLast");
-const kioskBtn = $("#kioskBtn");
-const settingsBtn = $("#settingsBtn");
-const copyLinksBtn = $("#copyLinks");
-
-const searchInput = $("#searchInput");
-const clearSearchBtn = $("#clearSearch");
-
-const themeBtn = $("#themeBtn");
-const openModeBtn = $("#openModeBtn");
-
-const grid = $("#grid");
-const favGrid = $("#favGrid");
-const favBadge = $("#favBadge");
-const allBadge = $("#allBadge");
-const statusEl = $("#status");
-
-const kpiRow = $("#kpiRow");
-
-const clockTime = $("#clockTime");
-const clockDate = $("#clockDate");
-
-const bottomNav = $("#bottomNav");
-
-/* Privacy lock */
-function showLock(){
-  if(lockEl){
-    lockEl.style.display="grid";
-    lockEl.setAttribute("aria-hidden","false");
-  }
-  tickClock(true);
-}
-function hideLock(){
-  if(lockEl){
-    lockEl.style.display="none";
-    lockEl.setAttribute("aria-hidden","true");
-  }
-}
-
-/* Clock */
-function fmt2(n){ return String(n).padStart(2,"0"); }
-function tickClock(force){
-  if(!clockTime || !clockDate) return;
-  if(lockEl && lockEl.style.display === "none" && !force) return;
-
-  const d = new Date();
-  clockTime.textContent = `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`;
-  const days = ["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
-  const months = ["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
-  clockDate.textContent = `${days[d.getDay()]} · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-/* Open */
-function openSystemById(id){
-  const sys = SYSTEMS.find(s=>s.id===id);
-  if(!sys) return;
-  localStorage.setItem(K_LAST_OPEN, sys.id);
-
+function openSystem(id){
+  const s = SYSTEMS.find(x=>x.id===id);
+  if(!s) return;
+  localStorage.setItem(K_LAST, id);
   const mode = getOpenMode();
-  if(mode==="new") window.open(sys.url, "_blank", "noopener");
-  else window.location.href = sys.url;
-}
-function openSystemByIndex(i){
-  const sys=SYSTEMS[i];
-  if(sys) openSystemById(sys.id);
+  if(mode==="new") window.open(s.url, "_blank", "noopener");
+  else window.location.href = s.url;
 }
 function openLast(){
-  const last = localStorage.getItem(K_LAST_OPEN);
-  if(last && SYSTEMS.some(s=>s.id===last)){
-    openSystemById(last);
-  }else{
-    openSystemByIndex(0);
-  }
+  const last = localStorage.getItem(K_LAST);
+  if(last && SYSTEMS.some(s=>s.id===last)) openSystem(last);
+  else openSystem("facturas");
 }
 
-/* Search */
-function setSearch(v){
-  SEARCH = (v||"").trim().toLowerCase();
-  renderAll();
-}
-
-/* KPI */
-function kpiHTML(s){
-  const last = localStorage.getItem(K_LAST_OPEN) === s.id;
-  const fav = isFav(s.id);
-  const badge = last ? `<span class="badge green"><span class="dot"></span>Último</span>` :
-               fav  ? `<span class="badge violet"><span class="dot"></span>Favorito</span>` :
-                      `<span class="badge blue"><span class="dot"></span>Sistema</span>`;
-  return `
-    <div class="kpi" data-kpi="${s.id}" role="button" tabindex="0">
-      <div class="kpiTop">
-        <div class="kpiIcon">${s.icon}</div>
-        ${badge}
-      </div>
-      <p class="kpiTitle">${s.name}</p>
-      <p class="kpiSub">${s.desc}</p>
-    </div>
-  `;
-}
-function renderKPIs(){
-  if(!kpiRow) return;
-  kpiRow.innerHTML = SYSTEMS.map(kpiHTML).join("");
-  kpiRow.querySelectorAll("[data-kpi]").forEach(el=>{
-    const id = el.getAttribute("data-kpi");
-    el.addEventListener("click", ()=> openSystemById(id));
-    el.addEventListener("keydown",(e)=>{ if(e.key==="Enter") openSystemById(id); });
-  });
-}
-
-/* Cards */
 function cardHTML(s){
-  const fav = isFav(s.id);
-  const last = localStorage.getItem(K_LAST_OPEN) === s.id;
-
-  const badge = last ? `<span class="badge green"><span class="dot"></span>Último</span>` :
-               fav  ? `<span class="badge violet"><span class="dot"></span>Favorito</span>` :
-                      `<span class="badge blue"><span class="dot"></span>${s.id.toUpperCase()}</span>`;
-
   return `
-    <div class="card" data-open-id="${s.id}" tabindex="0" role="button" aria-label="Abrir ${s.name}">
-      <div class="cardTop">
-        <div style="display:flex;align-items:flex-start;gap:12px;min-width:0">
-          <div class="appIcon">${s.icon}</div>
-          <div style="min-width:0">
-            <div class="cardTitle">${s.name}</div>
-            <div class="cardDesc">${s.desc}</div>
-          </div>
+    <div class="card" data-open="${s.id}" role="button" tabindex="0">
+      <div class="left">
+        <div class="ico">${s.icon}</div>
+        <div class="txt">
+          <b>${s.name}</b>
+          <span>${s.sub}</span>
         </div>
-        ${badge}
       </div>
-
-      <div class="cardMeta">${s.url}</div>
-
-      <div class="cardBottom">
-        <button class="starBtn ${fav ? "active":""}" data-fav-id="${s.id}" type="button">${fav ? "⭐ Favorito" : "☆ Favorito"}</button>
-        <button class="openBtn" data-open-btn="${s.id}" type="button">➡️ Abrir</button>
-      </div>
+      <div class="go">Abrir →</div>
     </div>
   `;
 }
 
-function applyCardHandlers(container){
-  if(!container) return;
+function render(){
+  const grid = $("#grid");
+  grid.innerHTML = SYSTEMS.map(cardHTML).join("");
 
-  container.querySelectorAll("[data-open-id]").forEach(card=>{
-    const id = card.getAttribute("data-open-id");
-    card.addEventListener("click",(e)=>{
-      if(e.target && (e.target.closest("[data-fav-id]") || e.target.closest("[data-open-btn]"))) return;
-      openSystemById(id);
-    });
-    card.addEventListener("keydown",(e)=>{ if(e.key==="Enter") openSystemById(id); });
+  grid.querySelectorAll("[data-open]").forEach(el=>{
+    const id = el.getAttribute("data-open");
+    el.addEventListener("click", ()=> openSystem(id));
+    el.addEventListener("keydown",(e)=>{ if(e.key==="Enter") openSystem(id); });
   });
 
-  container.querySelectorAll("[data-open-btn]").forEach(btn=>{
-    btn.addEventListener("click",(e)=>{
-      e.preventDefault(); e.stopPropagation();
-      openSystemById(btn.getAttribute("data-open-btn"));
-    });
-  });
-
-  container.querySelectorAll("[data-fav-id]").forEach(btn=>{
-    btn.addEventListener("click",(e)=>{
-      e.preventDefault(); e.stopPropagation();
-      toggleFav(btn.getAttribute("data-fav-id"));
-    });
-  });
+  const status = $("#status");
+  const last = localStorage.getItem(K_LAST) || "—";
+  status.textContent = `Último: ${last.toUpperCase()} · Modo: ${getTheme().toUpperCase()}`;
 }
 
-function filterSystems(arr){
-  if(!SEARCH) return arr;
-  return arr.filter(s=>{
-    const hay = (s.name+" "+s.desc+" "+s.url+" "+s.id).toLowerCase();
-    return hay.includes(SEARCH);
-  });
-}
-
-function renderAll(){
-  document.body.setAttribute("data-kiosk", getKiosk() ? "1":"0");
-
-  renderKPIs();
-
-  const favIds = getFavs();
-  const favSystems = SYSTEMS.filter(s => favIds.includes(s.id));
-
-  const filteredAll = filterSystems(SYSTEMS);
-  const filteredFav = filterSystems(favSystems);
-
-  if(favBadge) favBadge.textContent = `⭐ ${favSystems.length}`;
-  if(allBadge) allBadge.textContent = `📦 ${SYSTEMS.length}`;
-
-  if(favGrid){
-    favGrid.innerHTML = filteredFav.length
-      ? filteredFav.map(cardHTML).join("")
-      : `<div class="card" style="grid-column:1/-1">
-           <div class="cardTop">
-             <div style="display:flex;align-items:flex-start;gap:12px;min-width:0">
-               <div class="appIcon">⭐</div>
-               <div style="min-width:0">
-                 <div class="cardTitle">Sin favoritos</div>
-                 <div class="cardDesc">Marca un sistema como favorito para que aparezca aquí.</div>
-               </div>
-             </div>
-             <span class="badge blue"><span class="dot"></span>TIP</span>
-           </div>
-           <div class="cardMeta">Pulsa “☆ Favorito”</div>
-           <div class="cardBottom">
-             <button class="openBtn" type="button" data-open-btn="facturas">➡️ Abrir Facturas</button>
-             <button class="openBtn" type="button" data-open-btn="listas">➡️ Abrir Listas</button>
-           </div>
-         </div>`;
-  }
-
-  if(grid) grid.innerHTML = filteredAll.map(cardHTML).join("");
-
-  applyCardHandlers(favGrid);
-  applyCardHandlers(grid);
-
-  if(statusEl){
-    const info=[];
-    if(SEARCH) info.push(`Filtro: “${SEARCH}”`);
-    info.push(`Favoritos: ${favSystems.length}`);
-    info.push(getOpenMode()==="new" ? "Abrir: nueva pestaña" : "Abrir: misma pestaña");
-    info.push(getKiosk() ? "Kiosko: ON" : "Kiosko: OFF");
-    statusEl.textContent = info.join(" · ");
-  }
-
-  setActiveTab(getActiveTab() || "hub", true);
-}
-
-/* Copy links */
-async function copyAllLinks(){
+/* Copiar */
+async function copyLinks(){
   const text = SYSTEMS.map(s => `${s.name}: ${s.url}`).join("\n");
   try{
     await navigator.clipboard.writeText(text);
-    toast("Enlaces copiados ✅");
-    if(copyLinksBtn){
-      copyLinksBtn.textContent = "✅ Copiado";
-      setTimeout(()=> copyLinksBtn.textContent = "📋 Copiar", 900);
-    }
+    $("#status").textContent = "Links copiados ✅";
   }catch{
     alert(text);
   }
 }
 
-/* Settings */
-function resetAllLocal(){
-  const ok = confirm("¿Borrar configuración local? (favoritos, tema, kiosko, etc.)");
-  if(!ok) return;
-  [K_THEME,K_OPENMODE,K_FAVS,K_CONFIRM_LOCK,K_CLEAR_ON_CLOSE,K_LAST_OPEN,K_SESSION,K_ACTIVE_TAB,K_KIOSK].forEach(k=>localStorage.removeItem(k));
-  setTheme("day");
-  localStorage.setItem(K_OPENMODE,"new");
-  setKiosk(false);
-  SEARCH="";
-  if(searchInput) searchInput.value="";
-  toast("Reseteado ✅");
-  renderAll();
+/* PAUSA */
+function fmt2(n){ return String(n).padStart(2,"0"); }
+function tickClock(){
+  const d=new Date();
+  $("#clock").textContent = `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`;
+  const days=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
+  const months=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
+  $("#date").textContent = `${days[d.getDay()]} · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+let clockInt=null;
+function showPause(){
+  $("#pause").style.display="grid";
+  $("#pause").setAttribute("aria-hidden","false");
+  tickClock();
+  clockInt = setInterval(tickClock, 1000);
+}
+function hidePause(){
+  $("#pause").style.display="none";
+  $("#pause").setAttribute("aria-hidden","true");
+  if(clockInt){ clearInterval(clockInt); clockInt=null; }
 }
 
-function settingsMenu(){
-  const a = getConfirmLock() ? "ON" : "OFF";
-  const b = getClearOnClose() ? "ON" : "OFF";
-  const c = getOpenMode()==="new" ? "Nueva pestaña" : "Misma pestaña";
-  const k = getKiosk() ? "ON" : "OFF";
-
-  const choice = prompt(
-`AJUSTES:
-1 = Cambiar abrir enlaces (actual: ${c})
-2 = Confirmar al pausar (actual: ${a})
-3 = Cerrar “sesión” al cerrar pestaña (actual: ${b})
-4 = Modo Kiosko (actual: ${k})
-5 = Reset configuración local
-
-Escribe 1-5`
-  );
-
-  if(choice==="1") return setOpenMode(getOpenMode()==="new" ? "same" : "new");
-  if(choice==="2"){ const next=!getConfirmLock(); setConfirmLock(next); toast(`Confirmación pausa: ${next?"ON":"OFF"}`); return; }
-  if(choice==="3"){ const next=!getClearOnClose(); setClearOnClose(next); toast(`Cerrar sesión: ${next?"ON":"OFF"}`); return; }
-  if(choice==="4"){ setKiosk(!getKiosk()); return; }
-  if(choice==="5") return resetAllLocal();
-}
-
-/* Bottom nav */
-function getActiveTab(){ return localStorage.getItem(K_ACTIVE_TAB) || "hub"; }
-function setActiveTab(tab, silent){
-  localStorage.setItem(K_ACTIVE_TAB, tab);
-  if(bottomNav){
-    bottomNav.querySelectorAll(".navBtn").forEach(b=>{
-      const t=b.getAttribute("data-nav");
-      b.classList.toggle("active", t===tab);
-    });
-  }
-  if(!silent && tab!=="hub"){
-    openSystemById(tab);
-  }
-}
-
-/* Wire */
-function wire(){
+/* BOOT */
+(function init(){
   setTheme(getTheme());
   setOpenMode(getOpenMode());
-  document.body.setAttribute("data-kiosk", getKiosk() ? "1":"0");
+  render();
 
-  if(themeBtn) themeBtn.addEventListener("click", ()=> setTheme(getTheme()==="night" ? "day" : "night"));
-  if(openModeBtn) openModeBtn.addEventListener("click", ()=> setOpenMode(getOpenMode()==="new" ? "same" : "new"));
+  // Si icon-512 no existe, que no rompa la pausa
+  const pk = $("#pauseKiwi");
+  pk.onerror = () => { pk.style.display="none"; };
 
-  if(openMainBtn) openMainBtn.addEventListener("click", ()=> openSystemByIndex(0));
-  if(openLastBtn) openLastBtn.addEventListener("click", openLast);
-  if(kioskBtn) kioskBtn.addEventListener("click", ()=> setKiosk(!getKiosk()));
-  if(settingsBtn) settingsBtn.addEventListener("click", settingsMenu);
-  if(copyLinksBtn) copyLinksBtn.addEventListener("click", copyAllLinks);
-
-  if(searchInput) searchInput.addEventListener("input", (e)=> setSearch(e.target.value));
-  if(clearSearchBtn) clearSearchBtn.addEventListener("click", ()=>{
-    if(searchInput){
-      searchInput.value="";
-      setSearch("");
-      searchInput.focus();
-    }
+  $("#themeBtn").addEventListener("click", ()=>{
+    setTheme(getTheme()==="night" ? "day" : "night");
+    render();
   });
 
-  function doLock(){
-    if(getConfirmLock()){
-      const ok = confirm("¿Activar pantalla de privacidad?");
-      if(!ok) return;
-    }
-    showLock();
-  }
-  if(lockBtn) lockBtn.addEventListener("click", doLock);
-  if(unlockBtn) unlockBtn.addEventListener("click", hideLock);
-  if(unlockBtn2) unlockBtn2.addEventListener("click", hideLock);
-  if(hideBtn) hideBtn.addEventListener("click", hideLock);
+  $("#openModeBtn").addEventListener("click", ()=>{
+    setOpenMode(getOpenMode()==="new" ? "same" : "new");
+    $("#status").textContent = `Abrir: ${getOpenMode()==="new" ? "Nueva pestaña" : "Misma pestaña"}`;
+  });
 
-  // bottom nav click
-  if(bottomNav){
-    bottomNav.querySelectorAll(".navBtn").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const t = btn.getAttribute("data-nav");
-        setActiveTab(t, false);
-      });
-    });
-  }
+  $("#lastBtn").addEventListener("click", openLast);
+  $("#copyBtn").addEventListener("click", copyLinks);
+  $("#pauseBtn").addEventListener("click", showPause);
 
   window.addEventListener("keydown",(e)=>{
-    // lock active
-    if(lockEl && lockEl.style.display !== "none"){
-      if(e.key==="Enter") return hideLock();
-      if(e.key==="Escape") return hideLock();
-      return;
-    }
-
-    // Focus search with /
-    if(e.key==="/" && searchInput){
-      e.preventDefault();
-      searchInput.focus();
-      return;
-    }
-
-    // ignore typing
-    if(e.target && ["INPUT","TEXTAREA"].includes(e.target.tagName)) return;
-
     const k = e.key.toLowerCase();
-    if(k==="f"){ setActiveTab("facturas", true); return openSystemById("facturas"); }
-    if(k==="l"){ setActiveTab("listas", true); return openSystemById("listas"); }
-    if(k==="b"){ setActiveTab("b2b", true); return openSystemById("b2b"); }
-    if(k==="g"){ setActiveTab("gs", true); return openSystemById("gs"); }
-    if(k==="r"){ return openLast(); }
-    if(k==="k"){ return setKiosk(!getKiosk()); }
-    if(e.key==="Escape") return doLock();
-  });
 
-  window.addEventListener("beforeunload", ()=>{
-    if(getClearOnClose()){
-      localStorage.setItem(K_SESSION,"0");
+    // Si está en pausa
+    if($("#pause").style.display !== "none"){
+      if(e.key==="Escape" || e.key==="Enter") hidePause();
+      return;
     }
+
+    if(k==="f") return openSystem("facturas");
+    if(k==="l") return openSystem("listas");
+    if(k==="b") return openSystem("b2b");
+    if(k==="g") return openSystem("gs");
+    if(k==="r") return openLast();
+    if(e.key==="Escape") return showPause();
   });
 
-  renderAll();
-  toast("HUB listo ✅");
-}
+  $("#pause").addEventListener("click", hidePause);
+})();
+</script>
 
-/* Boot */
-wire();
-tickClock(true);
-setInterval(()=>tickClock(false), 1000);
-
-/* PWA SW */
+<script>
+/* SW */
 if("serviceWorker" in navigator){
   window.addEventListener("load", ()=>{
-    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+    navigator.serviceWorker.register("sw.js").catch(()=>{});
   });
 }
 </script>
