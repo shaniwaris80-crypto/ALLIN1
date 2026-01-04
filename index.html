@@ -96,7 +96,6 @@
     .key{border:1px solid var(--line);background:var(--cardSolid);border-radius:12px;padding:8px 10px;font-weight:950;font-size:12px;color:var(--muted);}
     .key b{color:var(--text)}
 
-    /* DEBUG overlay visible if JS errors */
     .debugBar{
       position:fixed; left:12px; right:12px; bottom:12px;
       background: rgba(239,68,68,.14);
@@ -120,7 +119,6 @@
 </head>
 
 <body data-theme="day">
-
   <div id="debugBar" class="debugBar"></div>
 
   <!-- LOCK SCREEN -->
@@ -137,7 +135,7 @@
       </div>
       <div class="lockBody">
         <div class="small">🔒 PIN + bloqueo por intentos · <b>sin auto-bloqueo</b></div>
-        <div class="small">🔁 Si algún día no entra: mantén pulsado <b>Entrar</b> 3s → reset PIN a <b>8410</b>.</div>
+        <div class="small">🔁 Mantén pulsado <b>Entrar</b> 3s → reset PIN a <b>8410</b>.</div>
 
         <div class="pinRow">
           <input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN"/>
@@ -210,7 +208,7 @@
 
 <script>
 /* ===============================
-   ARSLAN HUB PRO (PIN FAIL-SAFE)
+   FIX: SEARCH init BEFORE renderAll
 =============================== */
 
 /* ===== Debug visible ===== */
@@ -226,6 +224,9 @@ window.addEventListener("error", (e)=>{
 window.addEventListener("unhandledrejection", (e)=>{
   showDebug("Promise error: " + (e && e.reason ? String(e.reason) : "desconocido"));
 });
+
+/* ✅ IMPORTANT: declare SEARCH FIRST */
+let SEARCH = "";
 
 /* ===== Sistemas ===== */
 const SYSTEMS = [
@@ -285,7 +286,6 @@ function setTheme(t){
   const el=$("#themeTxt");
   if(el) el.textContent = (t==="night") ? "Noche" : "Día";
 }
-setTheme(getTheme());
 
 /* Open mode */
 function getOpenMode(){return localStorage.getItem(K_OPENMODE)||"new";}
@@ -293,9 +293,8 @@ function setOpenMode(m){
   localStorage.setItem(K_OPENMODE,m);
   const el=$("#openModeTxt");
   if(el) el.textContent=(m==="new")?"Nueva pestaña":"Misma pestaña";
-  renderAll();
+  // ✅ DO NOT call renderAll until defined; safe after functions defined at bottom
 }
-setOpenMode(getOpenMode());
 
 /* Session */
 function isSessionOn(){return localStorage.getItem(K_SESSION)==="1";}
@@ -347,8 +346,6 @@ const grid=$("#grid");
 const favGrid=$("#favGrid");
 const favBadge=$("#favBadge");
 const allBadge=$("#allBadge");
-
-let SEARCH="";
 
 /* lockouts */
 function getFails(){return parseInt(localStorage.getItem(K_FAILS)||"0",10);}
@@ -536,29 +533,70 @@ function renderAll(){
   }
 }
 
-/* Buttons wiring (DOUBLE SAFE) */
+/* Settings menu */
+function changePinFlow(){
+  ensurePin();
+  const current = prompt("PIN actual:");
+  if(current === null) return;
+  const ok = simpleHash(current.trim()) === localStorage.getItem(K_PINHASH);
+  if(!ok){ alert("PIN actual incorrecto ❌"); return; }
+
+  const next = prompt("Nuevo PIN (4-10 dígitos):");
+  if(next === null) return;
+  const clean = next.trim();
+  if(!/^[0-9]{4,10}$/.test(clean)){ alert("PIN inválido. Usa 4 a 10 números."); return; }
+
+  localStorage.setItem(K_PINHASH, simpleHash(clean));
+  alert("PIN cambiado ✅");
+}
+function resetAttempts(){
+  localStorage.setItem(K_FAILS,"0");
+  localStorage.setItem(K_LOCKUNTIL,"0");
+  alert("Intentos reseteados ✅");
+  updateLockInfo();
+}
+function settingsMenu(){
+  const a = getConfirmLock() ? "ON" : "OFF";
+  const b = getClearOnClose() ? "ON" : "OFF";
+  const c = getOpenMode()==="new" ? "Nueva pestaña" : "Misma pestaña";
+  const choice = prompt(
+`AJUSTES:
+1 = Cambiar PIN
+2 = Reset intentos / bloqueo
+3 = Cambiar abrir enlaces (actual: ${c})
+4 = Confirmar al bloquear (actual: ${a})
+5 = Cerrar sesión al cerrar pestaña (actual: ${b})
+
+Escribe 1-5`
+  );
+  if(choice==="1") return changePinFlow();
+  if(choice==="2") return resetAttempts();
+  if(choice==="3"){ setOpenMode(getOpenMode()==="new"?"same":"new"); renderAll(); return; }
+  if(choice==="4"){ const next=!getConfirmLock(); setConfirmLock(next); alert(`Confirmación al bloquear: ${next?"ON":"OFF"}`); return; }
+  if(choice==="5"){ const next=!getClearOnClose(); setClearOnClose(next); alert(`Cerrar sesión al cerrar pestaña: ${next?"ON":"OFF"}`); return; }
+}
+
+/* Wiring */
 function wire(){
-  if(!pinBtn){ showDebug("No existe #pinBtn en el HTML"); return; }
-  if(!pinInput){ showDebug("No existe #pinInput en el HTML"); return; }
+  if(pinBtn){
+    pinBtn.addEventListener("click", tryPin);
+    pinBtn.onclick = tryPin;
+    pinBtn.addEventListener("mousedown", ()=>{ __holdTimer=setTimeout(resetPinToDefault,3000); });
+    pinBtn.addEventListener("touchstart", ()=>{ __holdTimer=setTimeout(resetPinToDefault,3000); }, {passive:true});
+    ["mouseup","mouseleave","touchend","touchcancel"].forEach(ev=>{
+      pinBtn.addEventListener(ev, ()=>{ if(__holdTimer){ clearTimeout(__holdTimer); __holdTimer=null; } });
+    });
+  }
+  if(pinInput){
+    pinInput.addEventListener("keydown",(e)=>{ if(e.key==="Enter") tryPin(); });
+    pinInput.onkeydown = (e)=>{ if(e.key==="Enter") tryPin(); };
+  }
 
-  // doble: listener + handler directo
-  pinBtn.addEventListener("click", tryPin);
-  pinBtn.onclick = tryPin;
+  if(themeBtn) themeBtn.addEventListener("click", ()=>{ setTheme(getTheme()==="night"?"day":"night"); updateLockInfo(); renderAll(); });
+  if(openModeBtn) openModeBtn.addEventListener("click", ()=>{ setOpenMode(getOpenMode()==="new"?"same":"new"); renderAll(); });
 
-  pinInput.addEventListener("keydown",(e)=>{ if(e.key==="Enter") tryPin(); });
-  pinInput.onkeydown = (e)=>{ if(e.key==="Enter") tryPin(); };
-
-  pinBtn.addEventListener("mousedown", ()=>{ __holdTimer=setTimeout(resetPinToDefault,3000); });
-  pinBtn.addEventListener("touchstart", ()=>{ __holdTimer=setTimeout(resetPinToDefault,3000); }, {passive:true});
-  ["mouseup","mouseleave","touchend","touchcancel"].forEach(ev=>{
-    pinBtn.addEventListener(ev, ()=>{ if(__holdTimer){ clearTimeout(__holdTimer); __holdTimer=null; } });
-  });
-
-  if(themeBtn) themeBtn.addEventListener("click", ()=> setTheme(getTheme()==="night" ? "day" : "night"));
-  if(openModeBtn) openModeBtn.addEventListener("click", ()=> setOpenMode(getOpenMode()==="new" ? "same" : "new"));
   if(openMainBtn) openMainBtn.addEventListener("click", ()=> openSystemByIndex(0));
-  if(clearSearchBtn) clearSearchBtn.addEventListener("click", ()=>{ if(searchInput){ searchInput.value=""; setSearch(""); searchInput.focus(); } });
-  if(searchInput) searchInput.addEventListener("input",(e)=> setSearch(e.target.value));
+  if(settingsBtn) settingsBtn.addEventListener("click", settingsMenu);
 
   if(copyLinksBtn){
     copyLinksBtn.addEventListener("click", async ()=>{
@@ -570,6 +608,9 @@ function wire(){
       }catch{ alert(text); }
     });
   }
+
+  if(searchInput) searchInput.addEventListener("input",(e)=> setSearch(e.target.value));
+  if(clearSearchBtn) clearSearchBtn.addEventListener("click", ()=>{ if(searchInput){ searchInput.value=""; setSearch(""); searchInput.focus(); } });
 
   function doLock(){
     if(getConfirmLock()){
@@ -591,19 +632,26 @@ function wire(){
     if(e.key==="Escape") return doLock();
   });
 
-  if(getClearOnClose()){
-    window.addEventListener("beforeunload", ()=> localStorage.setItem(K_SESSION,"0"));
-  }
+  window.addEventListener("beforeunload", ()=>{
+    if(getClearOnClose()){
+      localStorage.setItem(K_SESSION,"0");
+    }
+  });
 }
 
-/* Boot */
+/* Init (SAFE ORDER) */
 try{
+  setTheme(getTheme());
+  setOpenMode(getOpenMode());
   wire();
+
   if(isSessionOn()) showApp();
   else showLock();
+
   updateLockInfo();
-  setInterval(()=>{ if(lockEl && lockEl.style.display!=="none") updateLockInfo(); }, 250);
   renderAll();
+
+  setInterval(()=>{ if(lockEl && lockEl.style.display!=="none") updateLockInfo(); }, 250);
 
   if("serviceWorker" in navigator){
     window.addEventListener("load", ()=>{ navigator.serviceWorker.register("./sw.js").catch(()=>{}); });
