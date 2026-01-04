@@ -10,37 +10,41 @@
   <meta name="theme-color" content="#0b0f14">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Icon (solo para pestaña/app, NO para DVD) -->
   <link rel="icon" type="image/png" href="icon-192.png">
 
   <style>
     :root{
-      --bg:#f4f7fb;
-      --panel:#ffffff;
-      --soft: rgba(2,6,23,.04);
-      --line: rgba(2,6,23,.10);
+      --bg:#f5f7fb;
+      --panel: rgba(255,255,255,.92);
+      --panel2: rgba(0,0,0,.02);
+      --line: rgba(12,18,32,.12);
       --text:#0b1220;
-      --muted: rgba(11,18,32,.60);
-      --shadow: 0 22px 70px rgba(2,6,23,.10);
-      --shadow2: 0 10px 28px rgba(2,6,23,.08);
-      --r: 24px;
+      --muted: rgba(11,18,32,.58);
+      --shadow: 0 22px 70px rgba(2,6,23,.12);
+      --shadow2: 0 10px 24px rgba(2,6,23,.10);
+      --r: 26px;
+
+      --a1:#0ea5e9;
+      --a2:#16a34a;
+      --a3:#8b5cf6;
+
       --safeB: env(safe-area-inset-bottom, 0px);
       --safeT: env(safe-area-inset-top, 0px);
-
-      --accent:#16a34a;
-      --accent2:#0ea5e9;
-      --danger:#ef4444;
-      --focus: 0 0 0 5px rgba(14,165,233,.16);
+      --glow: 0 0 0 6px rgba(14,165,233,.14);
     }
+
     [data-theme="night"]{
       --bg:#070b11;
       --panel: rgba(255,255,255,.06);
-      --soft: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.04);
       --line: rgba(255,255,255,.10);
       --text:#eef6ff;
       --muted: rgba(238,246,255,.62);
       --shadow: 0 22px 70px rgba(0,0,0,.55);
-      --shadow2: 0 10px 28px rgba(0,0,0,.32);
-      --focus: 0 0 0 5px rgba(56,189,248,.18);
+      --shadow2: 0 10px 24px rgba(0,0,0,.30);
+      --glow: 0 0 0 6px rgba(14,165,233,.16);
     }
 
     *{box-sizing:border-box}
@@ -50,9 +54,9 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color: var(--text);
       background:
-        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.14), transparent 60%),
-        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.12), transparent 60%),
-        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.10), transparent 60%),
+        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.14), transparent 62%),
+        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.12), transparent 62%),
+        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.10), transparent 62%),
         linear-gradient(180deg, var(--bg), var(--bg));
     }
 
@@ -62,6 +66,7 @@
       place-items:center;
       padding: 18px 18px calc(18px + var(--safeB));
     }
+
     .app{
       width:min(980px, 100%);
       border:1px solid var(--line);
@@ -72,6 +77,17 @@
       backdrop-filter: blur(14px);
       position:relative;
     }
+    .app::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(820px 160px at 20% 0%, rgba(14,165,233,.16), transparent 58%),
+        radial-gradient(820px 160px at 85% 0%, rgba(22,163,74,.12), transparent 58%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .app>*{position:relative; z-index:1;}
+
     .top{
       padding: calc(16px + var(--safeT)) 16px 16px;
       border-bottom: 1px solid var(--line);
@@ -79,22 +95,22 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
     }
 
     .brand{
       display:flex; align-items:center; gap:12px;
-      min-width:220px;
+      min-width: 220px;
     }
     .logoBox{
-      width:46px;height:46px;
+      width:46px; height:46px;
       border-radius: 18px;
       border:1px solid var(--line);
-      background: var(--soft);
-      box-shadow: var(--shadow2);
+      background: var(--panel2);
       overflow:hidden;
       display:grid;
       place-items:center;
+      box-shadow: var(--shadow2);
       flex:0 0 auto;
     }
     .logoBox img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -103,33 +119,34 @@
       display:none;
       place-items:center;
       font-size:22px;
-      font-weight:1000;
+      font-weight: 1000;
     }
-
-    .title{min-width:0}
+    .title{
+      display:flex; flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
     .title b{
-      display:block;
       font-size:15px;
-      font-weight:1000;
       letter-spacing:.2px;
-      line-height:1.1;
+      font-weight: 1000;
     }
     .title span{
-      display:block;
-      margin-top:4px;
       font-size:12px;
-      font-weight:850;
       color: var(--muted);
-      white-space:nowrap;
+      font-weight: 850;
+      white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
-      max-width:520px;
+      max-width: 520px;
     }
 
-    .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
     .btn{
       border:1px solid var(--line);
-      background: var(--soft);
+      background: var(--panel2);
       color: var(--text);
       padding: 10px 12px;
       border-radius: 16px;
@@ -137,69 +154,64 @@
       font-size: 13px;
       cursor:pointer;
       user-select:none;
-      box-shadow: var(--shadow2);
       transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+      box-shadow: var(--shadow2);
     }
     .btn:hover{opacity:.96; transform: translateY(-1px)}
     .btn:active{transform: translateY(0px)}
-    .btn:focus{outline:none; box-shadow: var(--shadow2), var(--focus);}
+    .btn:focus{outline:none; box-shadow: var(--shadow2), var(--glow);}
+
     .btn.primary{
       border-color: transparent;
-      background: linear-gradient(135deg, rgba(14,165,233,.95), rgba(22,163,74,.92));
-      color:#041018;
+      background: linear-gradient(135deg, rgba(14,165,233,.96), rgba(22,163,74,.92));
+      color: #041018;
+      box-shadow: 0 16px 50px rgba(14,165,233,.14), var(--shadow2);
     }
 
-    .content{padding: 18px;}
-    .hero{
-      border:1px solid var(--line);
-      background: var(--soft);
-      border-radius: 24px;
-      box-shadow: var(--shadow2);
-      padding: 14px 16px;
+    .content{ padding: 18px; }
+
+    .statusRow{
       display:flex;
-      align-items:center;
-      justify-content:space-between;
       gap:12px;
-      margin-bottom: 14px;
-    }
-
-    .heroLeft{min-width:0}
-    .heroLeft .big{
-      font-size:18px;
-      font-weight: 1000;
-      letter-spacing:.2px;
-    }
-    .heroLeft .sub{
-      margin-top:6px;
-      font-size:12px;
-      font-weight: 900;
-      color: var(--muted);
-      display:flex;
-      gap:10px;
       flex-wrap:wrap;
       align-items:center;
+      justify-content:space-between;
+      margin: 2px 0 14px;
     }
-    .pill{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.08);
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-weight: 950;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    [data-theme="night"] .pill{ background: rgba(255,255,255,.06); }
 
-    .grid{
+    .statusPill{
+      border:1px solid var(--line);
+      background: var(--panel2);
+      border-radius: 999px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight: 950;
+      font-size: 13px;
+      white-space:nowrap;
+    }
+    .statusPill small{
+      color: var(--muted);
+      font-weight: 900;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: linear-gradient(135deg, var(--a1), var(--a2));
+      box-shadow: 0 10px 30px rgba(14,165,233,.18);
+    }
+
+    .center{
       display:grid;
       gap:14px;
       grid-template-columns: 1fr 1fr;
     }
-    .card{
+
+    .big{
       border:1px solid var(--line);
-      background: var(--soft);
+      background: var(--panel2);
       border-radius: 26px;
-      box-shadow: var(--shadow2);
       padding: 18px;
       display:flex;
       align-items:center;
@@ -207,43 +219,64 @@
       gap:16px;
       cursor:pointer;
       transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease, border-color .12s ease;
+      box-shadow: var(--shadow2);
       min-height: 92px;
     }
-    .card:hover{
+    .big:hover{
       opacity:.97;
       transform: translateY(-2px);
       box-shadow: var(--shadow);
-      border-color: rgba(14,165,233,.25);
+      border-color: rgba(14,165,233,.28);
     }
-    .card:active{transform: translateY(0px)}
-    .card:focus{outline:none; box-shadow: var(--shadow2), var(--focus);}
+    .big:active{transform: translateY(0px)}
+    .big:focus{outline:none; box-shadow: var(--shadow2), var(--glow);}
 
-    .left{display:flex; align-items:center; gap:14px; min-width:0;}
-    .ico{
-      width:56px;height:56px;border-radius: 20px;
+    .bigLeft{display:flex; align-items:center; gap:14px; min-width:0;}
+    .bigIco{
+      width:54px;height:54px;
+      border-radius: 20px;
       border:1px solid var(--line);
-      display:grid; place-items:center;
+      display:grid;
+      place-items:center;
       background:
         radial-gradient(60px 60px at 30% 25%, rgba(14,165,233,.16), transparent 60%),
         radial-gradient(60px 60px at 85% 25%, rgba(22,163,74,.12), transparent 60%);
-      box-shadow: var(--shadow2);
       font-size: 24px;
+      box-shadow: var(--shadow2);
       flex:0 0 auto;
     }
-    .txt{min-width:0}
-    .txt b{display:block; font-size:16px; font-weight:1000;}
-    .txt span{display:block; margin-top:4px; font-size:12px; color:var(--muted); font-weight:900; white-space:nowrap; overflow:hidden; text-overflow: ellipsis;}
-    .go{
+    .bigTxt{min-width:0}
+    .bigTxt b{
+      display:block;
+      font-size:16px;
+      letter-spacing:.2px;
+      font-weight: 1000;
+    }
+    .bigTxt span{
+      display:block;
+      font-size:12px;
+      color: var(--muted);
+      font-weight: 850;
+      margin-top:4px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      max-width: 520px;
+    }
+    .chip{
       border:1px solid var(--line);
-      background: rgba(255,255,255,.08);
       padding: 8px 12px;
       border-radius: 999px;
+      background: rgba(255,255,255,.04);
       font-weight: 950;
       font-size: 12px;
-      color: var(--muted);
       white-space:nowrap;
+      color: rgba(238,246,255,.88);
     }
-    [data-theme="night"] .go{ background: rgba(255,255,255,.06); }
+    [data-theme="day"] .chip{
+      background: rgba(0,0,0,.02);
+      color: rgba(11,18,32,.75);
+    }
 
     .foot{
       margin-top: 14px;
@@ -255,209 +288,214 @@
       border-top:1px solid var(--line);
       padding-top: 14px;
       color: var(--muted);
-      font-weight: 900;
+      font-weight: 850;
       font-size: 12px;
     }
 
-    /* ============ PAUSA ============ */
+    /* ===== PAUSA ===== */
     .pause{
       position:fixed; inset:0;
       display:none;
       z-index: 999;
       background:
-        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.18), transparent 60%),
-        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.16), transparent 60%),
-        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.12), transparent 60%),
+        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.18), transparent 62%),
+        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.16), transparent 62%),
+        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.14), transparent 62%),
         linear-gradient(180deg, var(--bg), var(--bg));
     }
     .pause::before{
       content:"";
       position:absolute; inset:0;
-      backdrop-filter: blur(18px);
-      background: rgba(0,0,0,.18);
+      backdrop-filter: blur(16px);
+      background: rgba(0,0,0,.20);
     }
-    [data-theme="night"] .pause::before{ background: rgba(0,0,0,.34); }
+    [data-theme="night"] .pause::before{ background: rgba(0,0,0,.40); }
 
-    .pauseName{
-      position:absolute; inset:0;
-      display:grid; place-items:center;
-      pointer-events:none;
+    /* Fondo texto moviéndose (nombre) */
+    .movingName{
+      position:absolute;
+      left: 0;
+      top: 0;
       font-weight: 1000;
       letter-spacing:.14em;
       text-transform: uppercase;
-      font-size: clamp(56px, 9vw, 132px);
+      font-size: clamp(48px, 8vw, 110px);
       opacity: .10;
       color: var(--text);
-      text-align:center;
-      padding: 0 16px;
-      transform: translateY(-10px);
+      pointer-events:none;
+      user-select:none;
+      white-space: nowrap;
+      z-index: 1;
+      transform: translate3d(0,0,0);
+      will-change: transform;
     }
 
+    /* Bloque central grande */
     .pauseCenter{
       position:absolute;
       inset:0;
       display:grid;
       place-items:center;
-      z-index: 2;
+      z-index: 3;
       padding: 18px;
+      pointer-events:none;
     }
-    .pausePanel{
-      width:min(980px, 100%);
-      border-radius: 30px;
+    .centerCard{
+      width: min(900px, 100%);
       border:1px solid var(--line);
-      background: var(--panel);
+      background: rgba(255,255,255,.06);
+      border-radius: 30px;
       box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .pauseTop{
-      border-bottom:1px solid var(--line);
+      backdrop-filter: blur(14px);
       padding: 18px;
-      background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
       text-align:center;
     }
-    .pauseTime{
-      font-size: clamp(52px, 6.5vw, 92px);
+    [data-theme="day"] .centerCard{ background: rgba(255,255,255,.74); }
+
+    .bigLine{
+      font-size: clamp(54px, 6.6vw, 88px);
       font-weight: 1000;
       letter-spacing:-.02em;
-      line-height:1;
+      line-height: 1.05;
+      margin: 6px 0 0;
     }
-    .pauseMeta{
-      margin-top:10px;
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      flex-wrap:wrap;
-      color: var(--muted);
+    .subLine{
+      margin-top: 10px;
+      font-size: 14px;
       font-weight: 950;
-      font-size: 13px;
-    }
-    .pauseMeta .p{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.08);
-      padding: 8px 12px;
-      border-radius: 999px;
-    }
-    [data-theme="night"] .pauseMeta .p{ background: rgba(255,255,255,.06); }
-
-    .pauseBody{
-      padding: 18px;
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 16px;
-    }
-    .box{
-      border:1px solid var(--line);
-      background: var(--soft);
-      border-radius: 24px;
-      box-shadow: var(--shadow2);
-      padding: 14px;
-    }
-
-    /* Calendar */
-    .calHead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 10px;
-    }
-    .calHead b{
-      font-size:14px;
-      font-weight: 1000;
       letter-spacing:.18em;
       text-transform: uppercase;
       color: var(--muted);
     }
+    .tempLine{
+      margin-top: 8px;
+      font-size: clamp(34px, 4.6vw, 52px);
+      font-weight: 1000;
+      letter-spacing:-.02em;
+    }
+
+    /* Calendario */
+    .calWrap{
+      margin-top: 14px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      display:grid;
+      gap:10px;
+    }
+    .calHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .calHeader b{
+      font-size: 14px;
+      font-weight: 1000;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+    }
+    .calHeader span{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
     .calGrid{
       display:grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap:8px;
     }
     .dow{
-      font-size:11px;
+      font-size: 11px;
+      font-weight: 950;
       color: var(--muted);
-      font-weight: 1000;
-      text-align:center;
-      letter-spacing:.14em;
-      text-transform:uppercase;
+      letter-spacing:.18em;
+      text-transform: uppercase;
       padding: 6px 0;
     }
     .day{
       border:1px solid var(--line);
-      background: rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
       border-radius: 14px;
       min-height: 44px;
       display:grid;
       place-items:center;
-      font-weight: 1000;
-      color: var(--text);
+      font-weight: 950;
       position:relative;
-      user-select:none;
     }
-    [data-theme="night"] .day{ background: rgba(255,255,255,.06); }
+    [data-theme="day"] .day{ background: rgba(0,0,0,.02); }
     .day.muted{
-      opacity:.45;
-      font-weight: 900;
+      opacity:.35;
     }
     .day.today{
-      border-color: rgba(239,68,68,.55);
+      border-color: rgba(239,68,68,.70);
       box-shadow: 0 0 0 4px rgba(239,68,68,.14);
-    }
-    .day.today .num{
-      color: var(--danger);
     }
     .heart{
       position:absolute;
-      top:6px;
       right:8px;
+      top:6px;
       font-size: 14px;
-      line-height:1;
+      color: rgb(239,68,68);
+      line-height: 1;
     }
 
-    /* DVD fruits */
-    .dvdLayer{
-      position:fixed; inset:0;
-      z-index: 1;
-      pointer-events:none;
-    }
-    .dvdFruit{
+    /* Frutas DVD */
+    .fruit{
       position:absolute;
-      width: 70px;
-      height: 70px;
-      border-radius: 22px;
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
       border:1px solid var(--line);
-      background: rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
       box-shadow: var(--shadow2);
       display:grid;
       place-items:center;
-      font-size: 34px;
+      font-size: 28px;
       user-select:none;
+      pointer-events:none;
+      z-index: 2;
+      will-change: transform;
       backdrop-filter: blur(10px);
     }
-    [data-theme="night"] .dvdFruit{ background: rgba(255,255,255,.06); }
+    [data-theme="day"] .fruit{ background: rgba(255,255,255,.70); }
 
     .pauseHint{
-      margin-top: 12px;
-      text-align:center;
+      position:absolute;
+      left:0; right:0;
+      bottom: calc(16px + var(--safeB));
+      display:flex;
+      justify-content:center;
+      z-index: 4;
+      pointer-events:none;
+    }
+    .pauseHint .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
       color: var(--muted);
       font-weight: 950;
       font-size: 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      padding: 10px 12px;
+      border-radius: 999px;
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(12px);
     }
+    [data-theme="day"] .pauseHint .row{ background: rgba(255,255,255,.70); }
     .kbd{
       border:1px solid var(--line);
-      background: rgba(255,255,255,.08);
       padding: 7px 10px;
       border-radius: 12px;
-      display:inline-block;
-      margin: 0 6px;
+      background: rgba(255,255,255,.05);
     }
-    [data-theme="night"] .kbd{ background: rgba(255,255,255,.06); }
 
     @media (max-width: 820px){
-      .grid{ grid-template-columns: 1fr; }
-      .title span{ display:none; }
-      .pauseBody{ grid-template-columns: 1fr; }
-      .dvdFruit{ width: 62px; height: 62px; border-radius: 20px; font-size: 30px; }
+      .center{ grid-template-columns: 1fr; }
+      .title span{display:none}
     }
   </style>
 </head>
@@ -466,61 +504,38 @@
 
   <!-- PAUSA -->
   <div id="pause" class="pause" aria-hidden="true">
-    <div class="pauseName">ARSLAN PRO</div>
-
-    <!-- DVD fruits behind the panel -->
-    <div id="dvdLayer" class="dvdLayer" aria-hidden="true"></div>
+    <div id="movingName" class="movingName">ARSLAN PRO</div>
 
     <div class="pauseCenter">
-      <div class="pausePanel">
-        <div class="pauseTop">
-          <div class="pauseTime" id="pTime">--:--</div>
-          <div class="pauseMeta">
-            <div class="p" id="pDate">--</div>
-            <div class="p" id="pPlace">📍 Burgos</div>
-            <div class="p" id="pTemp">🌡️ -- °C</div>
+      <div class="centerCard">
+        <div class="bigLine" id="pTime">--:--</div>
+        <div class="subLine" id="pDate">----</div>
+        <div class="subLine" id="pPlace">BURGOS</div>
+        <div class="tempLine" id="pTemp">--°C</div>
+
+        <div class="calWrap">
+          <div class="calHeader">
+            <b id="calTitle">Mes</b>
+            <span>Hoy en rojo ❤️</span>
           </div>
-          <div class="pauseHint">
-            <span class="kbd"><b>Enter</b></span> o <span class="kbd"><b>Esc</b></span> para volver
-          </div>
+          <div class="calGrid" id="calGrid"></div>
         </div>
+      </div>
+    </div>
 
-        <div class="pauseBody">
-          <div class="box">
-            <div class="calHead">
-              <b id="calTitle">CALENDARIO</b>
-              <span class="pill" id="todayLabel">HOY</span>
-            </div>
-            <div class="calGrid" id="calGrid"></div>
-          </div>
-
-          <div class="box">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px;">
-              <b style="font-size:14px; font-weight:1000; letter-spacing:.18em; text-transform:uppercase; color:var(--muted);">Pausa</b>
-              <span class="pill">Frutas DVD</span>
-            </div>
-            <div style="color:var(--muted); font-weight:900; font-size:13px; line-height:1.45;">
-              Salvapantallas con frutas rebotando. <br/>
-              Mantiene privacidad sin PIN. <br/><br/>
-              Atajos activos:
-              <div style="margin-top:10px;">
-                <span class="kbd">F</span><span class="kbd">L</span><span class="kbd">B</span><span class="kbd">G</span><span class="kbd">R</span>
-                <span class="kbd">M</span><span class="kbd">O</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
+    <div class="pauseHint">
+      <div class="row">
+        <span class="kbd"><b>Enter</b> volver</span>
+        <span class="kbd"><b>Esc</b> volver</span>
       </div>
     </div>
   </div>
 
-  <!-- APP -->
   <div class="wrap">
     <div class="app">
       <div class="top">
         <div class="brand">
-          <div class="logoBox" aria-hidden="true">
+          <div class="logoBox">
             <img id="logo" src="icon-192.png" alt="Kiwi">
             <div id="logoFallback" class="logoFallback">🥝</div>
           </div>
@@ -531,7 +546,7 @@
         </div>
 
         <div class="actions">
-          <button class="btn" id="modeBtn" type="button">🌓 Noche</button>
+          <button class="btn" id="themeBtn" type="button">🌓 Día</button>
           <button class="btn" id="openModeBtn" type="button">🔗 Nueva pestaña</button>
           <button class="btn primary" id="lastBtn" type="button">🟢 Abrir último</button>
           <button class="btn" id="copyBtn" type="button">📋 Copiar</button>
@@ -540,23 +555,27 @@
       </div>
 
       <div class="content">
-        <div class="hero">
-          <div class="heroLeft">
-            <div class="big" id="hTime">--:--</div>
-            <div class="sub">
-              <span class="pill" id="hDate">--</span>
-              <span class="pill" id="hPlace">📍 Burgos</span>
-              <span class="pill" id="hTemp">🌡️ -- °C</span>
-            </div>
+        <!-- Hora/fecha/lugar/temp en principal -->
+        <div class="statusRow">
+          <div class="statusPill" id="mainClock">
+            <span class="dot"></span>
+            <span id="mTime">--:--</span>
+            <small id="mDate">----</small>
           </div>
-          <div class="pill" id="status">Listo</div>
+
+          <div class="statusPill" id="mainWeather">
+            <span class="dot"></span>
+            <span id="mPlace">Burgos</span>
+            <small id="mTemp">--°C</small>
+          </div>
         </div>
 
-        <div class="grid" id="grid"></div>
+        <!-- 4 botones grandes -->
+        <div class="center" id="grid"></div>
 
         <div class="foot">
-          <div>Atajos: F Facturas · L Listas · B B2B · G GS · R Último · M Modo · O Abrir · Esc Pausa</div>
-          <div>Sin PIN · Simple · Pro</div>
+          <div>Atajos: F Facturas · L Listas · B B2B · G GS · R Último · Esc Pausa</div>
+          <div id="status">Listo</div>
         </div>
       </div>
     </div>
@@ -564,54 +583,53 @@
 
 <script>
 /* ===============================
-   ARSLAN PRO — HUB (SIMPLE, SIN ERRORES)
+   ARSLAN PRO — HUB (SIMPLE + PRO)
    - Día por defecto
-   - Hora/fecha/lugar/temperatura en Home y Pausa
-   - Pausa: panel centrado + calendario del mes (hoy rojo + ❤️)
-   - Pausa: DVD con frutas (no logo)
-   - Atajos: F/L/B/G/R/Esc/Enter + M (modo) + O (open mode)
+   - Pausa 30s inactividad
+   - Pausa: reloj grande + Burgos + temp + calendario mes (hoy rojo ❤️)
+   - Pausa: frutas rebotando (DVD)
+   - Nombre ARSLAN PRO moviéndose detrás
 =============================== */
-
-/* ===== Config ===== */
-const PLACE_NAME = "Burgos";
-const BURGOS = { lat: 42.34106, lon: -3.70184, tz: "Europe/Madrid" }; // coords Burgos aprox :contentReference[oaicite:1]{index=1}
 
 const SYSTEMS = [
   { id:"facturas", icon:"🧾", name:"Facturas", sub:"arslanpro.com", url:"http://arslanpro.com/" },
-  { id:"listas",   icon:"📝", name:"Listas / Pedidos", sub:"/pedidos", url:"https://shaniwaris80-crypto.github.io/pedidos/" },
-  { id:"b2b",      icon:"📚", name:"B2B Contabilidad", sub:"/b2b", url:"https://shaniwaris80-crypto.github.io/b2b/" },
-  { id:"gs",       icon:"🏪", name:"GS Gestión / Ventas", sub:"/GS", url:"https://shaniwaris80-crypto.github.io/GS/" }
+  { id:"listas",   icon:"📝", name:"Listas / Pedidos", sub:"GitHub · /pedidos", url:"https://shaniwaris80-crypto.github.io/pedidos/" },
+  { id:"b2b",      icon:"📚", name:"B2B Contabilidad", sub:"GitHub · /b2b", url:"https://shaniwaris80-crypto.github.io/b2b/" },
+  { id:"gs",       icon:"🏪", name:"GS Gestión / Ventas", sub:"GitHub · /GS", url:"https://shaniwaris80-crypto.github.io/GS/" }
 ];
 
-const K_THEME = "ARSLAN_HUB_THEME";      // day/night
-const K_OPEN  = "ARSLAN_HUB_OPENMODE";   // new/same
-const K_LAST  = "ARSLAN_HUB_LASTOPEN";   // id
+const PLACE_NAME = "Burgos";
+const BURGOS = { lat: 42.3439, lon: -3.6969, tz: "Europe/Madrid" }; // Burgos
+
+const K_THEME="ARSLAN_HUB_THEME";
+const K_OPENMODE="ARSLAN_HUB_OPENMODE";
+const K_LAST="ARSLAN_HUB_LAST";
+
+const INACTIVITY_MS = 30000; // 30s
+
+const FRUITS = ["🍎","🍏","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍑","🍒","🥭","🍍","🥝","🍅"];
 
 const $ = s => document.querySelector(s);
 
-/* ===== Theme & Open Mode ===== */
 function getTheme(){ return localStorage.getItem(K_THEME) || "day"; }
 function setTheme(t){
   localStorage.setItem(K_THEME, t);
   document.body.setAttribute("data-theme", t);
-  $("#modeBtn").textContent = (t==="day") ? "🌓 Noche" : "☀️ Día";
+  const isNight = (t==="night");
+  $("#themeBtn").textContent = isNight ? "🌙 Noche" : "🌓 Día";
 }
-function toggleTheme(){ setTheme(getTheme()==="day" ? "night" : "day"); }
 
-function getOpenMode(){ return localStorage.getItem(K_OPEN) || "new"; }
+function getOpenMode(){ return localStorage.getItem(K_OPENMODE) || "new"; }
 function setOpenMode(m){
-  localStorage.setItem(K_OPEN, m);
+  localStorage.setItem(K_OPENMODE, m);
   $("#openModeBtn").textContent = (m==="new") ? "🔗 Nueva pestaña" : "🔗 Misma pestaña";
 }
-function toggleOpenMode(){ setOpenMode(getOpenMode()==="new" ? "same" : "new"); }
 
-/* ===== Open Systems ===== */
 function openSystem(id){
   const s = SYSTEMS.find(x=>x.id===id);
   if(!s) return;
   localStorage.setItem(K_LAST, id);
-  const mode = getOpenMode();
-  if(mode==="new") window.open(s.url, "_blank", "noopener");
+  if(getOpenMode()==="new") window.open(s.url, "_blank", "noopener");
   else window.location.href = s.url;
 }
 function openLast(){
@@ -620,18 +638,17 @@ function openLast(){
   else openSystem("facturas");
 }
 
-/* ===== Render cards ===== */
 function cardHTML(s){
   return `
-    <div class="card" data-open="${s.id}" tabindex="0" role="button" aria-label="Abrir ${s.name}">
-      <div class="left">
-        <div class="ico">${s.icon}</div>
-        <div class="txt">
+    <div class="big" data-open="${s.id}" tabindex="0" role="button" aria-label="Abrir ${s.name}">
+      <div class="bigLeft">
+        <div class="bigIco">${s.icon}</div>
+        <div class="bigTxt">
           <b>${s.name}</b>
           <span>${s.sub}</span>
         </div>
       </div>
-      <div class="go">Abrir →</div>
+      <div class="chip">Abrir →</div>
     </div>
   `;
 }
@@ -642,310 +659,314 @@ function render(){
     el.addEventListener("click", ()=> openSystem(id));
     el.addEventListener("keydown",(e)=>{ if(e.key==="Enter") openSystem(id); });
   });
-
-  const last = localStorage.getItem(K_LAST) || "—";
-  $("#status").textContent = `Último: ${String(last).toUpperCase()}`;
 }
 
-/* ===== Copy links ===== */
+/* ===== Logo robusto (principal) ===== */
+function initLogo(){
+  const img = $("#logo");
+  const fb = $("#logoFallback");
+  img.onerror = () => {
+    img.style.display="none";
+    fb.style.display="grid";
+  };
+}
+
+/* ===== Copiar links ===== */
 async function copyLinks(){
   const text = SYSTEMS.map(s => `${s.name}: ${s.url}`).join("\n");
   try{
     await navigator.clipboard.writeText(text);
-    $("#status").textContent = "Copiado ✅";
-    setTimeout(()=>$("#status").textContent="Listo", 900);
+    $("#status").textContent = "Links copiados ✅";
   }catch{
     alert(text);
   }
 }
 
-/* ===== Clock + Date ===== */
+/* ===== Hora/Fecha (Burgos) ===== */
 function fmt2(n){ return String(n).padStart(2,"0"); }
-function formatDateES(d){
+function formatDateLong(d){
   const days=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
   const months=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
   return `${days[d.getDay()]} · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
-function tickClock(){
-  const d = new Date();
-  const time = `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`;
-  const date = formatDateES(d);
+function tickTime(){
+  const now = new Date();
+  // Hora local del navegador, pero en España será correcto normalmente.
+  // (Si quieres 100% Burgos, se puede usar Intl con timeZone: Europe/Madrid.)
+  $("#mTime").textContent = `${fmt2(now.getHours())}:${fmt2(now.getMinutes())}`;
+  $("#mDate").textContent = formatDateLong(now);
 
-  $("#hTime").textContent = time;
-  $("#hDate").textContent = date;
-
-  $("#pTime").textContent = time;
-  $("#pDate").textContent = date;
+  $("#pTime").textContent = `${fmt2(now.getHours())}:${fmt2(now.getMinutes())}`;
+  $("#pDate").textContent = formatDateLong(now);
 }
 
-/* ===== Weather (Open-Meteo current temperature) ===== */
-let lastTemp = null;
+/* ===== Temperatura (Open-Meteo) ===== */
+let lastTempText = "--°C";
 
-async function fetchWeather(){
-  const url =
-    `https://api.open-meteo.com/v1/forecast` +
-    `?latitude=${encodeURIComponent(BURGOS.lat)}` +
-    `&longitude=${encodeURIComponent(BURGOS.lon)}` +
-    `&current=temperature_2m` +
-    `&timezone=${encodeURIComponent(BURGOS.tz)}`;
-
+async function refreshWeather(){
   try{
-    const r = await fetch(url, { cache: "no-store" });
-    if(!r.ok) throw new Error("HTTP " + r.status);
-    const j = await r.json();
-    const t = j && j.current ? j.current.temperature_2m : null;
-    if(typeof t !== "number") throw new Error("No temp");
-    lastTemp = t;
-
-    const txt = `🌡️ ${Math.round(t)} °C`;
-    $("#hTemp").textContent = txt;
-    $("#pTemp").textContent = txt;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${BURGOS.lat}&longitude=${BURGOS.lon}&current_weather=true&timezone=${encodeURIComponent(BURGOS.tz)}`;
+    const res = await fetch(url, { cache: "no-store" });
+    if(!res.ok) throw new Error("weather http");
+    const data = await res.json();
+    const t = data?.current_weather?.temperature;
+    if(typeof t === "number"){
+      lastTempText = `${Math.round(t)}°C`;
+      $("#mTemp").textContent = lastTempText;
+      $("#pTemp").textContent = lastTempText;
+    }
   }catch{
-    const txt = lastTemp==null ? "🌡️ -- °C" : `🌡️ ${Math.round(lastTemp)} °C`;
-    $("#hTemp").textContent = txt;
-    $("#pTemp").textContent = txt;
+    // deja lo último o --
+    $("#mTemp").textContent = lastTempText;
+    $("#pTemp").textContent = lastTempText;
   }
 }
 
-/* ===== Place ===== */
-function setPlace(){
-  $("#hPlace").textContent = `📍 ${PLACE_NAME}`;
-  $("#pPlace").textContent = `📍 ${PLACE_NAME}`;
-}
-
-/* ===== Calendar (month view + today red + ❤️) ===== */
+/* ===== Calendario del mes (hoy rojo + ❤️) ===== */
 function buildCalendar(){
   const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
+  const y = now.getFullYear();
+  const m = now.getMonth(); // 0-11
+  const today = now.getDate();
 
-  const monthsFull = ["ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"];
-  $("#calTitle").textContent = `${monthsFull[month]} ${year}`;
+  const months=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  $("#calTitle").textContent = `${months[m]} ${y}`;
 
-  $("#todayLabel").textContent = `HOY: ${now.getDate()}`;
-
-  const first = new Date(year, month, 1);
-  const last  = new Date(year, month + 1, 0);
-
-  // Start week on Monday (ES): convert JS (Sun=0) -> Mon=0
-  const startIndex = (first.getDay() + 6) % 7;
-
-  const daysInMonth = last.getDate();
-
-  // previous month days to fill
-  const prevLast = new Date(year, month, 0).getDate();
-
-  const dow = ["L","M","X","J","V","S","D"];
   const grid = $("#calGrid");
-  grid.innerHTML = dow.map(x=>`<div class="dow">${x}</div>`).join("");
+  grid.innerHTML = "";
 
-  // total cells = 7*6 (42) for stable layout (nice)
-  const totalCells = 42;
+  const dows = ["L","M","X","J","V","S","D"];
+  dows.forEach(x=>{
+    const el = document.createElement("div");
+    el.className = "dow";
+    el.textContent = x;
+    grid.appendChild(el);
+  });
 
-  for(let i=0; i<totalCells; i++){
-    const cellIndex = i - startIndex + 1;
-    let num, cls = "day", isToday=false;
+  // first day of month
+  const first = new Date(y, m, 1);
+  let firstDow = first.getDay(); // 0 Sun - 6 Sat
+  // convert to Monday-first index (0..6)
+  firstDow = (firstDow + 6) % 7;
 
-    if(cellIndex <= 0){
-      // prev month
-      num = prevLast + cellIndex;
-      cls += " muted";
-    } else if(cellIndex > daysInMonth){
-      // next month
-      num = cellIndex - daysInMonth;
-      cls += " muted";
-    } else {
-      num = cellIndex;
-      if(num === now.getDate()){
-        isToday = true;
-        cls += " today";
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const prevDays = new Date(y, m, 0).getDate();
+
+  // Fill 6 weeks (42 cells)
+  for(let i=0;i<42;i++){
+    const cell = document.createElement("div");
+    cell.className = "day";
+
+    const dayNum = i - firstDow + 1;
+    if(dayNum <= 0){
+      cell.classList.add("muted");
+      cell.textContent = String(prevDays + dayNum);
+    }else if(dayNum > daysInMonth){
+      cell.classList.add("muted");
+      cell.textContent = String(dayNum - daysInMonth);
+    }else{
+      cell.textContent = String(dayNum);
+      if(dayNum === today){
+        cell.classList.add("today");
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = "❤️";
+        cell.appendChild(h);
       }
     }
 
-    const heart = isToday ? `<span class="heart">❤️</span>` : "";
-    const numSpan = `<span class="num">${num}</span>`;
-    grid.insertAdjacentHTML("beforeend", `<div class="${cls}">${heart}${numSpan}</div>`);
+    grid.appendChild(cell);
   }
 }
 
-/* ===== Pause ===== */
+/* ===== PAUSA + Inactividad ===== */
 let pauseOn = false;
-let clockInt = null;
-let dvdRAF = null;
+let inactivityTimer = null;
 
 function showPause(){
   if(pauseOn) return;
   pauseOn = true;
   $("#pause").style.display = "block";
   $("#pause").setAttribute("aria-hidden","false");
-
-  tickClock();
-  buildCalendar();
-
-  clockInt = setInterval(tickClock, 1000);
-
-  startDVD();
+  $("#pPlace").textContent = PLACE_NAME;
+  spawnFruits(); // frutas DVD
 }
 function hidePause(){
   if(!pauseOn) return;
   pauseOn = false;
   $("#pause").style.display = "none";
   $("#pause").setAttribute("aria-hidden","true");
-  if(clockInt){ clearInterval(clockInt); clockInt = null; }
-  stopDVD();
+  clearFruits();
 }
 
-/* ===== DVD Fruits (no logo) ===== */
-const FRUITS = ["🍓","🍌","🍍","🍉","🍎","🍊","🍇","🥭","🍒","🍐","🥝","🍑"];
-const dvdState = [];
-
-function rand(min,max){ return Math.random()*(max-min)+min; }
-function pickFruit(){ return FRUITS[Math.floor(Math.random()*FRUITS.length)]; }
-
-function createFruitEl(){
-  const el = document.createElement("div");
-  el.className = "dvdFruit";
-  el.textContent = pickFruit();
-  return el;
+function resetInactivity(){
+  if(inactivityTimer) clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(()=> showPause(), INACTIVITY_MS);
 }
 
-function startDVD(){
-  const layer = $("#dvdLayer");
-  layer.innerHTML = "";
-  dvdState.length = 0;
+$("#pauseBtn").addEventListener("click", showPause);
+$("#pause").addEventListener("click", hidePause);
 
-  // how many fruits bounce
-  const count = 5;
+window.addEventListener("keydown",(e)=>{
+  // si está en pausa
+  if(pauseOn){
+    if(e.key==="Escape" || e.key==="Enter") hidePause();
+    resetInactivity();
+    return;
+  }
+
+  const k = e.key.toLowerCase();
+  if(k==="f") openSystem("facturas");
+  else if(k==="l") openSystem("listas");
+  else if(k==="b") openSystem("b2b");
+  else if(k==="g") openSystem("gs");
+  else if(k==="r") openLast();
+  else if(e.key==="Escape") showPause();
+
+  resetInactivity();
+});
+
+/* ===== Nombre moviéndose detrás ===== */
+const nameState = { x: 0, y: 40, vx: 0.55, vy: 0.28 };
+function animateName(){
+  const el = $("#movingName");
+  if(!el) return;
+
+  if(pauseOn){
+    const maxX = window.innerWidth - el.offsetWidth - 10;
+    const maxY = window.innerHeight - 120;
+
+    nameState.x += nameState.vx;
+    nameState.y += nameState.vy;
+
+    if(nameState.x < 10 || nameState.x > maxX) nameState.vx *= -1;
+    if(nameState.y < 10 || nameState.y > maxY) nameState.vy *= -1;
+
+    // clamp
+    nameState.x = Math.max(10, Math.min(maxX, nameState.x));
+    nameState.y = Math.max(10, Math.min(maxY, nameState.y));
+
+    el.style.transform = `translate(${nameState.x}px, ${nameState.y}px)`;
+  }
+
+  requestAnimationFrame(animateName);
+}
+
+/* ===== Frutas rebotando (muchas) ===== */
+let fruits = [];
+let fruitRAF = null;
+
+function clearFruits(){
+  fruits.forEach(f => f.el.remove());
+  fruits = [];
+  if(fruitRAF) cancelAnimationFrame(fruitRAF);
+  fruitRAF = null;
+}
+
+function spawnFruits(){
+  clearFruits();
+
+  // cantidad "abundante" adaptada
+  const count = Math.max(10, Math.min(22, Math.floor(window.innerWidth / 70)));
 
   for(let i=0;i<count;i++){
-    const el = createFruitEl();
-    layer.appendChild(el);
+    const el = document.createElement("div");
+    el.className = "fruit";
+    el.textContent = FRUITS[i % FRUITS.length];
 
-    dvdState.push({
+    // random size slightly
+    const size = 48 + Math.floor(Math.random()*18);
+    el.style.width = size + "px";
+    el.style.height = size + "px";
+    el.style.fontSize = Math.floor(size*0.52) + "px";
+    el.style.borderRadius = Math.floor(size*0.35) + "px";
+
+    document.body.appendChild(el);
+
+    const vx = (Math.random()>0.5?1:-1) * (1.2 + Math.random()*2.0);
+    const vy = (Math.random()>0.5?1:-1) * (1.0 + Math.random()*1.8);
+
+    fruits.push({
       el,
-      x: rand(20, window.innerWidth - 120),
-      y: rand(20, window.innerHeight - 120),
-      vx: (Math.random() > .5 ? 1 : -1) * rand(1.8, 2.8),
-      vy: (Math.random() > .5 ? 1 : -1) * rand(1.6, 2.6),
-      lastHit: 0
+      x: 10 + Math.random()*(window.innerWidth - size - 20),
+      y: 10 + Math.random()*(window.innerHeight - size - 20),
+      vx, vy,
+      size
     });
   }
 
-  cancelAnimationFrame(dvdRAF);
-  dvdRAF = requestAnimationFrame(animateDVD);
-}
+  const step = ()=>{
+    if(!pauseOn) return;
 
-function stopDVD(){
-  cancelAnimationFrame(dvdRAF);
-  dvdRAF = null;
-  const layer = $("#dvdLayer");
-  layer.innerHTML = "";
-}
+    const W = window.innerWidth;
+    const H = window.innerHeight;
 
-function animateDVD(ts){
-  if(!pauseOn) return;
+    for(const f of fruits){
+      f.x += f.vx;
+      f.y += f.vy;
 
-  const w = window.innerWidth;
-  const h = window.innerHeight;
+      const maxX = W - f.size - 10;
+      const maxY = H - f.size - 10;
 
-  for(const s of dvdState){
-    const el = s.el;
-    const bw = el.offsetWidth || 70;
-    const bh = el.offsetHeight || 70;
-    const maxX = w - bw - 10;
-    const maxY = h - bh - 10;
+      if(f.x <= 10 || f.x >= maxX) f.vx *= -1;
+      if(f.y <= 10 || f.y >= maxY) f.vy *= -1;
 
-    s.x += s.vx;
-    s.y += s.vy;
+      f.x = Math.max(10, Math.min(maxX, f.x));
+      f.y = Math.max(10, Math.min(maxY, f.y));
 
-    let hit = false;
-
-    if(s.x <= 10){ s.x = 10; s.vx *= -1; hit = true; }
-    if(s.x >= maxX){ s.x = maxX; s.vx *= -1; hit = true; }
-    if(s.y <= 10){ s.y = 10; s.vy *= -1; hit = true; }
-    if(s.y >= maxY){ s.y = maxY; s.vy *= -1; hit = true; }
-
-    if(hit && ts - s.lastHit > 180){
-      s.el.textContent = pickFruit();
-      s.lastHit = ts;
+      f.el.style.transform = `translate(${f.x}px, ${f.y}px)`;
     }
 
-    el.style.transform = `translate(${s.x}px, ${s.y}px)`;
-  }
+    fruitRAF = requestAnimationFrame(step);
+  };
 
-  dvdRAF = requestAnimationFrame(animateDVD);
+  fruitRAF = requestAnimationFrame(step);
 }
 
-/* ===== Keyboard shortcuts ===== */
-function wireShortcuts(){
-  window.addEventListener("keydown",(e)=>{
-    const k = e.key.toLowerCase();
+/* ===== Inactividad listeners ===== */
+["mousemove","mousedown","touchstart","touchmove","scroll","click"].forEach(evt=>{
+  window.addEventListener(evt, ()=>{ resetInactivity(); }, { passive:true });
+});
 
-    // pause open
-    if(pauseOn){
-      if(e.key === "Escape" || e.key === "Enter") hidePause();
-      return;
-    }
-
-    if(k==="f") return openSystem("facturas");
-    if(k==="l") return openSystem("listas");
-    if(k==="b") return openSystem("b2b");
-    if(k==="g") return openSystem("gs");
-    if(k==="r") return openLast();
-
-    if(k==="m") return toggleTheme();
-    if(k==="o") return toggleOpenMode();
-
-    if(e.key==="Escape") return showPause();
-  });
-}
-
-/* ===== Init ===== */
+/* ===== BOOT ===== */
 (function init(){
-  // logo fallback
-  const img = $("#logo");
-  const fb  = $("#logoFallback");
-  img.onerror = () => { img.style.display="none"; fb.style.display="grid"; };
+  initLogo();
+  setTheme(getTheme());           // día por defecto si no hay storage
+  setOpenMode(getOpenMode());
 
-  // defaults
-  setTheme(getTheme());             // default day if not stored
-  setOpenMode(getOpenMode());       // default new if not stored
-  setPlace();
+  $("#mPlace").textContent = PLACE_NAME;
+  $("#pPlace").textContent = PLACE_NAME;
 
-  // render systems
   render();
-
-  // time
-  tickClock();
-  setInterval(tickClock, 1000);
-
-  // weather
-  fetchWeather();
-  setInterval(fetchWeather, 10 * 60 * 1000);
-
-  // buttons
-  $("#modeBtn").addEventListener("click", toggleTheme);
-  $("#openModeBtn").addEventListener("click", toggleOpenMode);
-  $("#lastBtn").addEventListener("click", openLast);
-  $("#copyBtn").addEventListener("click", copyLinks);
-  $("#pauseBtn").addEventListener("click", showPause);
-
-  // click pause to exit
-  $("#pause").addEventListener("click", hidePause);
-
-  // shortcuts
-  wireShortcuts();
-
-  // build calendar once for home->pause initial
   buildCalendar();
 
-  // status
-  $("#status").textContent = "Listo";
+  tickTime();
+  setInterval(tickTime, 1000);
+
+  refreshWeather();
+  setInterval(refreshWeather, 10 * 60 * 1000); // cada 10 min
+
+  $("#themeBtn").addEventListener("click", ()=>{
+    setTheme(getTheme()==="night" ? "day" : "night");
+  });
+
+  $("#openModeBtn").addEventListener("click", ()=>{
+    setOpenMode(getOpenMode()==="new" ? "same" : "new");
+  });
+
+  $("#lastBtn").addEventListener("click", openLast);
+  $("#copyBtn").addEventListener("click", copyLinks);
+
+  // salir pausa con Enter/Esc
+  window.addEventListener("keydown", resetInactivity);
+  resetInactivity();
+
+  requestAnimationFrame(animateName);
 })();
 </script>
 
 <script>
-/* Service Worker */
+/* SW */
 if("serviceWorker" in navigator){
   window.addEventListener("load", ()=>{
     navigator.serviceWorker.register("sw.js").catch(()=>{});
