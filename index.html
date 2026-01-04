@@ -3,68 +3,235 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>ARSLAN PRO — Suite</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>ARSLAN PRO — Panel Principal</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#121924;
+      --muted:#9fb0c3;
+      --text:#e9f0f7;
+      --line:#1f2a3a;
+      --accent:#6ee7b7;
+      --danger:#ff5a5f;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:var(--bg);
+      color:var(--text);
+    }
+    .wrap{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:18px;
+    }
+    .panel{
+      width:min(980px,100%);
+      background:rgba(18,25,36,.92);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:20px;
+      backdrop-filter: blur(10px);
+    }
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    h1{margin:0;font-size:22px;font-weight:900}
+    .sub{color:var(--muted);font-weight:700;margin-top:6px}
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background:#0f1622;
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:800;
+    }
+    .btn:hover{opacity:.95}
+    .pill{
+      border:1px solid var(--line);
+      background:#0f1622;
+      padding:9px 12px;
+      border-radius:999px;
+      font-weight:800;
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .pill b{color:var(--text)}
+    .grid{
+      margin-top:18px;
+      display:grid;
+      gap:14px;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    }
+    .card{
+      text-decoration:none;
+      color:inherit;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      background:#0f1622;
+      display:block;
+      transition:.15s;
+    }
+    .card:hover{
+      border-color:var(--accent);
+      transform:translateY(-2px);
+    }
+    .title{
+      font-weight:950;
+      font-size:16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .desc{
+      margin-top:8px;
+      color:var(--muted);
+      font-weight:700;
+      font-size:14px;
+      line-height:1.35;
+    }
+    .url{
+      margin-top:10px;
+      font-size:12px;
+      color:#7f93aa;
+      word-break:break-all;
+    }
+    .footer{
+      margin-top:16px;
+      padding-top:14px;
+      border-top:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-weight:700;
+      font-size:12px;
+    }
+    .small{font-size:12px;color:var(--muted);font-weight:700}
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <div class="panel">
+      <div class="top">
+        <div>
+          <h1>ARSLAN PRO</h1>
+          <div class="sub">Panel principal · Acceso rápido a tus sistemas</div>
+          <div class="small" style="margin-top:6px">Un solo sitio para entrar a: Facturas · Listas · Contabilidad · Ventas/Gestión</div>
+        </div>
 
-  <!-- LOGIN PIN -->
-  <div id="lock" class="lock">
-    <div class="lock-card">
-      <div class="lock-title">ARSLAN PRO</div>
-      <div class="lock-sub">Acceso seguro</div>
-
-      <div class="pin-row">
-        <input id="pinInput" type="password" inputmode="numeric" placeholder="PIN" autocomplete="off"/>
-        <button id="pinBtn" class="btn primary">Entrar</button>
+        <div class="controls">
+          <div id="openMode" class="pill" title="Cambia cómo se abren los enlaces">
+            🔗 Abrir: <b id="openModeText">Nueva pestaña</b>
+          </div>
+          <button class="btn" id="copyAll">📋 Copiar enlaces</button>
+        </div>
       </div>
-      <div id="pinMsg" class="lock-msg"></div>
+
+      <div class="grid" id="grid"></div>
+
+      <div class="footer">
+        <div>✅ Consejo: guarda esta página como favorito o como icono en el móvil</div>
+        <div>ARSLAN HUB · v1</div>
+      </div>
     </div>
   </div>
 
-  <!-- APP -->
-  <div id="app" class="app hidden">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="brand-title">ARSLAN PRO</div>
-        <div class="brand-sub">Suite · Listas + Gestión + Facturación</div>
-      </div>
+<script>
+  const systems = [
+    {
+      icon: "🧾",
+      name: "Facturas",
+      desc: "Crear y gestionar facturas (tu web principal).",
+      url: "http://arslanpro.com/"
+    },
+    {
+      icon: "📝",
+      name: "Listas / Pedidos",
+      desc: "Crear listas de pedidos y exportar (pedidos).",
+      url: "https://shaniwaris80-crypto.github.io/pedidos/"
+    },
+    {
+      icon: "📚",
+      name: "Contabilidad (B2B)",
+      desc: "Contabilidad y trazabilidad (b2b).",
+      url: "https://shaniwaris80-crypto.github.io/b2b/"
+    },
+    {
+      icon: "🏪",
+      name: "Ventas / Gestión (GS)",
+      desc: "Ventas, gestión, reportes y control general.",
+      url: "https://shaniwaris80-crypto.github.io/GS/"
+    }
+  ];
 
-      <nav class="nav">
-        <button class="nav-btn" data-route="home">🏠 Inicio</button>
-        <button class="nav-btn" data-route="facturacion">🧾 Facturación</button>
-        <button class="nav-btn" data-route="listas">📝 Listas / Pedidos</button>
-        <button class="nav-btn" data-route="gestion">🗂️ Gestión</button>
-        <button class="nav-btn" data-route="reportes">📊 Reportes</button>
-        <button class="nav-btn" data-route="nube">☁️ Nube</button>
-        <button id="logoutBtn" class="nav-btn danger">🔒 Salir</button>
-      </nav>
+  const grid = document.getElementById("grid");
+  const openMode = document.getElementById("openMode");
+  const openModeText = document.getElementById("openModeText");
+  const copyAll = document.getElementById("copyAll");
 
-      <div class="sidebar-footer">
-        <div id="cloudPill" class="pill warn">☁️ Nube: off</div>
-        <div class="muted">v1 Suite</div>
-      </div>
-    </aside>
+  const MODE_KEY = "ARSLAN_HUB_OPENMODE"; // "new" o "same"
+  function getMode(){ return localStorage.getItem(MODE_KEY) || "new"; }
+  function setMode(m){ localStorage.setItem(MODE_KEY, m); }
 
-    <main class="main">
-      <header class="topbar">
-        <button id="burger" class="burger">☰</button>
-        <div class="topbar-title" id="pageTitle">Inicio</div>
-        <div class="topbar-actions">
-          <button class="btn" id="backupBtn">⬇️ Backup JSON</button>
-          <label class="btn">
-            ⬆️ Importar JSON
-            <input id="importFile" type="file" accept="application/json" hidden>
-          </label>
-        </div>
-      </header>
+  function render(){
+    const mode = getMode();
+    openModeText.textContent = (mode === "new") ? "Nueva pestaña" : "Misma pestaña";
 
-      <section id="view" class="view">
-        <!-- aquí se renderiza cada módulo -->
-      </section>
-    </main>
-  </div>
+    grid.innerHTML = systems.map(s => {
+      const target = (mode === "new") ? "_blank" : "_self";
+      const rel = (mode === "new") ? "noopener noreferrer" : "";
+      return `
+        <a class="card" href="${s.url}" target="${target}" rel="${rel}">
+          <div class="title">
+            <span>${s.icon} ${s.name}</span>
+            <span style="color:#7f93aa;font-weight:900">→</span>
+          </div>
+          <div class="desc">${s.desc}</div>
+          <div class="url">${s.url}</div>
+        </a>
+      `;
+    }).join("");
+  }
 
-  <script src="app.js"></script>
+  openMode.addEventListener("click", ()=>{
+    const mode = getMode();
+    setMode(mode === "new" ? "same" : "new");
+    render();
+  });
+
+  copyAll.addEventListener("click", async ()=>{
+    const text = systems.map(s => `${s.name}: ${s.url}`).join("\\n");
+    try{
+      await navigator.clipboard.writeText(text);
+      copyAll.textContent = "✅ Copiado";
+      setTimeout(()=> copyAll.textContent = "📋 Copiar enlaces", 1200);
+    }catch{
+      alert(text);
+    }
+  });
+
+  render();
+</script>
 </body>
 </html>
