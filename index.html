@@ -77,38 +77,21 @@
     .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;font-weight:900;font-size:12px;color:var(--muted);}
     .footer{margin-top:14px;border-top:1px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-weight:900;font-size:12px;}
 
-    .lock{position:fixed;inset:0;display:grid;place-items:center;padding:18px;z-index:50;background:
+    /* Lock overlay (sin PIN) */
+    .lock{position:fixed;inset:0;display:none;place-items:center;padding:18px;z-index:50;background:
       radial-gradient(1200px 700px at 20% 10%, rgba(14,165,233,.22), transparent 60%),
       radial-gradient(1100px 650px at 90% 15%, rgba(22,163,74,.22), transparent 55%),
       linear-gradient(180deg,var(--bg),var(--bg2));
     }
-    .lockCard{width:min(520px,100%);border-radius:var(--radius);border:1px solid var(--line);background:var(--card);backdrop-filter:blur(12px);box-shadow:var(--shadow);overflow:hidden;}
+    .lockCard{width:min(560px,100%);border-radius:var(--radius);border:1px solid var(--line);background:var(--card);backdrop-filter:blur(12px);box-shadow:var(--shadow);overflow:hidden;}
     .lockHeader{padding:18px;border-bottom:1px solid var(--line);background:linear-gradient(90deg, rgba(14,165,233,.12), rgba(22,163,74,.12));}
     .lockHeader .t{display:flex;align-items:center;gap:10px;font-weight:950;font-size:18px;margin:0;}
     .lockHeader .s{margin-top:6px;color:var(--muted);font-weight:900;font-size:12px;}
     .lockBody{padding:18px}
-    .pinRow{display:flex;gap:10px;align-items:center;margin-top:12px;}
-    input[type="password"]{flex:1;border:1px solid var(--line);background:var(--cardSolid);color:var(--text);padding:12px;border-radius:14px;font-size:16px;font-weight:900;outline:none;}
-    .msg{margin-top:10px;font-weight:900;color:var(--muted);font-size:13px;}
-    .msg.bad{color:var(--danger)} .msg.ok{color:var(--ok)}
     .small{margin-top:10px;color:var(--muted);font-weight:800;font-size:12px;line-height:1.35;}
     .hintKeys{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;}
     .key{border:1px solid var(--line);background:var(--cardSolid);border-radius:12px;padding:8px 10px;font-weight:950;font-size:12px;color:var(--muted);}
     .key b{color:var(--text)}
-
-    .debugBar{
-      position:fixed; left:12px; right:12px; bottom:12px;
-      background: rgba(239,68,68,.14);
-      border:1px solid rgba(239,68,68,.35);
-      color: var(--text);
-      padding:10px 12px;
-      border-radius: 14px;
-      font-weight:950;
-      display:none;
-      z-index:9999;
-      box-shadow: var(--shadow2);
-      white-space: pre-wrap;
-    }
     @media (max-width:720px){
       .brand .sub{display:none}
       .btn,.pill{padding:9px 10px}
@@ -119,10 +102,9 @@
 </head>
 
 <body data-theme="day">
-  <div id="debugBar" class="debugBar"></div>
 
-  <!-- LOCK SCREEN -->
-  <div id="lock" class="lock" aria-hidden="false">
+  <!-- LOCK OVERLAY (SIN PIN) -->
+  <div id="lock" class="lock" aria-hidden="true">
     <div class="lockCard">
       <div class="lockHeader">
         <div class="t">
@@ -131,19 +113,11 @@
           </span>
           ARSLAN PRO — HUB
         </div>
-        <div class="s">Acceso protegido · Introduce el PIN</div>
+        <div class="s">Pausa / Bloqueo visual (sin contraseña)</div>
       </div>
       <div class="lockBody">
-        <div class="small">🔒 PIN + bloqueo por intentos · <b>sin auto-bloqueo</b></div>
-        <div class="small">🔁 Mantén pulsado <b>Entrar</b> 3s → reset PIN a <b>8410</b>.</div>
-
-        <div class="pinRow">
-          <input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN"/>
-          <button id="pinBtn" class="btn primary" type="button">Entrar</button>
-        </div>
-
-        <div id="pinMsg" class="msg"></div>
-        <div class="small" id="lockInfo"></div>
+        <div class="small">✅ Este modo solo oculta la pantalla. Para volver, pulsa <b>Desbloquear</b> o tecla <b>Enter</b>.</div>
+        <button id="unlockBtn" class="btn primary" type="button">🔓 Desbloquear</button>
 
         <div class="hintKeys">
           <div class="key"><b>F</b> Facturas</div>
@@ -151,6 +125,7 @@
           <div class="key"><b>B</b> B2B</div>
           <div class="key"><b>G</b> GS</div>
           <div class="key"><b>Esc</b> Bloquear</div>
+          <div class="key"><b>Enter</b> Desbloquear</div>
         </div>
       </div>
     </div>
@@ -158,7 +133,7 @@
 
   <!-- APP -->
   <div class="wrap">
-    <div class="shell" id="app" style="display:none">
+    <div class="shell" id="app">
       <div class="topbar">
         <div class="brand">
           <div class="logo" title="Kiwi">
@@ -176,7 +151,7 @@
           <button class="btn" id="openMain" type="button">🚀 Abrir Facturas</button>
           <button class="btn" id="settingsBtn" type="button">⚙️ Ajustes</button>
           <button class="btn" id="copyLinks" type="button">📋 Copiar enlaces</button>
-          <button class="btn" id="lockBtn" type="button">🔒 Bloquear</button>
+          <button class="btn" id="lockBtn" type="button">🙈 Pausa</button>
         </div>
       </div>
 
@@ -208,24 +183,19 @@
 
 <script>
 /* ===============================
-   FIX: SEARCH init BEFORE renderAll
+   ARSLAN HUB PRO (SIN PIN)
+   Mantiene TODAS las funciones:
+   - Favoritos
+   - Buscador
+   - Modo día/noche
+   - Abrir enlaces nueva/misma pestaña
+   - Copiar enlaces
+   - Atajos teclado (F/L/B/G)
+   - Ajustes
+   - PWA Service Worker
+   - "Pausa" (lock visual sin contraseña)
 =============================== */
 
-/* ===== Debug visible ===== */
-const debugBar = document.getElementById("debugBar");
-function showDebug(msg){
-  if(!debugBar) return;
-  debugBar.style.display = "block";
-  debugBar.textContent = "⚠️ ERROR / DEBUG:\n" + msg;
-}
-window.addEventListener("error", (e)=>{
-  showDebug((e && e.message ? e.message : "Error desconocido") + (e && e.filename ? ("\n" + e.filename + ":" + e.lineno) : ""));
-});
-window.addEventListener("unhandledrejection", (e)=>{
-  showDebug("Promise error: " + (e && e.reason ? String(e.reason) : "desconocido"));
-});
-
-/* ✅ IMPORTANT: declare SEARCH FIRST */
 let SEARCH = "";
 
 /* ===== Sistemas ===== */
@@ -239,44 +209,14 @@ const SYSTEMS = [
 /* ===== Keys ===== */
 const K_THEME="ARSLAN_HUB_THEME";
 const K_OPENMODE="ARSLAN_HUB_OPENMODE";
-const K_SESSION="ARSLAN_HUB_SESSION";
-const K_PINHASH="ARSLAN_HUB_PINHASH";
-const K_FAILS="ARSLAN_HUB_FAILS";
-const K_LOCKUNTIL="ARSLAN_HUB_LOCKUNTIL";
 const K_FAVS="ARSLAN_HUB_FAVORITES";
 const K_CONFIRM_LOCK="ARSLAN_HUB_CONFIRMLOCK";
 const K_CLEAR_ON_CLOSE="ARSLAN_HUB_CLEARONCLOSE";
 const K_LAST_OPEN="ARSLAN_HUB_LASTOPEN";
-
-const MAX_FAILS=3;
-const LOCK_SECONDS=60;
+const K_SESSION="ARSLAN_HUB_SESSION"; // se mantiene por compatibilidad
 
 const $=(s)=>document.querySelector(s);
-function now(){return Date.now();}
 function safeParse(json, fallback){ try{return JSON.parse(json);}catch{return fallback;} }
-
-/* Hash simple */
-function simpleHash(str){
-  let h=2166136261;
-  for(let i=0;i<str.length;i++){
-    h^=str.charCodeAt(i);
-    h=Math.imul(h,16777619);
-  }
-  return ("00000000"+(h>>>0).toString(16)).slice(-8);
-}
-
-/* PIN robusto */
-function ensurePin(){
-  const current = localStorage.getItem(K_PINHASH);
-  const valid = (typeof current==="string" && /^[0-9a-f]{8}$/.test(current));
-  if(!valid){
-    localStorage.setItem(K_PINHASH, simpleHash("8410"));
-    localStorage.setItem(K_FAILS,"0");
-    localStorage.setItem(K_LOCKUNTIL,"0");
-    localStorage.setItem(K_SESSION,"0");
-  }
-}
-ensurePin();
 
 /* Theme */
 function getTheme(){return localStorage.getItem(K_THEME)||"day";}
@@ -293,15 +233,11 @@ function setOpenMode(m){
   localStorage.setItem(K_OPENMODE,m);
   const el=$("#openModeTxt");
   if(el) el.textContent=(m==="new")?"Nueva pestaña":"Misma pestaña";
-  // ✅ DO NOT call renderAll until defined; safe after functions defined at bottom
+  renderAll();
 }
 
-/* Session */
-function isSessionOn(){return localStorage.getItem(K_SESSION)==="1";}
-function setSession(on){localStorage.setItem(K_SESSION,on?"1":"0");}
-
 /* Options */
-function getConfirmLock(){return localStorage.getItem(K_CONFIRM_LOCK)!=="0";}
+function getConfirmLock(){return localStorage.getItem(K_CONFIRM_LOCK)!=="0";} // default true
 function setConfirmLock(v){localStorage.setItem(K_CONFIRM_LOCK,v?"1":"0");}
 function getClearOnClose(){return localStorage.getItem(K_CLEAR_ON_CLOSE)==="1";}
 function setClearOnClose(v){localStorage.setItem(K_CLEAR_ON_CLOSE,v?"1":"0");}
@@ -326,19 +262,16 @@ function toggleFav(id){
 
 /* Elements */
 const lockEl=$("#lock");
-const appEl=$("#app");
-const pinInput=$("#pinInput");
-const pinBtn=$("#pinBtn");
-const pinMsg=$("#pinMsg");
-const lockInfo=$("#lockInfo");
+const unlockBtn=$("#unlockBtn");
+const lockBtn=$("#lockBtn");
 const statusEl=$("#status");
 
 const openMainBtn=$("#openMain");
 const settingsBtn=$("#settingsBtn");
 const copyLinksBtn=$("#copyLinks");
-const lockBtn=$("#lockBtn");
 const searchInput=$("#searchInput");
 const clearSearchBtn=$("#clearSearch");
+
 const themeBtn=$("#themeBtn");
 const openModeBtn=$("#openModeBtn");
 
@@ -347,97 +280,21 @@ const favGrid=$("#favGrid");
 const favBadge=$("#favBadge");
 const allBadge=$("#allBadge");
 
-/* lockouts */
-function getFails(){return parseInt(localStorage.getItem(K_FAILS)||"0",10);}
-function setFails(n){localStorage.setItem(K_FAILS,String(n));}
-function getLockUntil(){return parseInt(localStorage.getItem(K_LOCKUNTIL)||"0",10);}
-function setLockUntil(ts){localStorage.setItem(K_LOCKUNTIL,String(ts));}
-function isLockedOut(){const until=getLockUntil();return until && now()<until;}
-
-function updateLockInfo(){
-  if(!lockInfo) return;
-  const fails=getFails();
-  const until=getLockUntil();
-  if(isLockedOut()){
-    const sec=Math.ceil((until-now())/1000);
-    lockInfo.textContent=`⛔ Bloqueado ${sec}s por seguridad.`;
-  }else{
-    const modeTxt=(getTheme()==="night")?"Noche":"Día";
-    lockInfo.textContent = fails>0 ? `Intentos fallidos: ${fails}/${MAX_FAILS}` : `Modo: ${modeTxt} · Sin auto-bloqueo · Favoritos: ${getFavs().length}`;
-  }
-}
-
-/* show/hide */
-function showApp(){
-  if(lockEl) lockEl.style.display="none";
-  if(appEl) appEl.style.display="block";
-  setSession(true);
-  setFails(0);
-  renderAll();
-  if(statusEl) statusEl.textContent="Acceso OK · " + new Date().toLocaleString();
-}
+/* Lock (visual) */
 function showLock(){
-  setSession(false);
-  if(appEl) appEl.style.display="none";
-  if(lockEl) lockEl.style.display="grid";
-  if(pinInput) pinInput.value="";
-  if(pinMsg){ pinMsg.textContent=""; pinMsg.className="msg"; }
-  updateLockInfo();
+  if(lockEl){
+    lockEl.style.display="grid";
+    lockEl.setAttribute("aria-hidden","false");
+  }
+}
+function hideLock(){
+  if(lockEl){
+    lockEl.style.display="none";
+    lockEl.setAttribute("aria-hidden","true");
+  }
 }
 
-/* PIN attempt */
-function tryPin(){
-  ensurePin();
-  updateLockInfo();
-
-  if(!pinInput || !pinMsg){
-    showDebug("No encuentro #pinInput o #pinMsg. Revisa IDs del HTML.");
-    return;
-  }
-  if(isLockedOut()){
-    pinMsg.textContent="Demasiados intentos. Espera un momento…";
-    pinMsg.className="msg bad";
-    return;
-  }
-
-  const pin=(pinInput.value||"").trim();
-  const ok=simpleHash(pin)===localStorage.getItem(K_PINHASH);
-
-  if(!ok){
-    const fails=getFails()+1;
-    setFails(fails);
-    if(fails>=MAX_FAILS){
-      setLockUntil(now()+LOCK_SECONDS*1000);
-      pinMsg.textContent=`PIN incorrecto. Bloqueado ${LOCK_SECONDS}s.`;
-      pinMsg.className="msg bad";
-    }else{
-      pinMsg.textContent="PIN incorrecto.";
-      pinMsg.className="msg bad";
-    }
-    updateLockInfo();
-    return;
-  }
-
-  pinMsg.textContent="Acceso correcto ✅";
-  pinMsg.className="msg ok";
-  showApp();
-}
-
-/* Reset manual hold 3s */
-let __holdTimer=null;
-function resetPinToDefault(){
-  const ok=confirm("¿Resetear PIN a 8410? (Borra bloqueos y sesión)");
-  if(!ok) return;
-  localStorage.removeItem(K_PINHASH);
-  localStorage.setItem(K_FAILS,"0");
-  localStorage.setItem(K_LOCKUNTIL,"0");
-  localStorage.setItem(K_SESSION,"0");
-  ensurePin();
-  if(pinMsg){ pinMsg.textContent="PIN reseteado ✅ (8410)"; pinMsg.className="msg ok"; }
-  updateLockInfo();
-}
-
-/* OPEN */
+/* Open */
 function openSystemByIndex(i){
   const mode=getOpenMode();
   const sys=SYSTEMS[i];
@@ -533,67 +390,47 @@ function renderAll(){
   }
 }
 
-/* Settings menu */
-function changePinFlow(){
-  ensurePin();
-  const current = prompt("PIN actual:");
-  if(current === null) return;
-  const ok = simpleHash(current.trim()) === localStorage.getItem(K_PINHASH);
-  if(!ok){ alert("PIN actual incorrecto ❌"); return; }
-
-  const next = prompt("Nuevo PIN (4-10 dígitos):");
-  if(next === null) return;
-  const clean = next.trim();
-  if(!/^[0-9]{4,10}$/.test(clean)){ alert("PIN inválido. Usa 4 a 10 números."); return; }
-
-  localStorage.setItem(K_PINHASH, simpleHash(clean));
-  alert("PIN cambiado ✅");
+/* Settings menu (sin PIN) */
+function resetAllLocal(){
+  const ok = confirm("¿Borrar configuración local (favoritos, tema, modo abrir, etc.)?");
+  if(!ok) return;
+  [K_THEME,K_OPENMODE,K_FAVS,K_CONFIRM_LOCK,K_CLEAR_ON_CLOSE,K_LAST_OPEN,K_SESSION].forEach(k=>localStorage.removeItem(k));
+  setTheme("day");
+  setOpenMode("new");
+  SEARCH="";
+  if(searchInput) searchInput.value="";
+  renderAll();
+  alert("Reseteado ✅");
 }
-function resetAttempts(){
-  localStorage.setItem(K_FAILS,"0");
-  localStorage.setItem(K_LOCKUNTIL,"0");
-  alert("Intentos reseteados ✅");
-  updateLockInfo();
-}
+
 function settingsMenu(){
   const a = getConfirmLock() ? "ON" : "OFF";
   const b = getClearOnClose() ? "ON" : "OFF";
   const c = getOpenMode()==="new" ? "Nueva pestaña" : "Misma pestaña";
-  const choice = prompt(
-`AJUSTES:
-1 = Cambiar PIN
-2 = Reset intentos / bloqueo
-3 = Cambiar abrir enlaces (actual: ${c})
-4 = Confirmar al bloquear (actual: ${a})
-5 = Cerrar sesión al cerrar pestaña (actual: ${b})
 
-Escribe 1-5`
+  const choice = prompt(
+`AJUSTES (SIN PIN):
+1 = Cambiar abrir enlaces (actual: ${c})
+2 = Confirmar al pausar (actual: ${a})
+3 = Cerrar “sesión” al cerrar pestaña (actual: ${b})
+4 = Reset configuración local
+
+Escribe 1-4`
   );
-  if(choice==="1") return changePinFlow();
-  if(choice==="2") return resetAttempts();
-  if(choice==="3"){ setOpenMode(getOpenMode()==="new"?"same":"new"); renderAll(); return; }
-  if(choice==="4"){ const next=!getConfirmLock(); setConfirmLock(next); alert(`Confirmación al bloquear: ${next?"ON":"OFF"}`); return; }
-  if(choice==="5"){ const next=!getClearOnClose(); setClearOnClose(next); alert(`Cerrar sesión al cerrar pestaña: ${next?"ON":"OFF"}`); return; }
+
+  if(choice==="1") return setOpenMode(getOpenMode()==="new"?"same":"new");
+  if(choice==="2"){ const next=!getConfirmLock(); setConfirmLock(next); alert(`Confirmación al pausar: ${next?"ON":"OFF"}`); return; }
+  if(choice==="3"){ const next=!getClearOnClose(); setClearOnClose(next); alert(`Cerrar sesión al cerrar pestaña: ${next?"ON":"OFF"}`); return; }
+  if(choice==="4") return resetAllLocal();
 }
 
 /* Wiring */
 function wire(){
-  if(pinBtn){
-    pinBtn.addEventListener("click", tryPin);
-    pinBtn.onclick = tryPin;
-    pinBtn.addEventListener("mousedown", ()=>{ __holdTimer=setTimeout(resetPinToDefault,3000); });
-    pinBtn.addEventListener("touchstart", ()=>{ __holdTimer=setTimeout(resetPinToDefault,3000); }, {passive:true});
-    ["mouseup","mouseleave","touchend","touchcancel"].forEach(ev=>{
-      pinBtn.addEventListener(ev, ()=>{ if(__holdTimer){ clearTimeout(__holdTimer); __holdTimer=null; } });
-    });
-  }
-  if(pinInput){
-    pinInput.addEventListener("keydown",(e)=>{ if(e.key==="Enter") tryPin(); });
-    pinInput.onkeydown = (e)=>{ if(e.key==="Enter") tryPin(); };
-  }
+  setTheme(getTheme());
+  setOpenMode(getOpenMode());
 
-  if(themeBtn) themeBtn.addEventListener("click", ()=>{ setTheme(getTheme()==="night"?"day":"night"); updateLockInfo(); renderAll(); });
-  if(openModeBtn) openModeBtn.addEventListener("click", ()=>{ setOpenMode(getOpenMode()==="new"?"same":"new"); renderAll(); });
+  if(themeBtn) themeBtn.addEventListener("click", ()=> setTheme(getTheme()==="night"?"day":"night"));
+  if(openModeBtn) openModeBtn.addEventListener("click", ()=> setOpenMode(getOpenMode()==="new"?"same":"new"));
 
   if(openMainBtn) openMainBtn.addEventListener("click", ()=> openSystemByIndex(0));
   if(settingsBtn) settingsBtn.addEventListener("click", settingsMenu);
@@ -614,16 +451,24 @@ function wire(){
 
   function doLock(){
     if(getConfirmLock()){
-      const ok=confirm("¿Bloquear el HUB ahora?");
+      const ok=confirm("¿Pausar / ocultar pantalla?");
       if(!ok) return;
     }
     showLock();
   }
   if(lockBtn) lockBtn.addEventListener("click", doLock);
+  if(unlockBtn) unlockBtn.addEventListener("click", hideLock);
 
   window.addEventListener("keydown",(e)=>{
-    if(lockEl && lockEl.style.display !== "none") return;
+    // si está en lock, Enter desbloquea
+    if(lockEl && lockEl.style.display !== "none"){
+      if(e.key==="Enter") return hideLock();
+      if(e.key==="Escape") return hideLock();
+      return;
+    }
+
     if(e.target && ["INPUT","TEXTAREA"].includes(e.target.tagName)) return;
+
     const k=e.key.toLowerCase();
     if(k==="f") return openSystemById("facturas");
     if(k==="l") return openSystemById("listas");
@@ -637,27 +482,16 @@ function wire(){
       localStorage.setItem(K_SESSION,"0");
     }
   });
+
+  renderAll();
 }
 
-/* Init (SAFE ORDER) */
-try{
-  setTheme(getTheme());
-  setOpenMode(getOpenMode());
-  wire();
+/* Boot */
+wire();
 
-  if(isSessionOn()) showApp();
-  else showLock();
-
-  updateLockInfo();
-  renderAll();
-
-  setInterval(()=>{ if(lockEl && lockEl.style.display!=="none") updateLockInfo(); }, 250);
-
-  if("serviceWorker" in navigator){
-    window.addEventListener("load", ()=>{ navigator.serviceWorker.register("./sw.js").catch(()=>{}); });
-  }
-}catch(err){
-  showDebug("Fallo al iniciar: " + String(err));
+/* PWA SW */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{ navigator.serviceWorker.register("./sw.js").catch(()=>{}); });
 }
 </script>
 </body>
