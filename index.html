@@ -12,12 +12,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
-    /* =========================
-       PRO APP UI TOKENS
-    ========================== */
     :root{
-      --bg:#f5f7fb;
-      --bg2:#eef3fb;
+      --bg:#f5f7fb; --bg2:#eef3fb;
       --glass: rgba(255,255,255,.72);
       --panel: rgba(255,255,255,.94);
       --text:#0b1220;
@@ -25,9 +21,9 @@
       --line: rgba(12,18,32,.10);
       --soft: rgba(12,18,32,.04);
 
-      --accent:#16a34a;     /* green */
-      --accent2:#0ea5e9;    /* cyan */
-      --accent3:#8b5cf6;    /* violet */
+      --accent:#16a34a;  /* green */
+      --accent2:#0ea5e9; /* cyan */
+      --accent3:#8b5cf6; /* violet */
 
       --shadow: 0 22px 70px rgba(2, 6, 23, .12);
       --shadow2: 0 12px 34px rgba(2, 6, 23, .10);
@@ -40,11 +36,13 @@
       --focus: 0 0 0 4px rgba(14,165,233,.18);
       --safeBottom: env(safe-area-inset-bottom, 0px);
       --safeTop: env(safe-area-inset-top, 0px);
+
+      --toastBg: rgba(255,255,255,.85);
+      --toastText: var(--text);
     }
 
     [data-theme="night"]{
-      --bg:#070b11;
-      --bg2:#0a1220;
+      --bg:#070b11; --bg2:#0a1220;
       --glass: rgba(15,23,42,.64);
       --panel: rgba(15,23,42,.92);
       --text:#eaf2ff;
@@ -57,6 +55,9 @@
       --shadow3: 0 8px 18px rgba(0,0,0,.25);
 
       --focus: 0 0 0 4px rgba(56,189,248,.20);
+
+      --toastBg: rgba(15,23,42,.86);
+      --toastText: var(--text);
     }
 
     *{box-sizing:border-box}
@@ -72,9 +73,6 @@
         linear-gradient(180deg, var(--bg), var(--bg2));
     }
 
-    /* =========================
-       App Shell
-    ========================== */
     .wrap{
       min-height:100%;
       display:grid;
@@ -104,9 +102,7 @@
     }
     .app > *{position:relative; z-index:1;}
 
-    /* =========================
-       Header
-    ========================== */
+    /* Header */
     .topbar{
       position:sticky;
       top:0;
@@ -179,32 +175,75 @@
       border-radius: 999px;
       font-size:12px;
     }
-    .btn{
-      padding:11px 12px;
-      border-radius: 16px;
-      font-size:13px;
-    }
-    .miniBtn{
-      padding:11px 12px;
-      border-radius: 16px;
-      font-size:13px;
-    }
+    .btn{ padding:11px 12px; border-radius: 16px; font-size:13px; }
+    .miniBtn{ padding:11px 12px; border-radius: 16px; font-size:13px; }
+
     .chip:hover,.btn:hover,.miniBtn:hover{opacity:.95; transform: translateY(-1px)}
     .chip:active,.btn:active,.miniBtn:active{transform: translateY(0px)}
+
     .btn.primary{
       border-color: transparent;
       background: linear-gradient(135deg, rgba(14,165,233,.95), rgba(22,163,74,.95));
       color:#041018;
     }
-
-    /* =========================
-       Main Content
-    ========================== */
-    .content{
-      padding: 16px;
-      padding-bottom: calc(96px + var(--safeBottom)); /* space for bottom nav on mobile */
+    .btn.ghost{
+      background: transparent;
     }
 
+    /* Content */
+    .content{
+      padding: 16px;
+      padding-bottom: calc(104px + var(--safeBottom));
+    }
+
+    .kpis{
+      display:grid;
+      gap:12px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-bottom: 14px;
+    }
+    .kpi{
+      border:1px solid var(--line);
+      background: var(--panel);
+      border-radius: 20px;
+      padding:14px;
+      box-shadow: var(--shadow2);
+      position:relative;
+      overflow:hidden;
+      cursor:pointer;
+      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+    }
+    .kpi:hover{
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: rgba(14,165,233,.30);
+    }
+    .kpi::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(240px 120px at 15% 0%, rgba(14,165,233,.16), transparent 60%),
+        radial-gradient(240px 120px at 85% 0%, rgba(22,163,74,.14), transparent 60%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .kpi > *{position:relative; z-index:1}
+    .kpiTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom: 10px;
+    }
+    .kpiIcon{
+      width:44px;height:44px;border-radius:16px;
+      display:grid; place-items:center;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      box-shadow: var(--shadow3);
+      font-size:20px;
+    }
+    .kpiTitle{font-weight:950; font-size:13px; margin:0;}
+    .kpiSub{color:var(--muted); font-weight:850; font-size:12px; margin:6px 0 0; line-height:1.25;}
+
+    /* Search row */
     .toolbar{
       display:flex;
       gap:10px;
@@ -266,72 +305,32 @@
       color: var(--muted);
     }
 
-    /* KPI row */
-    .kpis{
-      display:grid;
-      gap:12px;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      margin-bottom: 14px;
-    }
-    .kpi{
-      border:1px solid var(--line);
-      background: var(--panel);
-      border-radius: 20px;
-      padding:14px;
-      box-shadow: var(--shadow2);
-      position:relative;
-      overflow:hidden;
-      cursor:pointer;
-      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
-    }
-    .kpi:hover{
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-      border-color: rgba(14,165,233,.30);
-    }
-    .kpi::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(240px 120px at 15% 0%, rgba(14,165,233,.16), transparent 60%),
-        radial-gradient(240px 120px at 85% 0%, rgba(22,163,74,.14), transparent 60%);
-      opacity:.9;
-      pointer-events:none;
-    }
-    .kpi > *{position:relative; z-index:1}
-    .kpiTop{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-bottom: 10px;
-    }
-    .kpiIcon{
-      width:44px;height:44px;border-radius:16px;
-      display:grid; place-items:center;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      box-shadow: var(--shadow3);
-      font-size:20px;
-    }
-    .kpiTitle{font-weight:950; font-size:13px; margin:0;}
-    .kpiSub{color:var(--muted); font-weight:850; font-size:12px; margin:6px 0 0; line-height:1.25;}
-    .kpiBadge{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(22,163,74,.08);
-      font-weight:950;
-      font-size:12px;
-      color: var(--muted);
-      white-space:nowrap;
-    }
-    .kpiBadge .dot{width:8px;height:8px;border-radius:999px;background:linear-gradient(135deg,var(--accent2),var(--accent));}
-
-    /* Cards Grid */
     .grid{
       display:grid;
       gap:14px;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
+
+    /* Badges colors */
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      font-weight:950;
+      font-size:12px;
+      color: var(--muted);
+      white-space:nowrap;
+    }
+    .badge .dot{width:8px;height:8px;border-radius:999px;}
+    .badge.blue{background: rgba(14,165,233,.08);}
+    .badge.blue .dot{background: linear-gradient(135deg, rgba(14,165,233,.95), rgba(56,189,248,.95));}
+    .badge.green{background: rgba(22,163,74,.10);}
+    .badge.green .dot{background: linear-gradient(135deg, rgba(22,163,74,.95), rgba(110,231,183,.95));}
+    .badge.violet{background: rgba(139,92,246,.10);}
+    .badge.violet .dot{background: linear-gradient(135deg, rgba(139,92,246,.95), rgba(14,165,233,.70));}
+
+    /* Cards */
     .card{
       text-decoration:none;
       color:inherit;
@@ -345,11 +344,8 @@
       outline:none;
     }
     .card:focus{ box-shadow: var(--shadow2), var(--focus); }
-    .card:hover{
-      transform: translateY(-3px);
-      box-shadow: var(--shadow);
-      border-color: rgba(14,165,233,.35);
-    }
+    .card:hover{ transform: translateY(-3px); box-shadow: var(--shadow); border-color: rgba(14,165,233,.35); }
+
     .cardTop{
       padding:16px 16px 0;
       display:flex;
@@ -365,8 +361,7 @@
       border:1px solid var(--line);
       background:
         radial-gradient(60px 60px at 30% 25%, rgba(14,165,233,.22), transparent 60%),
-        radial-gradient(60px 60px at 85% 25%, rgba(22,163,74,.22), transparent 60%),
-        linear-gradient(135deg, rgba(0,0,0,.02), rgba(0,0,0,0));
+        radial-gradient(60px 60px at 85% 25%, rgba(22,163,74,.22), transparent 60%);
       font-size:24px;
       box-shadow: var(--shadow3);
       flex:0 0 auto;
@@ -394,23 +389,7 @@
       gap:10px;
       padding:14px 16px 16px;
     }
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(14,165,233,.06);
-      font-weight: 950;
-      font-size:12px;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-    .tag .dot{
-      width:8px;height:8px;border-radius:999px;
-      background: linear-gradient(135deg, var(--accent2), var(--accent));
-    }
+
     .starBtn{
       border:1px solid var(--line);
       background: transparent;
@@ -428,9 +407,33 @@
     .starBtn:hover{opacity:.95; transform: translateY(-1px)}
     .starBtn:active{transform: translateY(0px)}
     .starBtn.active{
-      background: linear-gradient(135deg, rgba(14,165,233,.10), rgba(22,163,74,.08));
-      border-color: rgba(14,165,233,.35);
+      background: linear-gradient(135deg, rgba(139,92,246,.10), rgba(14,165,233,.08));
+      border-color: rgba(139,92,246,.35);
     }
+
+    .openBtn{
+      border:1px solid var(--line);
+      background: linear-gradient(135deg, rgba(14,165,233,.12), rgba(22,163,74,.10));
+      padding:8px 10px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-weight: 950;
+      font-size:12px;
+      color: var(--text);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition: transform .12s ease, opacity .12s ease;
+    }
+    .openBtn:hover{opacity:.95; transform: translateY(-1px)}
+    .openBtn:active{transform: translateY(0px)}
+
+    /* KIOSK mode: hide URLs + shorten text */
+    body[data-kiosk="1"] .cardMeta{display:none;}
+    body[data-kiosk="1"] .cardDesc{display:none;}
+    body[data-kiosk="1"] .brandText p{display:none;}
+    body[data-kiosk="1"] .kpiSub{display:none;}
+    body[data-kiosk="1"] .search{opacity:.98}
 
     .favPanel{
       border:1px solid var(--line);
@@ -455,9 +458,7 @@
       font-size:12px;
     }
 
-    /* =========================
-       Bottom Navigation (Mobile App)
-    ========================== */
+    /* Bottom Nav (mobile) */
     .bottomNav{
       position: fixed;
       left: 12px;
@@ -469,18 +470,12 @@
       background: rgba(255,255,255,.68);
       backdrop-filter: blur(16px);
       box-shadow: var(--shadow2);
-      display: none; /* mobile only */
+      display: none;
       overflow:hidden;
     }
-    [data-theme="night"] .bottomNav{
-      background: rgba(15,23,42,.66);
-    }
+    [data-theme="night"] .bottomNav{ background: rgba(15,23,42,.66); }
 
-    .navRow{
-      display:grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap:0;
-    }
+    .navRow{ display:grid; grid-template-columns: repeat(5, 1fr); }
     .navBtn{
       border:none;
       background: transparent;
@@ -517,15 +512,9 @@
       transform: translateY(-1px);
     }
 
-    /* =========================
-       Privacy Pause Overlay (No PIN)
-    ========================== */
+    /* Privacy pause (no PIN) */
     .lock{
-      position:fixed;
-      inset:0;
-      display:none;
-      place-items:center;
-      padding:18px;
+      position:fixed; inset:0; display:none; place-items:center; padding:18px;
       z-index:80;
       background:
         radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.25), transparent 58%),
@@ -534,8 +523,7 @@
         linear-gradient(180deg, var(--bg), var(--bg2));
     }
     .lock::before{
-      content:"";
-      position:absolute; inset:0;
+      content:""; position:absolute; inset:0;
       backdrop-filter: blur(14px);
       background: rgba(0,0,0,.08);
     }
@@ -561,76 +549,59 @@
       gap:12px;
       background: linear-gradient(90deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
     }
-    .lockTitle{
-      display:flex; align-items:center; gap:12px;
-      font-weight: 950;
-      font-size:16px;
-      margin:0;
-    }
-    .lockSub{
-      margin:0;
-      color: var(--muted);
-      font-weight: 900;
-      font-size:12px;
-    }
-    .lockBody{
-      padding:18px;
-      display:grid;
-      gap:14px;
-    }
+    .lockTitle{display:flex; align-items:center; gap:12px; font-weight: 950; font-size:16px; margin:0;}
+    .lockSub{margin:0; color: var(--muted); font-weight: 900; font-size:12px;}
+    .lockBody{padding:18px; display:grid; gap:14px;}
     .clock{
+      display:flex; align-items:baseline; justify-content:center; gap:10px;
+      padding:18px; border-radius: 22px; border:1px solid var(--line);
+      background: var(--panel); box-shadow: var(--shadow3);
+    }
+    .clock .time{font-size:42px; font-weight: 990; letter-spacing: -0.02em;}
+    .clock .date{font-size:12px; font-weight: 950; color: var(--muted); text-transform: uppercase; letter-spacing: .18em;}
+    .lockActions{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+    .kbdRow{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; color: var(--muted); font-weight: 900; font-size:12px;}
+    .kbd{border:1px solid var(--line); background: var(--panel); padding:8px 10px; border-radius: 12px; box-shadow: var(--shadow3);}
+
+    /* Toast */
+    .toastWrap{
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: calc(86px + var(--safeBottom));
+      z-index: 90;
       display:flex;
-      align-items:baseline;
       justify-content:center;
-      gap:10px;
-      padding:18px;
-      border-radius: 22px;
-      border:1px solid var(--line);
-      background: var(--panel);
-      box-shadow: var(--shadow3);
+      pointer-events:none;
     }
-    .clock .time{
-      font-size:42px;
-      font-weight: 990;
-      letter-spacing: -0.02em;
-    }
-    .clock .date{
-      font-size:12px;
+    .toast{
+      pointer-events:none;
+      opacity:0;
+      transform: translateY(10px);
+      transition: opacity .18s ease, transform .18s ease;
+      border: 1px solid var(--line);
+      background: var(--toastBg);
+      color: var(--toastText);
+      border-radius: 999px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
       font-weight: 950;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .18em;
-    }
-    .lockActions{
-      display:flex;
-      gap:10px;
-      justify-content:center;
-      flex-wrap:wrap;
-    }
-    .kbdRow{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:center;
-      color: var(--muted);
-      font-weight: 900;
       font-size:12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      max-width: 92vw;
     }
-    .kbd{
-      border:1px solid var(--line);
-      background: var(--panel);
-      padding:8px 10px;
-      border-radius: 12px;
-      box-shadow: var(--shadow3);
-    }
+    .toast.show{ opacity:1; transform: translateY(0); }
+    .toast .tDot{ width:10px;height:10px;border-radius:999px;background: linear-gradient(135deg, var(--accent2), var(--accent)); }
 
     /* Responsive */
     @media (max-width: 780px){
       .brandText p{display:none}
-      .content{padding:14px; padding-bottom: calc(108px + var(--safeBottom));}
+      .content{padding:14px; padding-bottom: calc(112px + var(--safeBottom));}
       .kpis{grid-template-columns: repeat(2, minmax(0, 1fr));}
       .bottomNav{display:block;}
-      .actions .btn.primary{display:none;} /* on mobile use bottom nav for quick open */
+      .actions .btn.primary{display:none;}
     }
     @media (max-width: 480px){
       .kpis{grid-template-columns: 1fr;}
@@ -638,7 +609,12 @@
   </style>
 </head>
 
-<body data-theme="day">
+<body data-theme="day" data-kiosk="0">
+
+  <!-- Toast -->
+  <div class="toastWrap" aria-hidden="true">
+    <div id="toast" class="toast"><span class="tDot"></span><span id="toastTxt">Listo</span></div>
+  </div>
 
   <!-- PRIVACY PAUSE (NO PIN) -->
   <div id="lock" class="lock" aria-hidden="true">
@@ -672,6 +648,9 @@
           <span class="kbd"><b>L</b> Listas</span>
           <span class="kbd"><b>B</b> B2B</span>
           <span class="kbd"><b>G</b> GS</span>
+          <span class="kbd"><b>R</b> Último</span>
+          <span class="kbd"><b>K</b> Kiosko</span>
+          <span class="kbd"><b>/</b> Buscar</span>
           <span class="kbd"><b>Esc</b> Pausa</span>
           <span class="kbd"><b>Enter</b> Volver</span>
         </div>
@@ -694,9 +673,11 @@
         </div>
 
         <div class="actions">
+          <button class="btn" id="openLast" type="button">🟢 Abrir último</button>
           <div class="chip" id="themeBtn" title="Cambiar modo día/noche">🌓 <span id="themeTxt">Día</span></div>
           <div class="chip" id="openModeBtn" title="Abrir enlaces en nueva pestaña o en la misma">🔗 <span id="openModeTxt">Nueva pestaña</span></div>
           <button class="btn primary" id="openMain" type="button">🚀 Abrir Facturas</button>
+          <button class="btn" id="kioskBtn" type="button">🧼 Kiosko</button>
           <button class="btn" id="settingsBtn" type="button">⚙️ Ajustes</button>
           <button class="btn" id="copyLinks" type="button">📋 Copiar</button>
           <button class="btn" id="lockBtn" type="button">🙈 Pausa</button>
@@ -704,13 +685,12 @@
       </div>
 
       <div class="content">
-        <!-- KPI Dashboard (quick launch) -->
         <div class="kpis" id="kpiRow"></div>
 
         <div class="toolbar">
           <div class="search">
             <span class="dot"></span>
-            <input id="searchInput" type="text" placeholder="Buscar sistemas… (Facturas, Listas, B2B, GS)" />
+            <input id="searchInput" type="text" placeholder="Buscar… (pulsa /)" />
           </div>
           <button class="miniBtn" id="clearSearch" type="button">✖</button>
         </div>
@@ -737,31 +717,26 @@
     </div>
   </div>
 
-  <!-- Bottom nav (mobile app mode) -->
+  <!-- Bottom nav (mobile) -->
   <div class="bottomNav" id="bottomNav">
     <div class="navRow">
-      <button class="navBtn" data-nav="facturas" type="button">
-        <span class="ico">🧾</span><span>Facturas</span>
-      </button>
-      <button class="navBtn" data-nav="listas" type="button">
-        <span class="ico">📝</span><span>Listas</span>
-      </button>
-      <button class="navBtn" data-nav="b2b" type="button">
-        <span class="ico">📚</span><span>B2B</span>
-      </button>
-      <button class="navBtn" data-nav="gs" type="button">
-        <span class="ico">🏪</span><span>GS</span>
-      </button>
-      <button class="navBtn active" data-nav="hub" type="button">
-        <span class="ico">🏠</span><span>Hub</span>
-      </button>
+      <button class="navBtn" data-nav="facturas" type="button"><span class="ico">🧾</span><span>Facturas</span></button>
+      <button class="navBtn" data-nav="listas" type="button"><span class="ico">📝</span><span>Listas</span></button>
+      <button class="navBtn" data-nav="b2b" type="button"><span class="ico">📚</span><span>B2B</span></button>
+      <button class="navBtn" data-nav="gs" type="button"><span class="ico">🏪</span><span>GS</span></button>
+      <button class="navBtn active" data-nav="hub" type="button"><span class="ico">🏠</span><span>Hub</span></button>
     </div>
   </div>
 
 <script>
 /* ===============================
-   ARSLAN PRO — HUB (APP MODE)
-   SIN PIN — mantiene todas funciones
+   ARSLAN PRO — HUB (UPGRADE)
+   - Badges por color
+   - Abrir último (R)
+   - Modo Kiosko (K)
+   - Toast pro
+   - / para buscar
+   - Todo lo anterior intacto
 =============================== */
 
 let SEARCH = "";
@@ -782,10 +757,22 @@ const K_CONFIRM_LOCK="ARSLAN_HUB_CONFIRMLOCK";
 const K_CLEAR_ON_CLOSE="ARSLAN_HUB_CLEARONCLOSE";
 const K_LAST_OPEN="ARSLAN_HUB_LASTOPEN";
 const K_SESSION="ARSLAN_HUB_SESSION"; // compat
-const K_ACTIVE_TAB="ARSLAN_HUB_ACTIVE_TAB"; // for bottom nav state
+const K_ACTIVE_TAB="ARSLAN_HUB_ACTIVE_TAB";
+const K_KIOSK="ARSLAN_HUB_KIOSK";
 
 const $ = (s)=>document.querySelector(s);
 function safeParse(json, fallback){ try{return JSON.parse(json);}catch{return fallback;} }
+
+/* Toast */
+let toastTimer=null;
+function toast(msg){
+  const t=$("#toast"), txt=$("#toastTxt");
+  if(!t || !txt) return;
+  txt.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove("show"), 1200);
+}
 
 /* Theme */
 function getTheme(){ return localStorage.getItem(K_THEME) || "day"; }
@@ -794,6 +781,15 @@ function setTheme(t){
   document.body.setAttribute("data-theme", t);
   const el = $("#themeTxt");
   if(el) el.textContent = (t==="night") ? "Noche" : "Día";
+}
+
+/* Kiosk */
+function getKiosk(){ return localStorage.getItem(K_KIOSK) === "1"; }
+function setKiosk(v){
+  localStorage.setItem(K_KIOSK, v ? "1":"0");
+  document.body.setAttribute("data-kiosk", v ? "1":"0");
+  toast(v ? "Kiosko: ON" : "Kiosko: OFF");
+  renderAll();
 }
 
 /* Open mode */
@@ -825,8 +821,10 @@ function setFavs(arr){
 function isFav(id){ return getFavs().includes(id); }
 function toggleFav(id){
   const f = getFavs();
-  if(f.includes(id)) setFavs(f.filter(x=>x!==id));
-  else setFavs([id, ...f]);
+  const next = f.includes(id) ? f.filter(x=>x!==id) : [id, ...f];
+  localStorage.setItem(K_FAVS, JSON.stringify(next));
+  toast(f.includes(id) ? "Quitado de favoritos" : "Añadido a favoritos");
+  renderAll();
 }
 
 /* Elements */
@@ -837,6 +835,8 @@ const hideBtn = $("#hideBtn");
 const lockBtn = $("#lockBtn");
 
 const openMainBtn = $("#openMain");
+const openLastBtn = $("#openLast");
+const kioskBtn = $("#kioskBtn");
 const settingsBtn = $("#settingsBtn");
 const copyLinksBtn = $("#copyLinks");
 
@@ -888,17 +888,26 @@ function tickClock(force){
 }
 
 /* Open */
-function openSystemByIndex(i){
-  const mode = getOpenMode();
-  const sys = SYSTEMS[i];
+function openSystemById(id){
+  const sys = SYSTEMS.find(s=>s.id===id);
   if(!sys) return;
   localStorage.setItem(K_LAST_OPEN, sys.id);
+
+  const mode = getOpenMode();
   if(mode==="new") window.open(sys.url, "_blank", "noopener");
   else window.location.href = sys.url;
 }
-function openSystemById(id){
-  const idx = SYSTEMS.findIndex(s=>s.id===id);
-  if(idx>=0) openSystemByIndex(idx);
+function openSystemByIndex(i){
+  const sys=SYSTEMS[i];
+  if(sys) openSystemById(sys.id);
+}
+function openLast(){
+  const last = localStorage.getItem(K_LAST_OPEN);
+  if(last && SYSTEMS.some(s=>s.id===last)){
+    openSystemById(last);
+  }else{
+    openSystemByIndex(0);
+  }
 }
 
 /* Search */
@@ -907,14 +916,18 @@ function setSearch(v){
   renderAll();
 }
 
-/* KPI quick launch */
+/* KPI */
 function kpiHTML(s){
   const last = localStorage.getItem(K_LAST_OPEN) === s.id;
+  const fav = isFav(s.id);
+  const badge = last ? `<span class="badge green"><span class="dot"></span>Último</span>` :
+               fav  ? `<span class="badge violet"><span class="dot"></span>Favorito</span>` :
+                      `<span class="badge blue"><span class="dot"></span>Sistema</span>`;
   return `
     <div class="kpi" data-kpi="${s.id}" role="button" tabindex="0">
       <div class="kpiTop">
         <div class="kpiIcon">${s.icon}</div>
-        <div class="kpiBadge"><span class="dot"></span>${last ? "Último" : "Abrir"}</div>
+        ${badge}
       </div>
       <p class="kpiTitle">${s.name}</p>
       <p class="kpiSub">${s.desc}</p>
@@ -935,11 +948,13 @@ function renderKPIs(){
 function cardHTML(s){
   const fav = isFav(s.id);
   const last = localStorage.getItem(K_LAST_OPEN) === s.id;
-  const starTxt = fav ? "⭐ Favorito" : "☆ Favorito";
-  const tagTxt = last ? "Último abierto" : s.id.toUpperCase();
+
+  const badge = last ? `<span class="badge green"><span class="dot"></span>Último</span>` :
+               fav  ? `<span class="badge violet"><span class="dot"></span>Favorito</span>` :
+                      `<span class="badge blue"><span class="dot"></span>${s.id.toUpperCase()}</span>`;
 
   return `
-    <a class="card" href="${s.url}" data-open-id="${s.id}">
+    <div class="card" data-open-id="${s.id}" tabindex="0" role="button" aria-label="Abrir ${s.name}">
       <div class="cardTop">
         <div style="display:flex;align-items:flex-start;gap:12px;min-width:0">
           <div class="appIcon">${s.icon}</div>
@@ -948,36 +963,41 @@ function cardHTML(s){
             <div class="cardDesc">${s.desc}</div>
           </div>
         </div>
-        <div class="tag" title="${last ? "Este fue el último sistema abierto" : "Etiqueta del sistema"}">
-          <span class="dot"></span> ${tagTxt}
-        </div>
+        ${badge}
       </div>
 
       <div class="cardMeta">${s.url}</div>
 
       <div class="cardBottom">
-        <button class="starBtn ${fav ? "active":""}" data-fav-id="${s.id}" type="button">${starTxt}</button>
-        <span class="tag" style="background:rgba(22,163,74,.06)"><span class="dot"></span> Abrir</span>
+        <button class="starBtn ${fav ? "active":""}" data-fav-id="${s.id}" type="button">${fav ? "⭐ Favorito" : "☆ Favorito"}</button>
+        <button class="openBtn" data-open-btn="${s.id}" type="button">➡️ Abrir</button>
       </div>
-    </a>
+    </div>
   `;
 }
 
 function applyCardHandlers(container){
   if(!container) return;
 
-  container.querySelectorAll("[data-open-id]").forEach(a=>{
-    a.addEventListener("click",(e)=>{
-      if(e.target && e.target.closest("[data-fav-id]")) return;
-      e.preventDefault();
-      openSystemById(a.getAttribute("data-open-id"));
+  container.querySelectorAll("[data-open-id]").forEach(card=>{
+    const id = card.getAttribute("data-open-id");
+    card.addEventListener("click",(e)=>{
+      if(e.target && (e.target.closest("[data-fav-id]") || e.target.closest("[data-open-btn]"))) return;
+      openSystemById(id);
+    });
+    card.addEventListener("keydown",(e)=>{ if(e.key==="Enter") openSystemById(id); });
+  });
+
+  container.querySelectorAll("[data-open-btn]").forEach(btn=>{
+    btn.addEventListener("click",(e)=>{
+      e.preventDefault(); e.stopPropagation();
+      openSystemById(btn.getAttribute("data-open-btn"));
     });
   });
 
   container.querySelectorAll("[data-fav-id]").forEach(btn=>{
     btn.addEventListener("click",(e)=>{
-      e.preventDefault();
-      e.stopPropagation();
+      e.preventDefault(); e.stopPropagation();
       toggleFav(btn.getAttribute("data-fav-id"));
     });
   });
@@ -992,6 +1012,8 @@ function filterSystems(arr){
 }
 
 function renderAll(){
+  document.body.setAttribute("data-kiosk", getKiosk() ? "1":"0");
+
   renderKPIs();
 
   const favIds = getFavs();
@@ -1012,15 +1034,15 @@ function renderAll(){
                <div class="appIcon">⭐</div>
                <div style="min-width:0">
                  <div class="cardTitle">Sin favoritos</div>
-                 <div class="cardDesc">Marca cualquier sistema como favorito para que aparezca aquí.</div>
+                 <div class="cardDesc">Marca un sistema como favorito para que aparezca aquí.</div>
                </div>
              </div>
-             <div class="tag"><span class="dot"></span> TIP</div>
+             <span class="badge blue"><span class="dot"></span>TIP</span>
            </div>
-           <div class="cardMeta">Pulsa “☆ Favorito” dentro de cada tarjeta.</div>
+           <div class="cardMeta">Pulsa “☆ Favorito”</div>
            <div class="cardBottom">
-             <span class="tag"><span class="dot"></span> Rápido</span>
-             <span class="tag" style="background:rgba(139,92,246,.06)"><span class="dot"></span> Ordenado</span>
+             <button class="openBtn" type="button" data-open-btn="facturas">➡️ Abrir Facturas</button>
+             <button class="openBtn" type="button" data-open-btn="listas">➡️ Abrir Listas</button>
            </div>
          </div>`;
   }
@@ -1035,10 +1057,10 @@ function renderAll(){
     if(SEARCH) info.push(`Filtro: “${SEARCH}”`);
     info.push(`Favoritos: ${favSystems.length}`);
     info.push(getOpenMode()==="new" ? "Abrir: nueva pestaña" : "Abrir: misma pestaña");
+    info.push(getKiosk() ? "Kiosko: ON" : "Kiosko: OFF");
     statusEl.textContent = info.join(" · ");
   }
 
-  // keep bottom nav state
   setActiveTab(getActiveTab() || "hub", true);
 }
 
@@ -1047,25 +1069,27 @@ async function copyAllLinks(){
   const text = SYSTEMS.map(s => `${s.name}: ${s.url}`).join("\n");
   try{
     await navigator.clipboard.writeText(text);
+    toast("Enlaces copiados ✅");
     if(copyLinksBtn){
       copyLinksBtn.textContent = "✅ Copiado";
-      setTimeout(()=> copyLinksBtn.textContent = "📋 Copiar", 1200);
+      setTimeout(()=> copyLinksBtn.textContent = "📋 Copiar", 900);
     }
   }catch{
     alert(text);
   }
 }
 
-/* Settings (no PIN) */
+/* Settings */
 function resetAllLocal(){
-  const ok = confirm("¿Borrar configuración local? (favoritos, tema, modo abrir, etc.)");
+  const ok = confirm("¿Borrar configuración local? (favoritos, tema, kiosko, etc.)");
   if(!ok) return;
-  [K_THEME,K_OPENMODE,K_FAVS,K_CONFIRM_LOCK,K_CLEAR_ON_CLOSE,K_LAST_OPEN,K_SESSION,K_ACTIVE_TAB].forEach(k=>localStorage.removeItem(k));
+  [K_THEME,K_OPENMODE,K_FAVS,K_CONFIRM_LOCK,K_CLEAR_ON_CLOSE,K_LAST_OPEN,K_SESSION,K_ACTIVE_TAB,K_KIOSK].forEach(k=>localStorage.removeItem(k));
   setTheme("day");
   localStorage.setItem(K_OPENMODE,"new");
+  setKiosk(false);
   SEARCH="";
   if(searchInput) searchInput.value="";
-  alert("Reseteado ✅");
+  toast("Reseteado ✅");
   renderAll();
 }
 
@@ -1073,48 +1097,53 @@ function settingsMenu(){
   const a = getConfirmLock() ? "ON" : "OFF";
   const b = getClearOnClose() ? "ON" : "OFF";
   const c = getOpenMode()==="new" ? "Nueva pestaña" : "Misma pestaña";
+  const k = getKiosk() ? "ON" : "OFF";
 
   const choice = prompt(
-`AJUSTES (SIN PIN):
+`AJUSTES:
 1 = Cambiar abrir enlaces (actual: ${c})
 2 = Confirmar al pausar (actual: ${a})
 3 = Cerrar “sesión” al cerrar pestaña (actual: ${b})
-4 = Reset configuración local
+4 = Modo Kiosko (actual: ${k})
+5 = Reset configuración local
 
-Escribe 1-4`
+Escribe 1-5`
   );
 
   if(choice==="1") return setOpenMode(getOpenMode()==="new" ? "same" : "new");
-  if(choice==="2"){ const next=!getConfirmLock(); setConfirmLock(next); alert(`Confirmación al pausar: ${next?"ON":"OFF"}`); return; }
-  if(choice==="3"){ const next=!getClearOnClose(); setClearOnClose(next); alert(`Cerrar sesión al cerrar pestaña: ${next?"ON":"OFF"}`); return; }
-  if(choice==="4") return resetAllLocal();
+  if(choice==="2"){ const next=!getConfirmLock(); setConfirmLock(next); toast(`Confirmación pausa: ${next?"ON":"OFF"}`); return; }
+  if(choice==="3"){ const next=!getClearOnClose(); setClearOnClose(next); toast(`Cerrar sesión: ${next?"ON":"OFF"}`); return; }
+  if(choice==="4"){ setKiosk(!getKiosk()); return; }
+  if(choice==="5") return resetAllLocal();
 }
 
-/* Bottom nav state */
-function getActiveTab(){
-  return localStorage.getItem(K_ACTIVE_TAB) || "hub";
-}
+/* Bottom nav */
+function getActiveTab(){ return localStorage.getItem(K_ACTIVE_TAB) || "hub"; }
 function setActiveTab(tab, silent){
   localStorage.setItem(K_ACTIVE_TAB, tab);
-  if(!bottomNav) return;
-  bottomNav.querySelectorAll(".navBtn").forEach(b=>{
-    const t=b.getAttribute("data-nav");
-    b.classList.toggle("active", t===tab);
-  });
+  if(bottomNav){
+    bottomNav.querySelectorAll(".navBtn").forEach(b=>{
+      const t=b.getAttribute("data-nav");
+      b.classList.toggle("active", t===tab);
+    });
+  }
   if(!silent && tab!=="hub"){
     openSystemById(tab);
   }
 }
 
-/* Wiring */
+/* Wire */
 function wire(){
   setTheme(getTheme());
   setOpenMode(getOpenMode());
+  document.body.setAttribute("data-kiosk", getKiosk() ? "1":"0");
 
   if(themeBtn) themeBtn.addEventListener("click", ()=> setTheme(getTheme()==="night" ? "day" : "night"));
   if(openModeBtn) openModeBtn.addEventListener("click", ()=> setOpenMode(getOpenMode()==="new" ? "same" : "new"));
 
   if(openMainBtn) openMainBtn.addEventListener("click", ()=> openSystemByIndex(0));
+  if(openLastBtn) openLastBtn.addEventListener("click", openLast);
+  if(kioskBtn) kioskBtn.addEventListener("click", ()=> setKiosk(!getKiosk()));
   if(settingsBtn) settingsBtn.addEventListener("click", settingsMenu);
   if(copyLinksBtn) copyLinksBtn.addEventListener("click", copyAllLinks);
 
@@ -1134,13 +1163,12 @@ function wire(){
     }
     showLock();
   }
-
   if(lockBtn) lockBtn.addEventListener("click", doLock);
   if(unlockBtn) unlockBtn.addEventListener("click", hideLock);
   if(unlockBtn2) unlockBtn2.addEventListener("click", hideLock);
   if(hideBtn) hideBtn.addEventListener("click", hideLock);
 
-  // Bottom nav click
+  // bottom nav click
   if(bottomNav){
     bottomNav.querySelectorAll(".navBtn").forEach(btn=>{
       btn.addEventListener("click", ()=>{
@@ -1150,7 +1178,7 @@ function wire(){
     });
   }
 
-  window.addEventListener("keydown", (e)=>{
+  window.addEventListener("keydown",(e)=>{
     // lock active
     if(lockEl && lockEl.style.display !== "none"){
       if(e.key==="Enter") return hideLock();
@@ -1158,6 +1186,14 @@ function wire(){
       return;
     }
 
+    // Focus search with /
+    if(e.key==="/" && searchInput){
+      e.preventDefault();
+      searchInput.focus();
+      return;
+    }
+
+    // ignore typing
     if(e.target && ["INPUT","TEXTAREA"].includes(e.target.tagName)) return;
 
     const k = e.key.toLowerCase();
@@ -1165,6 +1201,8 @@ function wire(){
     if(k==="l"){ setActiveTab("listas", true); return openSystemById("listas"); }
     if(k==="b"){ setActiveTab("b2b", true); return openSystemById("b2b"); }
     if(k==="g"){ setActiveTab("gs", true); return openSystemById("gs"); }
+    if(k==="r"){ return openLast(); }
+    if(k==="k"){ return setKiosk(!getKiosk()); }
     if(e.key==="Escape") return doLock();
   });
 
@@ -1175,6 +1213,7 @@ function wire(){
   });
 
   renderAll();
+  toast("HUB listo ✅");
 }
 
 /* Boot */
