@@ -11,30 +11,39 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- ICON (logo) -->
+  <!-- ICON -->
   <link rel="icon" type="image/png" href="icon-192.png">
 
   <style>
     :root{
-      --bg:#0b0f14;
+      --bg:#070b11;
       --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.04);
       --line: rgba(255,255,255,.10);
-      --text:#f2f6ff;
-      --muted: rgba(242,246,255,.65);
-      --accent: #16a34a;
-      --accent2:#0ea5e9;
+      --text:#eef6ff;
+      --muted: rgba(238,246,255,.62);
       --shadow: 0 22px 70px rgba(0,0,0,.55);
-      --r: 22px;
+      --shadow2: 0 10px 24px rgba(0,0,0,.30);
+      --r: 26px;
       --safeB: env(safe-area-inset-bottom, 0px);
       --safeT: env(safe-area-inset-top, 0px);
+
+      --a1:#0ea5e9; /* cyan */
+      --a2:#16a34a; /* green */
+      --a3:#8b5cf6; /* violet */
+      --glow: 0 0 0 6px rgba(14,165,233,.16);
     }
+
     [data-theme="day"]{
-      --bg:#f5f7fb;
-      --panel: rgba(255,255,255,.88);
+      --bg:#f4f7fb;
+      --panel: rgba(255,255,255,.92);
+      --panel2: rgba(0,0,0,.02);
       --line: rgba(12,18,32,.12);
       --text:#0b1220;
-      --muted: rgba(11,18,32,.62);
+      --muted: rgba(11,18,32,.58);
       --shadow: 0 22px 70px rgba(2,6,23,.12);
+      --shadow2: 0 10px 24px rgba(2,6,23,.10);
+      --glow: 0 0 0 6px rgba(14,165,233,.14);
     }
 
     *{box-sizing:border-box}
@@ -44,9 +53,9 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color: var(--text);
       background:
-        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.18), transparent 60%),
-        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.16), transparent 60%),
-        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.12), transparent 60%),
+        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.18), transparent 62%),
+        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.16), transparent 62%),
+        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.12), transparent 62%),
         linear-gradient(180deg, var(--bg), var(--bg));
     }
 
@@ -61,12 +70,25 @@
       width:min(980px, 100%);
       border:1px solid var(--line);
       background: var(--panel);
-      border-radius: 28px;
+      border-radius: 30px;
       box-shadow: var(--shadow);
       overflow:hidden;
       backdrop-filter: blur(14px);
+      position:relative;
     }
 
+    .app::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(820px 160px at 20% 0%, rgba(14,165,233,.18), transparent 58%),
+        radial-gradient(820px 160px at 85% 0%, rgba(22,163,74,.14), transparent 58%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .app>*{position:relative; z-index:1;}
+
+    /* ===== Top ===== */
     .top{
       padding: calc(16px + var(--safeT)) 16px 16px;
       border-bottom: 1px solid var(--line);
@@ -74,6 +96,7 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
+      background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
     }
 
     .brand{
@@ -82,18 +105,23 @@
     }
 
     .logoBox{
-      width:44px; height:44px;
-      border-radius: 16px;
+      width:46px; height:46px;
+      border-radius: 18px;
       border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
+      background: var(--panel2);
       overflow:hidden;
       display:grid;
       place-items:center;
+      box-shadow: var(--shadow2);
       flex:0 0 auto;
     }
-    .logoBox img{
-      width:100%; height:100%;
-      object-fit:cover; display:block;
+    .logoBox img{width:100%;height:100%;object-fit:cover;display:block;}
+    .logoFallback{
+      width:100%;height:100%;
+      display:none;
+      place-items:center;
+      font-size:22px;
+      font-weight: 1000;
     }
 
     .title{
@@ -104,11 +132,12 @@
     .title b{
       font-size:15px;
       letter-spacing:.2px;
+      font-weight: 1000;
     }
     .title span{
       font-size:12px;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 850;
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
@@ -118,77 +147,115 @@
     .actions{
       display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
     }
+
     .btn{
       border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
+      background: var(--panel2);
       color: var(--text);
       padding: 10px 12px;
-      border-radius: 14px;
-      font-weight: 900;
+      border-radius: 16px;
+      font-weight: 950;
       font-size: 13px;
       cursor:pointer;
       user-select:none;
-      transition: transform .12s ease, opacity .12s ease;
+      transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+      box-shadow: var(--shadow2);
     }
-    [data-theme="day"] .btn{ background: rgba(0,0,0,.02); }
-    .btn:hover{opacity:.95; transform: translateY(-1px)}
+    .btn:hover{opacity:.96; transform: translateY(-1px)}
     .btn:active{transform: translateY(0px)}
+    .btn:focus{outline:none; box-shadow: var(--shadow2), var(--glow);}
+
     .btn.primary{
       border-color: transparent;
-      background: linear-gradient(135deg, rgba(14,165,233,.92), rgba(22,163,74,.92));
+      background: linear-gradient(135deg, rgba(14,165,233,.96), rgba(22,163,74,.92));
       color: #041018;
+      box-shadow: 0 16px 50px rgba(14,165,233,.18), var(--shadow2);
     }
 
+    /* ===== Main ===== */
     .content{
-      padding: 16px;
+      padding: 18px;
     }
 
-    .grid{
+    .center{
       display:grid;
-      gap:12px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:14px;
+      padding: 18px 6px 10px;
+      grid-template-columns: 1fr 1fr;
     }
 
-    .card{
+    .big{
       border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      border-radius: var(--r);
-      padding: 14px;
+      background: var(--panel2);
+      border-radius: 26px;
+      padding: 18px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
+      gap:16px;
       cursor:pointer;
-      transition: transform .12s ease, opacity .12s ease;
+      transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease, border-color .12s ease;
+      box-shadow: var(--shadow2);
+      min-height: 92px;
     }
-    [data-theme="day"] .card{ background: rgba(0,0,0,.02); }
-    .card:hover{opacity:.96; transform: translateY(-2px)}
-    .left{display:flex; align-items:center; gap:12px; min-width:0;}
-    .ico{
-      width:46px;height:46px;border-radius: 16px;
+    .big:hover{
+      opacity:.97;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: rgba(14,165,233,.28);
+    }
+    .big:active{transform: translateY(0px)}
+    .big:focus{outline:none; box-shadow: var(--shadow2), var(--glow);}
+
+    .bigLeft{display:flex; align-items:center; gap:14px; min-width:0;}
+    .bigIco{
+      width:54px;height:54px;
+      border-radius: 20px;
       border:1px solid var(--line);
-      display:grid; place-items:center;
-      background: rgba(255,255,255,.05);
-      font-size: 20px;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(60px 60px at 30% 25%, rgba(14,165,233,.18), transparent 60%),
+        radial-gradient(60px 60px at 85% 25%, rgba(22,163,74,.14), transparent 60%);
+      font-size: 24px;
+      box-shadow: var(--shadow2);
       flex:0 0 auto;
     }
-    .txt{min-width:0}
-    .txt b{display:block; font-size:14px; letter-spacing:.2px;}
-    .txt span{display:block; font-size:12px; color:var(--muted); font-weight:800; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow: ellipsis;}
-    .go{
-      font-weight: 950;
-      color: rgba(242,246,255,.85);
+    .bigTxt{min-width:0}
+    .bigTxt b{
+      display:block;
+      font-size:16px;
+      letter-spacing:.2px;
+      font-weight: 1000;
+    }
+    .bigTxt span{
+      display:block;
+      font-size:12px;
+      color: var(--muted);
+      font-weight: 850;
+      margin-top:4px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      max-width: 520px;
+    }
+    .chip{
       border:1px solid var(--line);
-      padding: 8px 10px;
+      padding: 8px 12px;
       border-radius: 999px;
       background: rgba(255,255,255,.04);
+      font-weight: 950;
       font-size: 12px;
-      white-space: nowrap;
+      white-space:nowrap;
+      color: rgba(238,246,255,.88);
     }
-    [data-theme="day"] .go{ color: rgba(11,18,32,.80); background: rgba(0,0,0,.02); }
+    [data-theme="day"] .chip{
+      background: rgba(0,0,0,.02);
+      color: rgba(11,18,32,.75);
+    }
 
     .foot{
-      margin-top: 14px;
+      margin-top: 10px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
@@ -197,128 +264,150 @@
       border-top:1px solid var(--line);
       padding-top: 14px;
       color: var(--muted);
-      font-weight: 800;
+      font-weight: 850;
       font-size: 12px;
     }
 
-    /* PAUSA / SALVAPANTALLAS */
+    /* ===== PAUSA / SALVAPANTALLAS DVD ===== */
     .pause{
       position:fixed; inset:0;
       display:none;
-      place-items:center;
-      padding: 18px;
       z-index: 999;
       background:
-        radial-gradient(1000px 700px at 20% 15%, rgba(14,165,233,.20), transparent 60%),
-        radial-gradient(900px 650px at 80% 20%, rgba(22,163,74,.18), transparent 60%),
-        radial-gradient(900px 650px at 60% 85%, rgba(139,92,246,.14), transparent 60%),
+        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.20), transparent 62%),
+        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.18), transparent 62%),
+        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.14), transparent 62%),
         linear-gradient(180deg, var(--bg), var(--bg));
     }
     .pause::before{
       content:"";
       position:absolute; inset:0;
       backdrop-filter: blur(16px);
-      background: rgba(0,0,0,.30);
+      background: rgba(0,0,0,.28);
     }
-    [data-theme="day"] .pause::before{ background: rgba(255,255,255,.28); }
+    [data-theme="day"] .pause::before{ background: rgba(255,255,255,.22); }
 
-    .pauseInner{
-      position:relative;
-      width:min(900px, 100%);
-      border-radius: 30px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      padding: 26px 18px;
-      text-align:center;
-    }
-    [data-theme="day"] .pauseInner{ background: rgba(255,255,255,.72); }
-
-    /* Texto detrás (nombre del sistema) */
-    .bgName{
-      position:absolute;
-      inset:0;
-      display:grid;
-      place-items:center;
+    /* nombre detrás */
+    .pauseName{
+      position:absolute; inset:0;
+      display:grid; place-items:center;
       pointer-events:none;
       font-weight: 1000;
       letter-spacing:.12em;
       text-transform: uppercase;
-      font-size: clamp(42px, 8vw, 96px);
-      opacity: .14;
-      transform: translateY(-6px);
+      font-size: clamp(56px, 9vw, 120px);
+      opacity: .12;
       color: var(--text);
+      transform: translateY(-8px);
+      text-align:center;
+      padding: 0 16px;
     }
 
-    /* Kiwi grande (salvapantallas) */
-    .kiwiWrap{
-      position:relative;
-      display:grid;
-      place-items:center;
-      margin: 8px auto 14px;
-      width: min(220px, 55vw);
-      aspect-ratio: 1/1;
-      border-radius: 28px;
+    /* reloj */
+    .pauseHud{
+      position:absolute;
+      left: 18px;
+      right: 18px;
+      top: calc(18px + var(--safeT));
+      display:flex;
+      justify-content:center;
+      pointer-events:none;
+      z-index: 3;
+    }
+    .pauseClock{
       border:1px solid var(--line);
       background: rgba(255,255,255,.06);
-      overflow:hidden;
-      box-shadow: var(--shadow);
-      animation: floaty 4.6s ease-in-out infinite;
+      border-radius: 999px;
+      padding: 12px 16px;
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(12px);
+      text-align:center;
+      min-width: 240px;
     }
-    [data-theme="day"] .kiwiWrap{ background: rgba(0,0,0,.02); }
-    .kiwiWrap img{
-      width:100%; height:100%;
-      object-fit:cover;
-      display:block;
-      filter: saturate(1.05);
-    }
-    @keyframes floaty{
-      0%{ transform: translateY(0px) }
-      50%{ transform: translateY(-8px) }
-      100%{ transform: translateY(0px) }
-    }
-
-    .clock{
-      position:relative;
-      font-size: clamp(44px, 6vw, 78px);
+    [data-theme="day"] .pauseClock{ background: rgba(255,255,255,.70); }
+    .pauseClock .t{
+      font-size: 44px;
       font-weight: 1000;
       letter-spacing:-.02em;
-      margin-top: 2px;
+      line-height:1;
     }
-    .date{
-      position:relative;
-      margin-top: 6px;
+    .pauseClock .d{
+      margin-top:6px;
       font-size: 12px;
       color: var(--muted);
-      font-weight: 900;
+      font-weight: 950;
       letter-spacing:.22em;
       text-transform: uppercase;
     }
-    .hint{
-      position:relative;
-      margin-top: 16px;
-      display:inline-flex;
+
+    /* kiwi DVD */
+    .dvd{
+      position:absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 26px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background: rgba(255,255,255,.06);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      display:grid;
+      place-items:center;
+      z-index: 2;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+    [data-theme="day"] .dvd{ background: rgba(255,255,255,.72); }
+    .dvd img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter: saturate(1.04);
+      user-select:none;
+      -webkit-user-drag:none;
+      pointer-events:none;
+    }
+
+    .pauseHint{
+      position:absolute;
+      left:0; right:0;
+      bottom: calc(18px + var(--safeB));
+      display:flex;
+      justify-content:center;
+      z-index: 3;
+      pointer-events:none;
+    }
+    .pauseHint .row{
+      display:flex;
       gap:10px;
       flex-wrap:wrap;
       justify-content:center;
       color: var(--muted);
-      font-weight: 900;
+      font-weight: 950;
       font-size: 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      padding: 10px 12px;
+      border-radius: 999px;
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(12px);
     }
+    [data-theme="day"] .pauseHint .row{ background: rgba(255,255,255,.70); }
     .kbd{
       border:1px solid var(--line);
-      padding: 8px 10px;
+      padding: 7px 10px;
       border-radius: 12px;
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.05);
     }
-    [data-theme="day"] .kbd{ background: rgba(0,0,0,.02); }
 
     /* Mobile */
-    @media (max-width: 720px){
-      .grid{ grid-template-columns: 1fr; }
+    @media (max-width: 820px){
+      .center{ grid-template-columns: 1fr; }
       .title span{display:none}
-      .actions .btn{ padding:10px 10px; }
+      .btn{ padding:10px 10px; }
+      .dvd{ width:120px; height:120px; border-radius: 24px; }
+      .pauseClock .t{ font-size: 40px; }
     }
   </style>
 </head>
@@ -327,18 +416,21 @@
 
   <!-- PAUSA -->
   <div id="pause" class="pause" aria-hidden="true">
-    <div class="pauseInner">
-      <div class="bgName">ARSLAN PRO</div>
+    <div class="pauseName">ARSLAN PRO</div>
 
-      <div class="kiwiWrap" aria-hidden="true">
-        <!-- Logo kiwi / salvapantallas -->
-        <img id="pauseKiwi" src="icon-512.png" alt="Kiwi">
+    <div class="pauseHud">
+      <div class="pauseClock">
+        <div class="t" id="pTime">--:--</div>
+        <div class="d" id="pDate">----</div>
       </div>
+    </div>
 
-      <div id="clock" class="clock">--:--</div>
-      <div id="date" class="date">----</div>
+    <div id="dvd" class="dvd" aria-hidden="true">
+      <img id="dvdImg" src="icon-512.png" alt="Kiwi">
+    </div>
 
-      <div class="hint">
+    <div class="pauseHint">
+      <div class="row">
         <span class="kbd"><b>Enter</b> volver</span>
         <span class="kbd"><b>Esc</b> volver</span>
       </div>
@@ -350,14 +442,12 @@
       <div class="top">
         <div class="brand">
           <div class="logoBox">
-            <!-- LOGO: si falla, muestra emoji -->
-            <img id="logo" src="icon-192.png" alt="Kiwi"
-                 onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='grid';">
-            <div id="logoFallback" style="display:none; width:100%;height:100%; place-items:center; font-size:22px;">🥝</div>
+            <img id="logo" src="icon-192.png" alt="Kiwi">
+            <div id="logoFallback" class="logoFallback">🥝</div>
           </div>
           <div class="title">
             <b>ARSLAN PRO — HUB</b>
-            <span>Facturas · Listas · B2B · Gestión</span>
+            <span>Centro único: Facturas · Listas · B2B · Gestión</span>
           </div>
         </div>
 
@@ -365,13 +455,14 @@
           <button class="btn" id="themeBtn" type="button">🌓 Modo</button>
           <button class="btn" id="openModeBtn" type="button">🔗 Nueva pestaña</button>
           <button class="btn primary" id="lastBtn" type="button">🟢 Abrir último</button>
-          <button class="btn" id="copyBtn" type="button">📋 Copiar links</button>
+          <button class="btn" id="copyBtn" type="button">📋 Copiar</button>
           <button class="btn" id="pauseBtn" type="button">🙈 Pausa</button>
         </div>
       </div>
 
       <div class="content">
-        <div class="grid" id="grid"></div>
+        <!-- SOLO 4 BOTONES (ULTRA LIMPIO) -->
+        <div class="center" id="grid"></div>
 
         <div class="foot">
           <div>Atajos: F Facturas · L Listas · B B2B · G GS · R Último · Esc Pausa</div>
@@ -383,16 +474,19 @@
 
 <script>
 /* ===============================
-   HUB SIMPLE + PRO (NO PIN)
-   - Logo con fallback
-   - Pausa: reloj + ARSLAN PRO detrás + kiwi salvapantallas
+   ARSLAN PRO — HUB (FINAL)
+   - UI ultra limpia (4 botones)
+   - Branding coherente
+   - Pausa DVD kiwi + reloj + ARSLAN PRO detrás
+   - Logo robusto
+   - Día/Noche + abrir nueva/misma + abrir último + copiar + atajos
 =============================== */
 
 const SYSTEMS = [
   { id:"facturas", icon:"🧾", name:"Facturas", sub:"arslanpro.com", url:"http://arslanpro.com/" },
-  { id:"listas",   icon:"📝", name:"Listas / Pedidos", sub:"shaniwaris80-crypto.github.io/pedidos", url:"https://shaniwaris80-crypto.github.io/pedidos/" },
-  { id:"b2b",      icon:"📚", name:"B2B Contabilidad", sub:"shaniwaris80-crypto.github.io/b2b", url:"https://shaniwaris80-crypto.github.io/b2b/" },
-  { id:"gs",       icon:"🏪", name:"GS Gestión / Ventas", sub:"shaniwaris80-crypto.github.io/GS", url:"https://shaniwaris80-crypto.github.io/GS/" }
+  { id:"listas",   icon:"📝", name:"Listas / Pedidos", sub:"GitHub · /pedidos", url:"https://shaniwaris80-crypto.github.io/pedidos/" },
+  { id:"b2b",      icon:"📚", name:"B2B Contabilidad", sub:"GitHub · /b2b", url:"https://shaniwaris80-crypto.github.io/b2b/" },
+  { id:"gs",       icon:"🏪", name:"GS Gestión / Ventas", sub:"GitHub · /GS", url:"https://shaniwaris80-crypto.github.io/GS/" }
 ];
 
 const K_THEME="ARSLAN_HUB_THEME";
@@ -405,20 +499,26 @@ function getTheme(){ return localStorage.getItem(K_THEME) || "night"; }
 function setTheme(t){
   localStorage.setItem(K_THEME, t);
   document.body.setAttribute("data-theme", t);
+  $("#status").textContent = `Modo: ${t.toUpperCase()}`;
 }
+
 function getOpenMode(){ return localStorage.getItem(K_OPENMODE) || "new"; }
 function setOpenMode(m){
   localStorage.setItem(K_OPENMODE, m);
   $("#openModeBtn").textContent = (m==="new") ? "🔗 Nueva pestaña" : "🔗 Misma pestaña";
+  $("#status").textContent = `Abrir: ${(m==="new")?"Nueva pestaña":"Misma pestaña"}`;
 }
+
 function openSystem(id){
   const s = SYSTEMS.find(x=>x.id===id);
   if(!s) return;
   localStorage.setItem(K_LAST, id);
+
   const mode = getOpenMode();
   if(mode==="new") window.open(s.url, "_blank", "noopener");
   else window.location.href = s.url;
 }
+
 function openLast(){
   const last = localStorage.getItem(K_LAST);
   if(last && SYSTEMS.some(s=>s.id===last)) openSystem(last);
@@ -427,32 +527,30 @@ function openLast(){
 
 function cardHTML(s){
   return `
-    <div class="card" data-open="${s.id}" role="button" tabindex="0">
-      <div class="left">
-        <div class="ico">${s.icon}</div>
-        <div class="txt">
+    <div class="big" data-open="${s.id}" tabindex="0" role="button" aria-label="Abrir ${s.name}">
+      <div class="bigLeft">
+        <div class="bigIco">${s.icon}</div>
+        <div class="bigTxt">
           <b>${s.name}</b>
           <span>${s.sub}</span>
         </div>
       </div>
-      <div class="go">Abrir →</div>
+      <div class="chip">Abrir →</div>
     </div>
   `;
 }
 
 function render(){
-  const grid = $("#grid");
-  grid.innerHTML = SYSTEMS.map(cardHTML).join("");
+  $("#grid").innerHTML = SYSTEMS.map(cardHTML).join("");
 
-  grid.querySelectorAll("[data-open]").forEach(el=>{
+  $("#grid").querySelectorAll("[data-open]").forEach(el=>{
     const id = el.getAttribute("data-open");
     el.addEventListener("click", ()=> openSystem(id));
     el.addEventListener("keydown",(e)=>{ if(e.key==="Enter") openSystem(id); });
   });
 
-  const status = $("#status");
   const last = localStorage.getItem(K_LAST) || "—";
-  status.textContent = `Último: ${last.toUpperCase()} · Modo: ${getTheme().toUpperCase()}`;
+  $("#status").textContent = `Último: ${last.toUpperCase()} · Abrir: ${(getOpenMode()==="new")?"Nueva pestaña":"Misma pestaña"}`;
 }
 
 /* Copiar */
@@ -466,57 +564,126 @@ async function copyLinks(){
   }
 }
 
-/* PAUSA */
+/* Logo robusto */
+function initLogo(){
+  const img = $("#logo");
+  const fb = $("#logoFallback");
+  img.onerror = () => {
+    img.style.display="none";
+    fb.style.display="grid";
+  };
+}
+
+/* ===== PAUSA (DVD) ===== */
+let pauseOn = false;
+let clockInt=null;
+let animRAF=null;
+
 function fmt2(n){ return String(n).padStart(2,"0"); }
+
 function tickClock(){
   const d=new Date();
-  $("#clock").textContent = `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`;
+  $("#pTime").textContent = `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`;
   const days=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
   const months=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
-  $("#date").textContent = `${days[d.getDay()]} · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  $("#pDate").textContent = `${days[d.getDay()]} · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
-let clockInt=null;
+
+const dvdState = {
+  x: 60, y: 220,
+  vx: 2.1, vy: 1.7
+};
+
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+function animateDVD(){
+  const dvd = $("#dvd");
+  if(!dvd || !pauseOn) return;
+
+  const w = dvd.offsetWidth;
+  const h = dvd.offsetHeight;
+
+  const maxX = window.innerWidth - w - 10;
+  const maxY = window.innerHeight - h - 10;
+
+  dvdState.x += dvdState.vx;
+  dvdState.y += dvdState.vy;
+
+  if(dvdState.x <= 10 || dvdState.x >= maxX) dvdState.vx *= -1;
+  if(dvdState.y <= 10 || dvdState.y >= maxY) dvdState.vy *= -1;
+
+  dvdState.x = clamp(dvdState.x, 10, maxX);
+  dvdState.y = clamp(dvdState.y, 10, maxY);
+
+  dvd.style.transform = `translate(${dvdState.x}px, ${dvdState.y}px)`;
+
+  animRAF = requestAnimationFrame(animateDVD);
+}
+
 function showPause(){
-  $("#pause").style.display="grid";
+  if(pauseOn) return;
+  pauseOn = true;
+  $("#pause").style.display="block";
   $("#pause").setAttribute("aria-hidden","false");
+
+  // si icon-512 falla, no rompe
+  const di = $("#dvdImg");
+  di.onerror = () => { di.style.display="none"; };
+
   tickClock();
   clockInt = setInterval(tickClock, 1000);
+
+  // random start
+  dvdState.x = Math.floor(20 + Math.random()*(window.innerWidth-200));
+  dvdState.y = Math.floor(120 + Math.random()*(window.innerHeight-260));
+  dvdState.vx = (Math.random() > 0.5 ? 2.2 : -2.2);
+  dvdState.vy = (Math.random() > 0.5 ? 1.8 : -1.8);
+
+  cancelAnimationFrame(animRAF);
+  animRAF = requestAnimationFrame(animateDVD);
 }
+
 function hidePause(){
+  if(!pauseOn) return;
+  pauseOn = false;
   $("#pause").style.display="none";
   $("#pause").setAttribute("aria-hidden","true");
+
   if(clockInt){ clearInterval(clockInt); clockInt=null; }
+  if(animRAF){ cancelAnimationFrame(animRAF); animRAF=null; }
+}
+
+function togglePause(){
+  if(pauseOn) hidePause(); else showPause();
 }
 
 /* BOOT */
 (function init(){
+  initLogo();
   setTheme(getTheme());
   setOpenMode(getOpenMode());
   render();
 
-  // Si icon-512 no existe, que no rompa la pausa
-  const pk = $("#pauseKiwi");
-  pk.onerror = () => { pk.style.display="none"; };
-
   $("#themeBtn").addEventListener("click", ()=>{
     setTheme(getTheme()==="night" ? "day" : "night");
-    render();
   });
 
   $("#openModeBtn").addEventListener("click", ()=>{
     setOpenMode(getOpenMode()==="new" ? "same" : "new");
-    $("#status").textContent = `Abrir: ${getOpenMode()==="new" ? "Nueva pestaña" : "Misma pestaña"}`;
   });
 
   $("#lastBtn").addEventListener("click", openLast);
   $("#copyBtn").addEventListener("click", copyLinks);
   $("#pauseBtn").addEventListener("click", showPause);
 
+  // click anywhere on pause to exit
+  $("#pause").addEventListener("click", hidePause);
+
   window.addEventListener("keydown",(e)=>{
     const k = e.key.toLowerCase();
 
-    // Si está en pausa
-    if($("#pause").style.display !== "none"){
+    // If pause active
+    if(pauseOn){
       if(e.key==="Escape" || e.key==="Enter") hidePause();
       return;
     }
@@ -529,7 +696,13 @@ function hidePause(){
     if(e.key==="Escape") return showPause();
   });
 
-  $("#pause").addEventListener("click", hidePause);
+  // keep DVD bounds on resize
+  window.addEventListener("resize", ()=>{
+    if(pauseOn){
+      dvdState.x = clamp(dvdState.x, 10, window.innerWidth - ($("#dvd").offsetWidth||140) - 10);
+      dvdState.y = clamp(dvdState.y, 10, window.innerHeight - ($("#dvd").offsetHeight||140) - 10);
+    }
+  });
 })();
 </script>
 
@@ -541,5 +714,6 @@ if("serviceWorker" in navigator){
   });
 }
 </script>
+
 </body>
 </html>
