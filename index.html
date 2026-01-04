@@ -16,25 +16,7 @@
 
   <style>
     :root{
-      --bg:#070b11;
-      --panel: rgba(255,255,255,.06);
-      --panel2: rgba(255,255,255,.04);
-      --line: rgba(255,255,255,.10);
-      --text:#eef6ff;
-      --muted: rgba(238,246,255,.62);
-      --shadow: 0 22px 70px rgba(0,0,0,.55);
-      --shadow2: 0 10px 24px rgba(0,0,0,.30);
-      --r: 26px;
-      --safeB: env(safe-area-inset-bottom, 0px);
-      --safeT: env(safe-area-inset-top, 0px);
-
-      --a1:#0ea5e9; /* cyan */
-      --a2:#16a34a; /* green */
-      --a3:#8b5cf6; /* violet */
-      --glow: 0 0 0 6px rgba(14,165,233,.16);
-    }
-
-    [data-theme="day"]{
+      /* Default = DAY */
       --bg:#f4f7fb;
       --panel: rgba(255,255,255,.92);
       --panel2: rgba(0,0,0,.02);
@@ -44,6 +26,24 @@
       --shadow: 0 22px 70px rgba(2,6,23,.12);
       --shadow2: 0 10px 24px rgba(2,6,23,.10);
       --glow: 0 0 0 6px rgba(14,165,233,.14);
+
+      --a1:#0ea5e9;
+      --a2:#16a34a;
+      --r: 26px;
+      --safeB: env(safe-area-inset-bottom, 0px);
+      --safeT: env(safe-area-inset-top, 0px);
+    }
+
+    [data-theme="night"]{
+      --bg:#070b11;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.04);
+      --line: rgba(255,255,255,.10);
+      --text:#eef6ff;
+      --muted: rgba(238,246,255,.62);
+      --shadow: 0 22px 70px rgba(0,0,0,.55);
+      --shadow2: 0 10px 24px rgba(0,0,0,.30);
+      --glow: 0 0 0 6px rgba(14,165,233,.16);
     }
 
     *{box-sizing:border-box}
@@ -55,7 +55,6 @@
       background:
         radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.18), transparent 62%),
         radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.16), transparent 62%),
-        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.12), transparent 62%),
         linear-gradient(180deg, var(--bg), var(--bg));
     }
 
@@ -77,18 +76,6 @@
       position:relative;
     }
 
-    .app::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(820px 160px at 20% 0%, rgba(14,165,233,.18), transparent 58%),
-        radial-gradient(820px 160px at 85% 0%, rgba(22,163,74,.14), transparent 58%);
-      pointer-events:none;
-      opacity:.9;
-    }
-    .app>*{position:relative; z-index:1;}
-
-    /* ===== Top ===== */
     .top{
       padding: calc(16px + var(--safeT)) 16px 16px;
       border-bottom: 1px solid var(--line);
@@ -99,55 +86,31 @@
       background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
     }
 
-    .brand{
-      display:flex; align-items:center; gap:12px;
-      min-width: 220px;
-    }
-
+    .brand{display:flex; align-items:center; gap:12px; min-width:220px;}
     .logoBox{
       width:46px; height:46px;
       border-radius: 18px;
       border:1px solid var(--line);
       background: var(--panel2);
       overflow:hidden;
-      display:grid;
-      place-items:center;
+      display:grid; place-items:center;
       box-shadow: var(--shadow2);
       flex:0 0 auto;
     }
     .logoBox img{width:100%;height:100%;object-fit:cover;display:block;}
-    .logoFallback{
-      width:100%;height:100%;
-      display:none;
-      place-items:center;
-      font-size:22px;
-      font-weight: 1000;
-    }
+    .logoFallback{display:none; width:100%; height:100%; place-items:center; font-size:22px; font-weight:1000;}
 
-    .title{
-      display:flex; flex-direction:column;
-      gap:2px;
-      min-width:0;
-    }
-    .title b{
-      font-size:15px;
-      letter-spacing:.2px;
-      font-weight: 1000;
-    }
+    .title{display:flex; flex-direction:column; gap:2px; min-width:0;}
+    .title b{font-size:15px; letter-spacing:.2px; font-weight:1000;}
     .title span{
       font-size:12px;
       color: var(--muted);
-      font-weight: 850;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      max-width: 520px;
+      font-weight:850;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width:520px;
     }
 
-    .actions{
-      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
-    }
-
+    .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
     .btn{
       border:1px solid var(--line);
       background: var(--panel2);
@@ -172,12 +135,8 @@
       box-shadow: 0 16px 50px rgba(14,165,233,.18), var(--shadow2);
     }
 
-    /* ===== Main ===== */
-    .content{
-      padding: 18px;
-    }
-
-    .center{
+    .content{padding: 18px;}
+    .grid{
       display:grid;
       gap:14px;
       padding: 18px 6px 10px;
@@ -212,8 +171,7 @@
       width:54px;height:54px;
       border-radius: 20px;
       border:1px solid var(--line);
-      display:grid;
-      place-items:center;
+      display:grid; place-items:center;
       background:
         radial-gradient(60px 60px at 30% 25%, rgba(14,165,233,.18), transparent 60%),
         radial-gradient(60px 60px at 85% 25%, rgba(22,163,74,.14), transparent 60%);
@@ -222,23 +180,17 @@
       flex:0 0 auto;
     }
     .bigTxt{min-width:0}
-    .bigTxt b{
-      display:block;
-      font-size:16px;
-      letter-spacing:.2px;
-      font-weight: 1000;
-    }
+    .bigTxt b{display:block; font-size:16px; letter-spacing:.2px; font-weight:1000;}
     .bigTxt span{
       display:block;
       font-size:12px;
       color: var(--muted);
-      font-weight: 850;
+      font-weight:850;
       margin-top:4px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      max-width: 520px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width:520px;
     }
+
     .chip{
       border:1px solid var(--line);
       padding: 8px 12px;
@@ -249,10 +201,8 @@
       white-space:nowrap;
       color: rgba(238,246,255,.88);
     }
-    [data-theme="day"] .chip{
-      background: rgba(0,0,0,.02);
-      color: rgba(11,18,32,.75);
-    }
+    [data-theme="night"] .chip{ background: rgba(255,255,255,.04); color: rgba(238,246,255,.88); }
+    body:not([data-theme="night"]) .chip{ background: rgba(0,0,0,.02); color: rgba(11,18,32,.72); }
 
     .foot{
       margin-top: 10px;
@@ -268,7 +218,7 @@
       font-size: 12px;
     }
 
-    /* ===== PAUSA / SALVAPANTALLAS DVD ===== */
+    /* ===== PAUSA (DVD) ===== */
     .pause{
       position:fixed; inset:0;
       display:none;
@@ -276,63 +226,63 @@
       background:
         radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.20), transparent 62%),
         radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.18), transparent 62%),
-        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.14), transparent 62%),
         linear-gradient(180deg, var(--bg), var(--bg));
     }
     .pause::before{
       content:"";
       position:absolute; inset:0;
       backdrop-filter: blur(16px);
-      background: rgba(0,0,0,.28);
+      background: rgba(255,255,255,.22);
     }
-    [data-theme="day"] .pause::before{ background: rgba(255,255,255,.22); }
+    [data-theme="night"] .pause::before{ background: rgba(0,0,0,.30); }
 
-    /* nombre detrás */
-    .pauseName{
-      position:absolute; inset:0;
-      display:grid; place-items:center;
-      pointer-events:none;
-      font-weight: 1000;
-      letter-spacing:.12em;
-      text-transform: uppercase;
-      font-size: clamp(56px, 9vw, 120px);
-      opacity: .12;
-      color: var(--text);
-      transform: translateY(-8px);
-      text-align:center;
-      padding: 0 16px;
-    }
-
-    /* reloj */
-    .pauseHud{
+    .hud{
       position:absolute;
-      left: 18px;
-      right: 18px;
-      top: calc(18px + var(--safeT));
+      left: 16px;
+      right: 16px;
+      top: calc(16px + var(--safeT));
+      z-index: 3;
       display:flex;
       justify-content:center;
       pointer-events:none;
-      z-index: 3;
     }
-    .pauseClock{
+    .hudCard{
       border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.74);
       border-radius: 999px;
       padding: 12px 16px;
       box-shadow: var(--shadow2);
       backdrop-filter: blur(12px);
       text-align:center;
-      min-width: 240px;
+      min-width: 320px;
     }
-    [data-theme="day"] .pauseClock{ background: rgba(255,255,255,.70); }
-    .pauseClock .t{
-      font-size: 44px;
+    [data-theme="night"] .hudCard{ background: rgba(255,255,255,.08); }
+
+    .hudTop{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      align-items:baseline;
+      flex-wrap:wrap;
+    }
+    .bigTxtHUD{
+      font-size: 46px;
       font-weight: 1000;
       letter-spacing:-.02em;
-      line-height:1;
+      line-height: 1;
     }
-    .pauseClock .d{
-      margin-top:6px;
+    .tempHUD{
+      font-size: 46px;
+      font-weight: 1000;
+      letter-spacing:-.02em;
+      line-height: 1;
+      background: linear-gradient(135deg, rgba(14,165,233,.96), rgba(22,163,74,.92));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color: transparent;
+    }
+    .hudSub{
+      margin-top: 6px;
       font-size: 12px;
       color: var(--muted);
       font-weight: 950;
@@ -340,15 +290,15 @@
       text-transform: uppercase;
     }
 
-    /* kiwi DVD */
-    .dvd{
+    /* Moving kiwi */
+    .dvdKiwi{
       position:absolute;
       width: 140px;
       height: 140px;
       border-radius: 26px;
       border:1px solid var(--line);
       overflow:hidden;
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.74);
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       display:grid;
@@ -357,22 +307,41 @@
       user-select:none;
       -webkit-user-drag:none;
     }
-    [data-theme="day"] .dvd{ background: rgba(255,255,255,.72); }
-    .dvd img{
+    [data-theme="night"] .dvdKiwi{ background: rgba(255,255,255,.10); }
+    .dvdKiwi img{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
-      filter: saturate(1.04);
       user-select:none;
       -webkit-user-drag:none;
       pointer-events:none;
     }
 
+    /* Moving text (NOT logo) */
+    .dvdText{
+      position:absolute;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.74);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
+      font-weight: 1000;
+      letter-spacing:.18em;
+      text-transform: uppercase;
+      z-index: 2;
+      user-select:none;
+      pointer-events:none;
+      white-space:nowrap;
+      opacity:.92;
+    }
+    [data-theme="night"] .dvdText{ background: rgba(255,255,255,.10); }
+
     .pauseHint{
       position:absolute;
       left:0; right:0;
-      bottom: calc(18px + var(--safeB));
+      bottom: calc(16px + var(--safeB));
       display:flex;
       justify-content:center;
       z-index: 3;
@@ -387,47 +356,50 @@
       font-weight: 950;
       font-size: 12px;
       border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.74);
       padding: 10px 12px;
       border-radius: 999px;
       box-shadow: var(--shadow2);
       backdrop-filter: blur(12px);
     }
-    [data-theme="day"] .pauseHint .row{ background: rgba(255,255,255,.70); }
+    [data-theme="night"] .pauseHint .row{ background: rgba(255,255,255,.10); }
     .kbd{
       border:1px solid var(--line);
       padding: 7px 10px;
       border-radius: 12px;
-      background: rgba(255,255,255,.05);
+      background: rgba(255,255,255,.06);
     }
 
-    /* Mobile */
     @media (max-width: 820px){
-      .center{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr; }
       .title span{display:none}
       .btn{ padding:10px 10px; }
-      .dvd{ width:120px; height:120px; border-radius: 24px; }
-      .pauseClock .t{ font-size: 40px; }
+      .dvdKiwi{ width:120px; height:120px; border-radius: 24px; }
+      .bigTxtHUD, .tempHUD{ font-size: 40px; }
+      .hudCard{ min-width: 280px; }
     }
   </style>
 </head>
 
-<body data-theme="night">
+<body data-theme="day">
 
   <!-- PAUSA -->
   <div id="pause" class="pause" aria-hidden="true">
-    <div class="pauseName">ARSLAN PRO</div>
-
-    <div class="pauseHud">
-      <div class="pauseClock">
-        <div class="t" id="pTime">--:--</div>
-        <div class="d" id="pDate">----</div>
+    <div class="hud">
+      <div class="hudCard">
+        <div class="hudTop">
+          <div class="bigTxtHUD" id="pTime">--:--</div>
+          <div class="tempHUD" id="pTemp">--°</div>
+        </div>
+        <div class="hudSub" id="pSub">BURGOS · CARGANDO…</div>
       </div>
     </div>
 
-    <div id="dvd" class="dvd" aria-hidden="true">
+    <div id="dvdKiwi" class="dvdKiwi" aria-hidden="true">
       <img id="dvdImg" src="icon-512.png" alt="Kiwi">
     </div>
+
+    <div id="dvdText" class="dvdText" aria-hidden="true">ARSLAN PRO</div>
 
     <div class="pauseHint">
       <div class="row">
@@ -452,7 +424,7 @@
         </div>
 
         <div class="actions">
-          <button class="btn" id="themeBtn" type="button">🌓 Modo</button>
+          <button class="btn" id="themeBtn" type="button">🌓 Día</button>
           <button class="btn" id="openModeBtn" type="button">🔗 Nueva pestaña</button>
           <button class="btn primary" id="lastBtn" type="button">🟢 Abrir último</button>
           <button class="btn" id="copyBtn" type="button">📋 Copiar</button>
@@ -461,8 +433,7 @@
       </div>
 
       <div class="content">
-        <!-- SOLO 4 BOTONES (ULTRA LIMPIO) -->
-        <div class="center" id="grid"></div>
+        <div class="grid" id="grid"></div>
 
         <div class="foot">
           <div>Atajos: F Facturas · L Listas · B B2B · G GS · R Último · Esc Pausa</div>
@@ -474,12 +445,10 @@
 
 <script>
 /* ===============================
-   ARSLAN PRO — HUB (FINAL)
-   - UI ultra limpia (4 botones)
-   - Branding coherente
-   - Pausa DVD kiwi + reloj + ARSLAN PRO detrás
-   - Logo robusto
-   - Día/Noche + abrir nueva/misma + abrir último + copiar + atajos
+   ARSLAN PRO — HUB (SIMPLE / NO PIN)
+   - Default DAY + toggle NIGHT
+   - Pause: time/date/place/temp big + kiwi DVD + moving text
+   - Short, robust, no errors
 =============================== */
 
 const SYSTEMS = [
@@ -493,12 +462,17 @@ const K_THEME="ARSLAN_HUB_THEME";
 const K_OPENMODE="ARSLAN_HUB_OPENMODE";
 const K_LAST="ARSLAN_HUB_LAST";
 
+const PLACE_NAME = "Burgos";
+const BURGOS_LAT = 42.34106;
+const BURGOS_LON = -3.70184;
+
 const $ = s => document.querySelector(s);
 
-function getTheme(){ return localStorage.getItem(K_THEME) || "night"; }
+function getTheme(){ return localStorage.getItem(K_THEME) || "day"; }
 function setTheme(t){
   localStorage.setItem(K_THEME, t);
   document.body.setAttribute("data-theme", t);
+  $("#themeBtn").textContent = (t==="night") ? "🌙 Noche" : "🌓 Día";
   $("#status").textContent = `Modo: ${t.toUpperCase()}`;
 }
 
@@ -513,7 +487,6 @@ function openSystem(id){
   const s = SYSTEMS.find(x=>x.id===id);
   if(!s) return;
   localStorage.setItem(K_LAST, id);
-
   const mode = getOpenMode();
   if(mode==="new") window.open(s.url, "_blank", "noopener");
   else window.location.href = s.url;
@@ -542,7 +515,6 @@ function cardHTML(s){
 
 function render(){
   $("#grid").innerHTML = SYSTEMS.map(cardHTML).join("");
-
   $("#grid").querySelectorAll("[data-open]").forEach(el=>{
     const id = el.getAttribute("data-open");
     el.addEventListener("click", ()=> openSystem(id));
@@ -553,7 +525,7 @@ function render(){
   $("#status").textContent = `Último: ${last.toUpperCase()} · Abrir: ${(getOpenMode()==="new")?"Nueva pestaña":"Misma pestaña"}`;
 }
 
-/* Copiar */
+/* Copy links */
 async function copyLinks(){
   const text = SYSTEMS.map(s => `${s.name}: ${s.url}`).join("\n");
   try{
@@ -574,48 +546,99 @@ function initLogo(){
   };
 }
 
-/* ===== PAUSA (DVD) ===== */
+/* ===== Weather (Open-Meteo) ===== */
+let LAST_TEMP_C = null;
+let LAST_WEATHER_AT = 0;
+
+async function fetchWeather(){
+  // refresh max every 10 min
+  const now = Date.now();
+  if(now - LAST_WEATHER_AT < 10 * 60 * 1000 && LAST_TEMP_C !== null) return LAST_TEMP_C;
+
+  const url =
+    `https://api.open-meteo.com/v1/forecast` +
+    `?latitude=${encodeURIComponent(BURGOS_LAT)}` +
+    `&longitude=${encodeURIComponent(BURGOS_LON)}` +
+    `&current=temperature_2m` +
+    `&temperature_unit=celsius` +
+    `&timezone=Europe%2FMadrid`;
+
+  try{
+    const res = await fetch(url, { cache: "no-store" });
+    if(!res.ok) throw new Error("Weather HTTP " + res.status);
+    const data = await res.json();
+    const t = data?.current?.temperature_2m;
+    if(typeof t !== "number") throw new Error("No temp");
+    LAST_TEMP_C = Math.round(t);
+    LAST_WEATHER_AT = now;
+    return LAST_TEMP_C;
+  }catch{
+    // keep last known (if any)
+    return LAST_TEMP_C;
+  }
+}
+
+/* ===== Pause / Screensaver ===== */
 let pauseOn = false;
-let clockInt=null;
-let animRAF=null;
+let clockInt = null;
+let animRAF = null;
+
+const kiwi = { x: 40, y: 140, vx: 2.2, vy: 1.8 };
+const text = { x: 80, y: 320, vx: 2.0, vy: 1.6 };
 
 function fmt2(n){ return String(n).padStart(2,"0"); }
 
-function tickClock(){
-  const d=new Date();
-  $("#pTime").textContent = `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`;
+function formatDateLine(d){
   const days=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
   const months=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
-  $("#pDate").textContent = `${days[d.getDay()]} · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  return `${days[d.getDay()]} · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-const dvdState = {
-  x: 60, y: 220,
-  vx: 2.1, vy: 1.7
-};
+async function tickHUD(){
+  const d = new Date();
+  $("#pTime").textContent = `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`;
 
-function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+  const t = await fetchWeather();
+  $("#pTemp").textContent = (t === null) ? "--°" : `${t}°`;
+
+  const dateLine = formatDateLine(d);
+  const tempLine = (t === null) ? "SIN DATOS" : `${t}°C`;
+  $("#pSub").textContent = `${PLACE_NAME.toUpperCase()} · ${dateLine} · ${tempLine}`;
+}
+
+function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
 
 function animateDVD(){
-  const dvd = $("#dvd");
-  if(!dvd || !pauseOn) return;
+  if(!pauseOn) return;
 
-  const w = dvd.offsetWidth;
-  const h = dvd.offsetHeight;
+  const dvdKiwi = $("#dvdKiwi");
+  const dvdText = $("#dvdText");
 
-  const maxX = window.innerWidth - w - 10;
-  const maxY = window.innerHeight - h - 10;
+  // bounds
+  const kW = dvdKiwi.offsetWidth || 140;
+  const kH = dvdKiwi.offsetHeight || 140;
 
-  dvdState.x += dvdState.vx;
-  dvdState.y += dvdState.vy;
+  const tW = dvdText.offsetWidth || 220;
+  const tH = dvdText.offsetHeight || 46;
 
-  if(dvdState.x <= 10 || dvdState.x >= maxX) dvdState.vx *= -1;
-  if(dvdState.y <= 10 || dvdState.y >= maxY) dvdState.vy *= -1;
+  const maxX = window.innerWidth - 10;
+  const maxY = window.innerHeight - 10;
 
-  dvdState.x = clamp(dvdState.x, 10, maxX);
-  dvdState.y = clamp(dvdState.y, 10, maxY);
+  // kiwi move
+  kiwi.x += kiwi.vx; kiwi.y += kiwi.vy;
+  if(kiwi.x <= 10 || kiwi.x + kW >= maxX) kiwi.vx *= -1;
+  if(kiwi.y <= 10 || kiwi.y + kH >= maxY) kiwi.vy *= -1;
+  kiwi.x = clamp(kiwi.x, 10, maxX - kW);
+  kiwi.y = clamp(kiwi.y, 10, maxY - kH);
+  dvdKiwi.style.transform = `translate(${kiwi.x}px, ${kiwi.y}px)`;
 
-  dvd.style.transform = `translate(${dvdState.x}px, ${dvdState.y}px)`;
+  // text move (different speed)
+  text.x += text.vx; text.y += text.vy;
+  if(text.x <= 10 || text.x + tW >= maxX) text.vx *= -1;
+  if(text.y <= 10 || text.y + tH >= maxY) text.vy *= -1;
+  text.x = clamp(text.x, 10, maxX - tW);
+  text.y = clamp(text.y, 10, maxY - tH);
+  dvdText.style.transform = `translate(${text.x}px, ${text.y}px)`;
 
   animRAF = requestAnimationFrame(animateDVD);
 }
@@ -623,33 +646,36 @@ function animateDVD(){
 function showPause(){
   if(pauseOn) return;
   pauseOn = true;
-  $("#pause").style.display="block";
+  $("#pause").style.display = "block";
   $("#pause").setAttribute("aria-hidden","false");
 
-  // si icon-512 falla, no rompe
-const di = $("#dvdImg");
-di.onerror = () => {
-  // fallback: si icon-512 no existe, usa icon-192
-  if (di.src.includes("icon-512.png")) {
-    di.src = "icon-192.png";
-    return;
-  }
-  // si también falla, muestra emoji
-  di.style.display = "none";
-  $("#dvd").innerHTML = "🥝";
-  $("#dvd").style.fontSize = "64px";
-};
-
-
-  tickClock();
-  clockInt = setInterval(tickClock, 1000);
+  // Kiwi image fallback
+  const di = $("#dvdImg");
+  di.onerror = () => {
+    // if icon-512 missing, fallback to icon-192
+    if(di.src.includes("icon-512.png")){
+      di.src = "icon-192.png";
+      return;
+    }
+    // final fallback
+    di.style.display = "none";
+    $("#dvdKiwi").textContent = "🥝";
+    $("#dvdKiwi").style.fontSize = "64px";
+  };
 
   // random start
-  dvdState.x = Math.floor(20 + Math.random()*(window.innerWidth-200));
-  dvdState.y = Math.floor(120 + Math.random()*(window.innerHeight-260));
-  dvdState.vx = (Math.random() > 0.5 ? 2.2 : -2.2);
-  dvdState.vy = (Math.random() > 0.5 ? 1.8 : -1.8);
+  kiwi.x = Math.floor(20 + Math.random()*(window.innerWidth-220));
+  kiwi.y = Math.floor(80 + Math.random()*(window.innerHeight-260));
+  kiwi.vx = (Math.random()>0.5 ? 2.2 : -2.2);
+  kiwi.vy = (Math.random()>0.5 ? 1.8 : -1.8);
 
+  text.x = Math.floor(20 + Math.random()*(window.innerWidth-280));
+  text.y = Math.floor(120 + Math.random()*(window.innerHeight-320));
+  text.vx = (Math.random()>0.5 ? 2.0 : -2.0);
+  text.vy = (Math.random()>0.5 ? 1.6 : -1.6);
+
+  tickHUD();
+  clockInt = setInterval(tickHUD, 30000); // refresh HUD every 30s
   cancelAnimationFrame(animRAF);
   animRAF = requestAnimationFrame(animateDVD);
 }
@@ -657,21 +683,16 @@ di.onerror = () => {
 function hidePause(){
   if(!pauseOn) return;
   pauseOn = false;
-  $("#pause").style.display="none";
+  $("#pause").style.display = "none";
   $("#pause").setAttribute("aria-hidden","true");
-
   if(clockInt){ clearInterval(clockInt); clockInt=null; }
   if(animRAF){ cancelAnimationFrame(animRAF); animRAF=null; }
 }
 
-function togglePause(){
-  if(pauseOn) hidePause(); else showPause();
-}
-
-/* BOOT */
+/* Boot */
 (function init(){
   initLogo();
-  setTheme(getTheme());
+  setTheme(getTheme());        // default day if empty
   setOpenMode(getOpenMode());
   render();
 
@@ -687,13 +708,13 @@ function togglePause(){
   $("#copyBtn").addEventListener("click", copyLinks);
   $("#pauseBtn").addEventListener("click", showPause);
 
-  // click anywhere on pause to exit
+  // click pause screen to exit
   $("#pause").addEventListener("click", hidePause);
 
+  // Keyboard shortcuts
   window.addEventListener("keydown",(e)=>{
     const k = e.key.toLowerCase();
 
-    // If pause active
     if(pauseOn){
       if(e.key==="Escape" || e.key==="Enter") hidePause();
       return;
@@ -707,13 +728,8 @@ function togglePause(){
     if(e.key==="Escape") return showPause();
   });
 
-  // keep DVD bounds on resize
-  window.addEventListener("resize", ()=>{
-    if(pauseOn){
-      dvdState.x = clamp(dvdState.x, 10, window.innerWidth - ($("#dvd").offsetWidth||140) - 10);
-      dvdState.y = clamp(dvdState.y, 10, window.innerHeight - ($("#dvd").offsetHeight||140) - 10);
-    }
-  });
+  // Weather warm-up (non-blocking)
+  fetchWeather().catch(()=>{});
 })();
 </script>
 
