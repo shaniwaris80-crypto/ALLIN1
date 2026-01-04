@@ -1,4 +1,4 @@
-const CACHE_VERSION = "arslan-hub-v1.0.5";
+const CACHE_VERSION = "arslan-hub-v1.1.0";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {
@@ -8,7 +8,7 @@ self.addEventListener("install", (e) => {
 
 self.addEventListener("activate", (e) => {
   e.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.map(k => k!==CACHE_VERSION ? caches.delete(k) : null)))
+    caches.keys().then(keys => Promise.all(keys.map(k => (k !== CACHE_VERSION ? caches.delete(k) : null))))
   );
   self.clients.claim();
 });
@@ -16,16 +16,18 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   const url = new URL(req.url);
-  if(url.origin !== self.location.origin) return;
 
-  if(req.mode === "navigate"){
-    e.respondWith(fetch(req).catch(()=>caches.match("./index.html")));
+  // cache only same-origin (your hub)
+  if (url.origin !== self.location.origin) return;
+
+  if (req.mode === "navigate") {
+    e.respondWith(fetch(req).catch(() => caches.match("./index.html")));
     return;
   }
 
   e.respondWith(
-    caches.match(req).then(hit => hit || fetch(req).then(res=>{
-      if(res.ok) caches.open(CACHE_VERSION).then(c=>c.put(req, res.clone()));
+    caches.match(req).then(hit => hit || fetch(req).then(res => {
+      if (res && res.ok) caches.open(CACHE_VERSION).then(c => c.put(req, res.clone()));
       return res;
     }))
   );
