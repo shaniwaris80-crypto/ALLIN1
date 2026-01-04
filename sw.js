@@ -2,7 +2,9 @@ const CACHE_NAME = "arslan-hub-v1";
 const ASSETS = [
   "./",
   "./index.html",
-  "./manifest.webmanifest"
+  "./manifest.webmanifest",
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 
 self.addEventListener("install", (event) => {
@@ -23,7 +25,12 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const req = event.request;
+
+  // Only cache same-origin requests (keeps it safe)
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
+
   event.respondWith(
-    caches.match(req).then((cached) => cached || fetch(req).catch(()=>cached))
+    caches.match(req).then((cached) => cached || fetch(req).catch(() => cached))
   );
 });
