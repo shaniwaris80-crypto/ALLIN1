@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ARSLAN PRO — Suite</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- LOGIN PIN -->
+  <div id="lock" class="lock">
+    <div class="lock-card">
+      <div class="lock-title">ARSLAN PRO</div>
+      <div class="lock-sub">Acceso seguro</div>
+
+      <div class="pin-row">
+        <input id="pinInput" type="password" inputmode="numeric" placeholder="PIN" autocomplete="off"/>
+        <button id="pinBtn" class="btn primary">Entrar</button>
+      </div>
+      <div id="pinMsg" class="lock-msg"></div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-title">ARSLAN PRO</div>
+        <div class="brand-sub">Suite · Listas + Gestión + Facturación</div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn" data-route="home">🏠 Inicio</button>
+        <button class="nav-btn" data-route="facturacion">🧾 Facturación</button>
+        <button class="nav-btn" data-route="listas">📝 Listas / Pedidos</button>
+        <button class="nav-btn" data-route="gestion">🗂️ Gestión</button>
+        <button class="nav-btn" data-route="reportes">📊 Reportes</button>
+        <button class="nav-btn" data-route="nube">☁️ Nube</button>
+        <button id="logoutBtn" class="nav-btn danger">🔒 Salir</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div id="cloudPill" class="pill warn">☁️ Nube: off</div>
+        <div class="muted">v1 Suite</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="burger" class="burger">☰</button>
+        <div class="topbar-title" id="pageTitle">Inicio</div>
+        <div class="topbar-actions">
+          <button class="btn" id="backupBtn">⬇️ Backup JSON</button>
+          <label class="btn">
+            ⬆️ Importar JSON
+            <input id="importFile" type="file" accept="application/json" hidden>
+          </label>
+        </div>
+      </header>
+
+      <section id="view" class="view">
+        <!-- aquí se renderiza cada módulo -->
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
