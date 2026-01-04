@@ -22,20 +22,18 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   const url = new URL(req.url);
+  if(url.origin !== self.location.origin) return;
 
-  // Only same-origin cache (Hub assets)
-  if (url.origin !== self.location.origin) return;
-
-  // HTML navigation: network-first
-  if (req.mode === "navigate") {
-    e.respondWith(fetch(req).catch(() => caches.match("./index.html")));
+  // HTML: network first
+  if(req.mode === "navigate"){
+    e.respondWith(fetch(req).catch(()=>caches.match("./index.html")));
     return;
   }
 
-  // Assets: cache-first
+  // assets: cache first
   e.respondWith(
-    caches.match(req).then(hit => hit || fetch(req).then(res => {
-      if (res && res.ok) caches.open(CACHE_VERSION).then(c => c.put(req, res.clone()));
+    caches.match(req).then(hit => hit || fetch(req).then(res=>{
+      if(res.ok) caches.open(CACHE_VERSION).then(c=>c.put(req, res.clone()));
       return res;
     }))
   );
