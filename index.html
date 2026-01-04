@@ -139,9 +139,7 @@
       color: #06131b;
     }
 
-    .content{
-      padding:16px;
-    }
+    .content{ padding:16px; }
 
     .grid{
       display:grid;
@@ -293,7 +291,6 @@
       font-size:12px;
     }
 
-    /* Mobile polish */
     @media (max-width: 520px){
       .actions{gap:8px}
       .pill{padding:8px 10px}
@@ -313,7 +310,7 @@
         <div class="s">Acceso protegido · Introduce el PIN</div>
       </div>
       <div class="lockBody">
-        <div class="small">🔒 Protección rápida (PIN) + bloqueo por intentos</div>
+        <div class="small">🔒 PIN + bloqueo por intentos (sin auto-bloqueo)</div>
 
         <div class="pinRow">
           <input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN"/>
@@ -321,7 +318,6 @@
         </div>
 
         <div id="pinMsg" class="msg"></div>
-
         <div class="small" id="lockInfo"></div>
       </div>
     </div>
@@ -360,11 +356,11 @@
 
 <script>
 /* ===============================
-   ARSLAN HUB PRO
+   ARSLAN HUB PRO (NO AUTO-LOCK)
    - PIN 8410 (hash)
    - Day/Night toggle
    - Lockout after 3 fails
-   - Auto-lock after inactivity
+   - Manual lock button
 =============================== */
 
 /* ===== Links (tuyos) ===== */
@@ -406,14 +402,12 @@ const K_LOCKUNTIL = "ARSLAN_HUB_LOCKUNTIL"; // timestamp
 /* ===== Security params ===== */
 const MAX_FAILS = 3;
 const LOCK_SECONDS = 60;
-const AUTO_LOCK_MINUTES = 10; // cambia si quieres
 
 /* ===== Helpers ===== */
 const $ = (s)=>document.querySelector(s);
-
 function now(){ return Date.now(); }
 
-/* Hash simple (no muestra el PIN en código visible) */
+/* Hash simple */
 function simpleHash(str){
   let h = 2166136261;
   for (let i=0;i<str.length;i++){
@@ -423,10 +417,7 @@ function simpleHash(str){
   return ("00000000"+(h>>>0).toString(16)).slice(-8);
 }
 
-/* ===== Setup PIN =====
-   Nota: el PIN como texto existe SOLO aquí. Si quieres máxima discreción:
-   - cambia el PIN aquí y NO publiques capturas del código.
-*/
+/* ===== Setup PIN ===== */
 function ensurePin(){
   if(!localStorage.getItem(K_PINHASH)){
     const initialPin = "8410";
@@ -479,7 +470,6 @@ function showApp(){
   statusEl.textContent = "Acceso OK · " + new Date().toLocaleString();
   setSession(true);
   resetFails();
-  touchActivity();
 }
 function showLock(){
   setSession(false);
@@ -511,26 +501,9 @@ function updateLockInfo(){
     const sec = Math.ceil((until - now())/1000);
     lockInfo.textContent = `⛔ Bloqueado ${sec}s por seguridad.`;
   }else{
-    lockInfo.textContent = fails>0 ? `Intentos fallidos: ${fails}/${MAX_FAILS}` : `Modo: ${getTheme()==="night" ? "Noche" : "Día"} · Auto-bloqueo ${AUTO_LOCK_MINUTES} min`;
+    lockInfo.textContent = fails>0 ? `Intentos fallidos: ${fails}/${MAX_FAILS}` : `Modo: ${getTheme()==="night" ? "Noche" : "Día"} · Sin auto-bloqueo`;
   }
 }
-
-/* ===== Auto lock by inactivity ===== */
-let lastActivity = now();
-function touchActivity(){
-  lastActivity = now();
-}
-function checkAutoLock(){
-  if(!isSessionOn()) return;
-  const maxMs = AUTO_LOCK_MINUTES * 60 * 1000;
-  if(now() - lastActivity > maxMs){
-    showLock();
-  }
-}
-setInterval(checkAutoLock, 2000);
-["click","keydown","mousemove","touchstart"].forEach(ev=>{
-  window.addEventListener(ev, touchActivity, {passive:true});
-});
 
 /* ===== PIN attempt ===== */
 function tryPin(){
