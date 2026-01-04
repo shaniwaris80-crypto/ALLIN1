@@ -3,235 +3,618 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>ARSLAN PRO — Panel Principal</title>
+  <title>ARSLAN PRO — HUB</title>
   <style>
+    /* =========================
+       THEME (Day/Night)
+    ========================== */
     :root{
+      --bg:#f4f7fb;
+      --bg2:#eef3fb;
+      --card:#ffffffcc;
+      --cardSolid:#ffffff;
+      --text:#0d1b2a;
+      --muted:#4b627a;
+      --line:#d9e4f2;
+      --accent:#16a34a;
+      --accent2:#0ea5e9;
+      --shadow: 0 18px 60px rgba(2, 6, 23, .12);
+      --shadow2: 0 10px 30px rgba(2, 6, 23, .10);
+      --danger:#ef4444;
+      --warn:#f59e0b;
+      --ok:#16a34a;
+      --radius: 22px;
+      --radius2: 16px;
+    }
+
+    [data-theme="night"]{
       --bg:#0b0f14;
-      --card:#121924;
-      --muted:#9fb0c3;
+      --bg2:#0d1420;
+      --card:#101a28cc;
+      --cardSolid:#101a28;
       --text:#e9f0f7;
+      --muted:#9fb0c3;
       --line:#1f2a3a;
       --accent:#6ee7b7;
+      --accent2:#38bdf8;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
       --danger:#ff5a5f;
+      --warn:#fbbf24;
+      --ok:#6ee7b7;
     }
+
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      background:var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(14,165,233,.18), transparent 60%),
+        radial-gradient(1100px 650px at 90% 15%, rgba(22,163,74,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
       color:var(--text);
     }
+
+    /* =========================
+       Layout
+    ========================== */
     .wrap{
-      min-height:100vh;
+      min-height:100%;
       display:grid;
       place-items:center;
       padding:18px;
     }
-    .panel{
-      width:min(980px,100%);
-      background:rgba(18,25,36,.92);
+
+    .shell{
+      width:min(980px, 100%);
       border:1px solid var(--line);
-      border-radius:22px;
-      padding:20px;
-      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
     }
-    .top{
+
+    .topbar{
       display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-    h1{margin:0;font-size:22px;font-weight:900}
-    .sub{color:var(--muted);font-weight:700;margin-top:6px}
-    .controls{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
       align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 16px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(90deg, rgba(14,165,233,.10), rgba(22,163,74,.10));
     }
-    .btn{
-      border:1px solid var(--line);
-      background:#0f1622;
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:800;
+
+    .brand{
+      display:flex; align-items:center; gap:10px;
     }
-    .btn:hover{opacity:.95}
+    .logo{
+      width:38px; height:38px;
+      border-radius:14px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      box-shadow: var(--shadow2);
+    }
+    .brand h1{
+      font-size:16px; margin:0; font-weight:950; letter-spacing:.2px;
+    }
+    .brand .sub{
+      font-size:12px; margin-top:2px; color:var(--muted); font-weight:800;
+    }
+
+    .actions{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+
     .pill{
+      display:flex; align-items:center; gap:8px;
       border:1px solid var(--line);
-      background:#0f1622;
+      background: var(--cardSolid);
       padding:9px 12px;
       border-radius:999px;
-      font-weight:800;
-      color:var(--muted);
-      display:flex;
-      align-items:center;
-      gap:8px;
+      font-weight:900;
+      font-size:12px;
       cursor:pointer;
       user-select:none;
+      box-shadow: var(--shadow2);
     }
-    .pill b{color:var(--text)}
+
+    .btn{
+      border:1px solid var(--line);
+      background: var(--cardSolid);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius: 14px;
+      font-weight:950;
+      cursor:pointer;
+      box-shadow: var(--shadow2);
+      transition: transform .12s ease, opacity .12s ease;
+    }
+    .btn:hover{opacity:.95; transform: translateY(-1px)}
+    .btn:active{transform: translateY(0px)}
+    .btn.primary{
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #06131b;
+    }
+
+    .content{
+      padding:16px;
+    }
+
     .grid{
-      margin-top:18px;
       display:grid;
       gap:14px;
-      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     }
+
     .card{
+      border:1px solid var(--line);
+      background: var(--cardSolid);
+      border-radius: var(--radius2);
+      padding:16px;
+      box-shadow: var(--shadow2);
       text-decoration:none;
       color:inherit;
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:16px;
-      background:#0f1622;
-      display:block;
-      transition:.15s;
+      position:relative;
+      overflow:hidden;
+      transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease;
     }
     .card:hover{
-      border-color:var(--accent);
-      transform:translateY(-2px);
+      transform: translateY(-3px);
+      border-color: rgba(22,163,74,.5);
+      box-shadow: var(--shadow);
     }
+
+    .card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(500px 120px at 20% 0%, rgba(14,165,233,.18), transparent 60%),
+                  radial-gradient(500px 120px at 90% 0%, rgba(22,163,74,.18), transparent 55%);
+      opacity:.6;
+      pointer-events:none;
+    }
+
+    .card > *{position:relative; z-index:1}
+
+    .row{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+
     .title{
+      font-size:15px;
       font-weight:950;
-      font-size:16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      display:flex; align-items:center; gap:10px;
+    }
+    .icon{
+      width:36px; height:36px;
+      border-radius:14px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(14,165,233,.18), rgba(22,163,74,.18));
+      border:1px solid var(--line);
+      font-size:18px;
     }
     .desc{
       margin-top:8px;
       color:var(--muted);
-      font-weight:700;
-      font-size:14px;
+      font-weight:800;
+      font-size:13px;
       line-height:1.35;
     }
     .url{
       margin-top:10px;
       font-size:12px;
-      color:#7f93aa;
-      word-break:break-all;
+      color: color-mix(in srgb, var(--muted) 80%, transparent);
+      word-break: break-all;
+      font-weight:800;
     }
+
     .footer{
-      margin-top:16px;
-      padding-top:14px;
+      margin-top:14px;
       border-top:1px solid var(--line);
+      padding-top:14px;
       display:flex;
       justify-content:space-between;
-      gap:10px;
+      gap:12px;
       flex-wrap:wrap;
       color:var(--muted);
-      font-weight:700;
+      font-weight:900;
       font-size:12px;
     }
-    .small{font-size:12px;color:var(--muted);font-weight:700}
+
+    /* =========================
+       LOCK (PIN screen)
+    ========================== */
+    .lock{
+      position:fixed; inset:0;
+      display:grid; place-items:center;
+      padding:18px;
+      z-index:50;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(14,165,233,.22), transparent 60%),
+        radial-gradient(1100px 650px at 90% 15%, rgba(22,163,74,.22), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+    }
+    .lockCard{
+      width:min(520px, 100%);
+      border-radius: var(--radius);
+      border:1px solid var(--line);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .lockHeader{
+      padding:18px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(90deg, rgba(14,165,233,.12), rgba(22,163,74,.12));
+    }
+    .lockHeader .t{
+      display:flex; align-items:center; gap:10px;
+      font-weight: 950;
+      font-size:18px;
+      margin:0;
+    }
+    .lockHeader .s{
+      margin-top:6px;
+      color:var(--muted);
+      font-weight:900;
+      font-size:12px;
+    }
+    .lockBody{padding:18px}
+    .pinRow{
+      display:flex; gap:10px; align-items:center;
+      margin-top:12px;
+    }
+    input[type="password"]{
+      flex:1;
+      border:1px solid var(--line);
+      background: var(--cardSolid);
+      color:var(--text);
+      padding:12px 12px;
+      border-radius:14px;
+      font-size:16px;
+      font-weight:900;
+      outline:none;
+    }
+    .msg{
+      margin-top:10px;
+      font-weight:900;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .msg.bad{color:var(--danger)}
+    .msg.ok{color:var(--ok)}
+    .small{
+      margin-top:10px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:12px;
+    }
+
+    /* Mobile polish */
+    @media (max-width: 520px){
+      .actions{gap:8px}
+      .pill{padding:8px 10px}
+      .btn{padding:9px 10px}
+      .content{padding:14px}
+    }
   </style>
 </head>
-<body>
-  <div class="wrap">
-    <div class="panel">
-      <div class="top">
-        <div>
-          <h1>ARSLAN PRO</h1>
-          <div class="sub">Panel principal · Acceso rápido a tus sistemas</div>
-          <div class="small" style="margin-top:6px">Un solo sitio para entrar a: Facturas · Listas · Contabilidad · Ventas/Gestión</div>
+
+<body data-theme="day">
+
+  <!-- LOCK SCREEN -->
+  <div id="lock" class="lock" aria-hidden="false">
+    <div class="lockCard">
+      <div class="lockHeader">
+        <div class="t"><span class="logo" style="width:34px;height:34px;border-radius:13px"></span> ARSLAN PRO — HUB</div>
+        <div class="s">Acceso protegido · Introduce el PIN</div>
+      </div>
+      <div class="lockBody">
+        <div class="small">🔒 Protección rápida (PIN) + bloqueo por intentos</div>
+
+        <div class="pinRow">
+          <input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN"/>
+          <button id="pinBtn" class="btn primary">Entrar</button>
         </div>
 
-        <div class="controls">
-          <div id="openMode" class="pill" title="Cambia cómo se abren los enlaces">
-            🔗 Abrir: <b id="openModeText">Nueva pestaña</b>
+        <div id="pinMsg" class="msg"></div>
+
+        <div class="small" id="lockInfo"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div class="wrap">
+    <div class="shell" id="app" style="display:none">
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo"></div>
+          <div>
+            <h1>ARSLAN PRO</h1>
+            <div class="sub">Panel principal · Facturas · Listas · Contabilidad · Gestión</div>
           </div>
-          <button class="btn" id="copyAll">📋 Copiar enlaces</button>
+        </div>
+
+        <div class="actions">
+          <div class="pill" id="themeBtn" title="Cambiar modo día/noche">🌓 <span id="themeTxt">Día</span></div>
+          <div class="pill" id="openModeBtn" title="Abrir enlaces en nueva pestaña o en la misma">🔗 <span id="openModeTxt">Nueva pestaña</span></div>
+          <button class="btn" id="copyLinks">📋 Copiar enlaces</button>
+          <button class="btn" id="lockBtn">🔒 Bloquear</button>
         </div>
       </div>
 
-      <div class="grid" id="grid"></div>
+      <div class="content">
+        <div class="grid" id="grid"></div>
 
-      <div class="footer">
-        <div>✅ Consejo: guarda esta página como favorito o como icono en el móvil</div>
-        <div>ARSLAN HUB · v1</div>
+        <div class="footer">
+          <div>✅ Consejo: añade esta página a Favoritos / pantalla de inicio</div>
+          <div id="status">Listo</div>
+        </div>
       </div>
     </div>
   </div>
 
 <script>
-  const systems = [
-    {
-      icon: "🧾",
-      name: "Facturas",
-      desc: "Crear y gestionar facturas (tu web principal).",
-      url: "http://arslanpro.com/"
-    },
-    {
-      icon: "📝",
-      name: "Listas / Pedidos",
-      desc: "Crear listas de pedidos y exportar (pedidos).",
-      url: "https://shaniwaris80-crypto.github.io/pedidos/"
-    },
-    {
-      icon: "📚",
-      name: "Contabilidad (B2B)",
-      desc: "Contabilidad y trazabilidad (b2b).",
-      url: "https://shaniwaris80-crypto.github.io/b2b/"
-    },
-    {
-      icon: "🏪",
-      name: "Ventas / Gestión (GS)",
-      desc: "Ventas, gestión, reportes y control general.",
-      url: "https://shaniwaris80-crypto.github.io/GS/"
-    }
-  ];
+/* ===============================
+   ARSLAN HUB PRO
+   - PIN 8410 (hash)
+   - Day/Night toggle
+   - Lockout after 3 fails
+   - Auto-lock after inactivity
+=============================== */
 
-  const grid = document.getElementById("grid");
-  const openMode = document.getElementById("openMode");
-  const openModeText = document.getElementById("openModeText");
-  const copyAll = document.getElementById("copyAll");
+/* ===== Links (tuyos) ===== */
+const SYSTEMS = [
+  {
+    icon:"🧾",
+    name:"Facturas (ARSLANPRO)",
+    desc:"Crear facturas y gestionar clientes/productos de facturación.",
+    url:"http://arslanpro.com/"
+  },
+  {
+    icon:"📝",
+    name:"Listas / Pedidos",
+    desc:"Hacer listas, pedidos, TXT, totales y proveedores.",
+    url:"https://shaniwaris80-crypto.github.io/pedidos/"
+  },
+  {
+    icon:"📚",
+    name:"Contabilidad (B2B)",
+    desc:"Trazabilidad, contabilidad y control por clientes/tags.",
+    url:"https://shaniwaris80-crypto.github.io/b2b/"
+  },
+  {
+    icon:"🏪",
+    name:"Ventas / Gestión (GS)",
+    desc:"Ventas, gestión y reportes generales.",
+    url:"https://shaniwaris80-crypto.github.io/GS/"
+  }
+];
 
-  const MODE_KEY = "ARSLAN_HUB_OPENMODE"; // "new" o "same"
-  function getMode(){ return localStorage.getItem(MODE_KEY) || "new"; }
-  function setMode(m){ localStorage.setItem(MODE_KEY, m); }
+/* ===== Keys ===== */
+const K_THEME = "ARSLAN_HUB_THEME";         // day|night
+const K_OPENMODE = "ARSLAN_HUB_OPENMODE";   // new|same
+const K_SESSION = "ARSLAN_HUB_SESSION";     // 1|0
+const K_PINHASH = "ARSLAN_HUB_PINHASH";     // stored hash
+const K_FAILS = "ARSLAN_HUB_FAILS";         // count
+const K_LOCKUNTIL = "ARSLAN_HUB_LOCKUNTIL"; // timestamp
 
-  function render(){
-    const mode = getMode();
-    openModeText.textContent = (mode === "new") ? "Nueva pestaña" : "Misma pestaña";
+/* ===== Security params ===== */
+const MAX_FAILS = 3;
+const LOCK_SECONDS = 60;
+const AUTO_LOCK_MINUTES = 10; // cambia si quieres
 
-    grid.innerHTML = systems.map(s => {
-      const target = (mode === "new") ? "_blank" : "_self";
-      const rel = (mode === "new") ? "noopener noreferrer" : "";
-      return `
-        <a class="card" href="${s.url}" target="${target}" rel="${rel}">
-          <div class="title">
-            <span>${s.icon} ${s.name}</span>
-            <span style="color:#7f93aa;font-weight:900">→</span>
-          </div>
-          <div class="desc">${s.desc}</div>
-          <div class="url">${s.url}</div>
-        </a>
-      `;
-    }).join("");
+/* ===== Helpers ===== */
+const $ = (s)=>document.querySelector(s);
+
+function now(){ return Date.now(); }
+
+/* Hash simple (no muestra el PIN en código visible) */
+function simpleHash(str){
+  let h = 2166136261;
+  for (let i=0;i<str.length;i++){
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return ("00000000"+(h>>>0).toString(16)).slice(-8);
+}
+
+/* ===== Setup PIN =====
+   Nota: el PIN como texto existe SOLO aquí. Si quieres máxima discreción:
+   - cambia el PIN aquí y NO publiques capturas del código.
+*/
+function ensurePin(){
+  if(!localStorage.getItem(K_PINHASH)){
+    const initialPin = "8410";
+    localStorage.setItem(K_PINHASH, simpleHash(initialPin));
+  }
+}
+ensurePin();
+
+/* ===== Theme ===== */
+function getTheme(){ return localStorage.getItem(K_THEME) || "day"; }
+function setTheme(t){
+  localStorage.setItem(K_THEME, t);
+  document.body.setAttribute("data-theme", t);
+  $("#themeTxt").textContent = (t==="night") ? "Noche" : "Día";
+}
+setTheme(getTheme());
+
+$("#themeBtn").addEventListener("click", ()=>{
+  setTheme(getTheme()==="night" ? "day" : "night");
+});
+
+/* ===== Open mode ===== */
+function getOpenMode(){ return localStorage.getItem(K_OPENMODE) || "new"; }
+function setOpenMode(m){
+  localStorage.setItem(K_OPENMODE, m);
+  $("#openModeTxt").textContent = (m==="new") ? "Nueva pestaña" : "Misma pestaña";
+  renderGrid();
+}
+setOpenMode(getOpenMode());
+
+$("#openModeBtn").addEventListener("click", ()=>{
+  setOpenMode(getOpenMode()==="new" ? "same" : "new");
+});
+
+/* ===== Session ===== */
+function isSessionOn(){ return localStorage.getItem(K_SESSION)==="1"; }
+function setSession(on){ localStorage.setItem(K_SESSION, on ? "1" : "0"); }
+
+const lockEl = $("#lock");
+const appEl = $("#app");
+const pinInput = $("#pinInput");
+const pinBtn = $("#pinBtn");
+const pinMsg = $("#pinMsg");
+const lockInfo = $("#lockInfo");
+const statusEl = $("#status");
+
+function showApp(){
+  lockEl.style.display="none";
+  appEl.style.display="block";
+  statusEl.textContent = "Acceso OK · " + new Date().toLocaleString();
+  setSession(true);
+  resetFails();
+  touchActivity();
+}
+function showLock(){
+  setSession(false);
+  appEl.style.display="none";
+  lockEl.style.display="grid";
+  pinInput.value="";
+  pinMsg.textContent="";
+  pinMsg.className="msg";
+  updateLockInfo();
+}
+
+/* ===== Lockout control ===== */
+function getFails(){ return parseInt(localStorage.getItem(K_FAILS)||"0",10); }
+function setFails(n){ localStorage.setItem(K_FAILS, String(n)); }
+function resetFails(){ setFails(0); }
+
+function getLockUntil(){ return parseInt(localStorage.getItem(K_LOCKUNTIL)||"0",10); }
+function setLockUntil(ts){ localStorage.setItem(K_LOCKUNTIL, String(ts)); }
+
+function isLockedOut(){
+  const until = getLockUntil();
+  return until && now() < until;
+}
+
+function updateLockInfo(){
+  const fails = getFails();
+  const until = getLockUntil();
+  if(isLockedOut()){
+    const sec = Math.ceil((until - now())/1000);
+    lockInfo.textContent = `⛔ Bloqueado ${sec}s por seguridad.`;
+  }else{
+    lockInfo.textContent = fails>0 ? `Intentos fallidos: ${fails}/${MAX_FAILS}` : `Modo: ${getTheme()==="night" ? "Noche" : "Día"} · Auto-bloqueo ${AUTO_LOCK_MINUTES} min`;
+  }
+}
+
+/* ===== Auto lock by inactivity ===== */
+let lastActivity = now();
+function touchActivity(){
+  lastActivity = now();
+}
+function checkAutoLock(){
+  if(!isSessionOn()) return;
+  const maxMs = AUTO_LOCK_MINUTES * 60 * 1000;
+  if(now() - lastActivity > maxMs){
+    showLock();
+  }
+}
+setInterval(checkAutoLock, 2000);
+["click","keydown","mousemove","touchstart"].forEach(ev=>{
+  window.addEventListener(ev, touchActivity, {passive:true});
+});
+
+/* ===== PIN attempt ===== */
+function tryPin(){
+  updateLockInfo();
+
+  if(isLockedOut()){
+    pinMsg.textContent = "Demasiados intentos. Espera un momento…";
+    pinMsg.className = "msg bad";
+    return;
   }
 
-  openMode.addEventListener("click", ()=>{
-    const mode = getMode();
-    setMode(mode === "new" ? "same" : "new");
-    render();
-  });
+  const pin = (pinInput.value||"").trim();
+  const ok = simpleHash(pin) === localStorage.getItem(K_PINHASH);
 
-  copyAll.addEventListener("click", async ()=>{
-    const text = systems.map(s => `${s.name}: ${s.url}`).join("\\n");
-    try{
-      await navigator.clipboard.writeText(text);
-      copyAll.textContent = "✅ Copiado";
-      setTimeout(()=> copyAll.textContent = "📋 Copiar enlaces", 1200);
-    }catch{
-      alert(text);
+  if(!ok){
+    const fails = getFails() + 1;
+    setFails(fails);
+
+    if(fails >= MAX_FAILS){
+      setLockUntil(now() + LOCK_SECONDS*1000);
+      pinMsg.textContent = `PIN incorrecto. Bloqueado ${LOCK_SECONDS}s.`;
+      pinMsg.className = "msg bad";
+    }else{
+      pinMsg.textContent = "PIN incorrecto.";
+      pinMsg.className = "msg bad";
     }
-  });
+    updateLockInfo();
+    return;
+  }
 
-  render();
+  pinMsg.textContent = "Acceso correcto ✅";
+  pinMsg.className = "msg ok";
+  showApp();
+}
+
+pinBtn.addEventListener("click", tryPin);
+pinInput.addEventListener("keydown", (e)=>{ if(e.key==="Enter") tryPin(); });
+
+/* ===== Buttons ===== */
+$("#lockBtn").addEventListener("click", showLock);
+
+$("#copyLinks").addEventListener("click", async ()=>{
+  const text = SYSTEMS.map(s => `${s.name}: ${s.url}`).join("\n");
+  try{
+    await navigator.clipboard.writeText(text);
+    $("#copyLinks").textContent = "✅ Copiado";
+    setTimeout(()=> $("#copyLinks").textContent = "📋 Copiar enlaces", 1200);
+  }catch{
+    alert(text);
+  }
+});
+
+/* ===== Grid render ===== */
+function renderGrid(){
+  const mode = getOpenMode();
+  const target = (mode==="new") ? "_blank" : "_self";
+  const rel = (mode==="new") ? "noopener noreferrer" : "";
+
+  $("#grid").innerHTML = SYSTEMS.map(s => `
+    <a class="card" href="${s.url}" target="${target}" rel="${rel}">
+      <div class="row">
+        <div class="title">
+          <span class="icon">${s.icon}</span>
+          <span>${s.name}</span>
+        </div>
+        <div style="font-weight:950;color:var(--muted)">→</div>
+      </div>
+      <div class="desc">${s.desc}</div>
+      <div class="url">${s.url}</div>
+    </a>
+  `).join("");
+}
+renderGrid();
+
+/* ===== Boot ===== */
+if(isSessionOn()){
+  showApp();
+}else{
+  showLock();
+}
+updateLockInfo();
+
+/* Lockout countdown update */
+setInterval(()=>{ if(lockEl.style.display!=="none") updateLockInfo(); }, 250);
 </script>
 </body>
 </html>
