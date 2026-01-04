@@ -3,10 +3,14 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
   <title>ARSLAN PRO — HUB</title>
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="./icon-192.png">
+
   <!-- PWA -->
-  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#0b0f14">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -98,13 +102,23 @@
       display:flex; align-items:center; gap:10px;
       min-width: 260px;
     }
+
     .logo{
       width:38px; height:38px;
       border-radius:14px;
       background: linear-gradient(135deg, var(--accent2), var(--accent));
       box-shadow: var(--shadow2);
+      overflow:hidden;
       flex: 0 0 auto;
+      border:1px solid rgba(255,255,255,.15);
     }
+    .logo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
     .brand h1{
       font-size:16px; margin:0; font-weight:950; letter-spacing:.2px;
     }
@@ -410,7 +424,12 @@
   <div id="lock" class="lock" aria-hidden="false">
     <div class="lockCard">
       <div class="lockHeader">
-        <div class="t"><span class="logo" style="width:34px;height:34px;border-radius:13px"></span> ARSLAN PRO — HUB</div>
+        <div class="t">
+          <span class="logo" style="width:34px;height:34px;border-radius:13px">
+            <img src="./icon-192.png" alt="Kiwi">
+          </span>
+          ARSLAN PRO — HUB
+        </div>
         <div class="s">Acceso protegido · Introduce el PIN</div>
       </div>
       <div class="lockBody">
@@ -440,7 +459,9 @@
     <div class="shell" id="app" style="display:none">
       <div class="topbar">
         <div class="brand">
-          <div class="logo"></div>
+          <div class="logo" title="Kiwi">
+            <img src="./icon-192.png" alt="Kiwi">
+          </div>
           <div>
             <h1>ARSLAN PRO</h1>
             <div class="sub">Panel principal · Todo en un solo sitio (Facturas · Listas · Contabilidad · Gestión)</div>
@@ -477,7 +498,7 @@
         <div class="grid" id="grid"></div>
 
         <div class="footer">
-          <div id="pwaHint">📲 Para instalar: en iPhone “Compartir → Añadir a pantalla de inicio” · En Android “Instalar app”</div>
+          <div id="pwaHint">📲 Instalar: iPhone “Compartir → Añadir a pantalla de inicio” · Android “Instalar app”</div>
           <div id="status">Listo</div>
         </div>
       </div>
@@ -505,8 +526,8 @@ const K_SESSION = "ARSLAN_HUB_SESSION";         // 1|0
 const K_PINHASH = "ARSLAN_HUB_PINHASH";         // stored hash
 const K_FAILS = "ARSLAN_HUB_FAILS";             // count
 const K_LOCKUNTIL = "ARSLAN_HUB_LOCKUNTIL";     // timestamp
-const K_FAVS = "ARSLAN_HUB_FAVORITES";           // json array of ids
-const K_CONFIRM_LOCK = "ARSLAN_HUB_CONFIRMLOCK"; // 1|0
+const K_FAVS = "ARSLAN_HUB_FAVORITES";          // json array of ids
+const K_CONFIRM_LOCK = "ARSLAN_HUB_CONFIRMLOCK";// 1|0
 const K_CLEAR_ON_CLOSE = "ARSLAN_HUB_CLEARONCLOSE"; // 1|0
 const K_LAST_OPEN = "ARSLAN_HUB_LASTOPEN";      // last opened system id
 
@@ -517,7 +538,6 @@ const LOCK_SECONDS = 60;
 /* ===== Helpers ===== */
 const $ = (s)=>document.querySelector(s);
 function now(){ return Date.now(); }
-
 function safeParse(json, fallback){
   try{ return JSON.parse(json); } catch { return fallback; }
 }
@@ -753,17 +773,14 @@ function cardHTML(s){
 }
 
 function applyCardHandlers(container){
-  // Open handling (respect openMode)
   container.querySelectorAll("[data-open-id]").forEach(a=>{
     a.addEventListener("click", (e)=>{
-      // If clicked star button, don't open
       if(e.target && e.target.closest("[data-fav-id]")) return;
       e.preventDefault();
       openSystemById(a.getAttribute("data-open-id"));
     });
   });
 
-  // Favorite toggle
   container.querySelectorAll("[data-fav-id]").forEach(btn=>{
     btn.addEventListener("click", (e)=>{
       e.preventDefault();
@@ -791,7 +808,6 @@ function renderAll(){
   favBadge.textContent = `⭐ ${favSystems.length}`;
   allBadge.textContent = `📦 ${SYSTEMS.length}`;
 
-  // Favoritos
   favGrid.innerHTML = filteredFav.length
     ? filteredFav.map(cardHTML).join("")
     : `<div class="card" style="grid-column:1/-1;cursor:default">
@@ -803,13 +819,11 @@ function renderAll(){
          <div class="url">También puedes buscar usando el buscador.</div>
        </div>`;
 
-  // Todos
   grid.innerHTML = filteredAll.map(cardHTML).join("");
 
   applyCardHandlers(favGrid);
   applyCardHandlers(grid);
 
-  // Status line
   const info = [];
   if(SEARCH) info.push(`Filtro: "${SEARCH}"`);
   info.push(`Favoritos: ${favSystems.length}`);
@@ -841,7 +855,7 @@ lockBtn.addEventListener("click", doLock);
 
 /* ===== Keyboard shortcuts ===== */
 window.addEventListener("keydown", (e)=>{
-  if(lockEl.style.display !== "none") return; // locked screen visible
+  if(lockEl.style.display !== "none") return;
   if(e.target && ["INPUT","TEXTAREA"].includes(e.target.tagName)) return;
 
   const k = e.key.toLowerCase();
@@ -914,7 +928,6 @@ Escribe 1-5`
     return;
   }
 }
-
 settingsBtn.addEventListener("click", settingsMenu);
 
 /* ===== Clear session on tab close (optional) ===== */
