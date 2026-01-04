@@ -434,6 +434,7 @@
       </div>
       <div class="lockBody">
         <div class="small">🔒 PIN + bloqueo por intentos · <b>sin auto-bloqueo</b></div>
+        <div class="small">🔁 Si alguna vez no entra: mantén pulsado <b>Entrar</b> 3 segundos para resetear a <b>8410</b>.</div>
 
         <div class="pinRow">
           <input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN"/>
@@ -509,6 +510,7 @@
 /* ===============================
    ARSLAN HUB PRO (NO AUTO-LOCK)
    + Favoritos + Buscador + Teclas + Ajustes + PWA
+   + PIN ROBUSTO (auto-repair) + Reset manual (hold 3s)
 =============================== */
 
 /* ===== Sistemas (tuyos) ===== */
@@ -523,7 +525,7 @@ const SYSTEMS = [
 const K_THEME = "ARSLAN_HUB_THEME";             // day|night
 const K_OPENMODE = "ARSLAN_HUB_OPENMODE";       // new|same
 const K_SESSION = "ARSLAN_HUB_SESSION";         // 1|0
-const K_PINHASH = "ARSLAN_HUB_PINHASH";         // stored hash
+const K_PINHASH = "ARSLAN_HUB_PINHASH";         // stored hash (8 hex)
 const K_FAILS = "ARSLAN_HUB_FAILS";             // count
 const K_LOCKUNTIL = "ARSLAN_HUB_LOCKUNTIL";     // timestamp
 const K_FAVS = "ARSLAN_HUB_FAVORITES";          // json array of ids
@@ -552,11 +554,20 @@ function simpleHash(str){
   return ("00000000"+(h>>>0).toString(16)).slice(-8);
 }
 
-/* ===== Setup PIN ===== */
+/* ===== Setup PIN (ROBUSTO) =====
+   - Si no existe -> crea 8410
+   - Si existe pero inválido -> resetea 8410 + limpia bloqueos
+*/
 function ensurePin(){
-  if(!localStorage.getItem(K_PINHASH)){
+  const current = localStorage.getItem(K_PINHASH);
+  const valid = (typeof current === "string" && /^[0-9a-f]{8}$/.test(current));
+
+  if(!valid){
     const initialPin = "8410";
     localStorage.setItem(K_PINHASH, simpleHash(initialPin));
+    localStorage.setItem(K_FAILS, "0");
+    localStorage.setItem(K_LOCKUNTIL, "0");
+    localStorage.setItem(K_SESSION, "0");
   }
 }
 ensurePin();
@@ -680,6 +691,7 @@ function showLock(){
 
 /* ===== PIN attempt ===== */
 function tryPin(){
+  ensurePin();
   updateLockInfo();
 
   if(isLockedOut()){
@@ -714,6 +726,37 @@ function tryPin(){
 
 pinBtn.addEventListener("click", tryPin);
 pinInput.addEventListener("keydown", (e)=>{ if(e.key==="Enter") tryPin(); });
+
+/* ===== Reset manual: mantener pulsado "Entrar" 3 segundos ===== */
+let __holdTimer = null;
+
+function resetPinToDefault(){
+  const ok = confirm("¿Resetear PIN a 8410? (Esto borra bloqueos y sesión)");
+  if(!ok) return;
+
+  localStorage.removeItem(K_PINHASH);
+  localStorage.setItem(K_FAILS, "0");
+  localStorage.setItem(K_LOCKUNTIL, "0");
+  localStorage.setItem(K_SESSION, "0");
+
+  ensurePin();
+  pinMsg.textContent = "PIN reseteado ✅ (8410)";
+  pinMsg.className = "msg ok";
+  updateLockInfo();
+}
+
+pinBtn.addEventListener("mousedown", ()=>{
+  __holdTimer = setTimeout(resetPinToDefault, 3000);
+});
+pinBtn.addEventListener("touchstart", ()=>{
+  __holdTimer = setTimeout(resetPinToDefault, 3000);
+}, {passive:true});
+
+["mouseup","mouseleave","touchend","touchcancel"].forEach(ev=>{
+  pinBtn.addEventListener(ev, ()=>{
+    if(__holdTimer){ clearTimeout(__holdTimer); __holdTimer = null; }
+  });
+});
 
 /* ===== Open system ===== */
 function openSystemByIndex(i){
@@ -868,6 +911,7 @@ window.addEventListener("keydown", (e)=>{
 
 /* ===== Settings ===== */
 function changePinFlow(){
+  ensurePin();
   const current = prompt("PIN actual:");
   if(current === null) return;
 
