@@ -627,8 +627,19 @@ function showPause(){
   $("#pause").setAttribute("aria-hidden","false");
 
   // si icon-512 falla, no rompe
-  const di = $("#dvdImg");
-  di.onerror = () => { di.style.display="none"; };
+const di = $("#dvdImg");
+di.onerror = () => {
+  // fallback: si icon-512 no existe, usa icon-192
+  if (di.src.includes("icon-512.png")) {
+    di.src = "icon-192.png";
+    return;
+  }
+  // si también falla, muestra emoji
+  di.style.display = "none";
+  $("#dvd").innerHTML = "🥝";
+  $("#dvd").style.fontSize = "64px";
+};
+
 
   tickClock();
   clockInt = setInterval(tickClock, 1000);
