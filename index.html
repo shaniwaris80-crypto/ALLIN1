@@ -4,6 +4,13 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>ARSLAN PRO — HUB</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <style>
     /* =========================
        THEME (Day/Night)
@@ -67,7 +74,7 @@
     }
 
     .shell{
-      width:min(980px, 100%);
+      width:min(1040px, 100%);
       border:1px solid var(--line);
       border-radius: var(--radius);
       background: var(--card);
@@ -89,22 +96,26 @@
 
     .brand{
       display:flex; align-items:center; gap:10px;
+      min-width: 260px;
     }
     .logo{
       width:38px; height:38px;
       border-radius:14px;
       background: linear-gradient(135deg, var(--accent2), var(--accent));
       box-shadow: var(--shadow2);
+      flex: 0 0 auto;
     }
     .brand h1{
       font-size:16px; margin:0; font-weight:950; letter-spacing:.2px;
     }
     .brand .sub{
       font-size:12px; margin-top:2px; color:var(--muted); font-weight:800;
+      max-width: 520px;
     }
 
     .actions{
       display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
     .pill{
@@ -118,6 +129,7 @@
       cursor:pointer;
       user-select:none;
       box-shadow: var(--shadow2);
+      white-space: nowrap;
     }
 
     .btn{
@@ -130,6 +142,7 @@
       cursor:pointer;
       box-shadow: var(--shadow2);
       transition: transform .12s ease, opacity .12s ease;
+      white-space: nowrap;
     }
     .btn:hover{opacity:.95; transform: translateY(-1px)}
     .btn:active{transform: translateY(0px)}
@@ -141,10 +154,44 @@
 
     .content{ padding:16px; }
 
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin: 2px 0 12px;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.3px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .searchRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+    .searchRow input{
+      flex:1;
+      min-width:240px;
+      border:1px solid var(--line);
+      background:var(--cardSolid);
+      color:var(--text);
+      padding:12px 12px;
+      border-radius:14px;
+      font-weight:900;
+      outline:none;
+    }
+
     .grid{
       display:grid;
       gap:14px;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     }
 
     .card{
@@ -173,7 +220,6 @@
       opacity:.6;
       pointer-events:none;
     }
-
     .card > *{position:relative; z-index:1}
 
     .row{
@@ -206,6 +252,46 @@
       color: color-mix(in srgb, var(--muted) 80%, transparent);
       word-break: break-all;
       font-weight:800;
+    }
+
+    .chipRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .starBtn{
+      border:1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      padding:8px 10px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-weight:950;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      box-shadow: none;
+    }
+    .starBtn:hover{opacity:.95}
+    .starBtn.active{
+      border-color: rgba(14,165,233,.5);
+      background: linear-gradient(135deg, rgba(14,165,233,.12), rgba(22,163,74,.10));
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: transparent;
+      font-weight:900;
+      font-size:12px;
+      color: var(--muted);
     }
 
     .footer{
@@ -289,13 +375,31 @@
       color:var(--muted);
       font-weight:800;
       font-size:12px;
+      line-height:1.35;
     }
 
-    @media (max-width: 520px){
-      .actions{gap:8px}
-      .pill{padding:8px 10px}
-      .btn{padding:9px 10px}
+    .hintKeys{
+      margin-top:12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .key{
+      border:1px solid var(--line);
+      background: var(--cardSolid);
+      border-radius: 12px;
+      padding:8px 10px;
+      font-weight:950;
+      font-size:12px;
+      color: var(--muted);
+    }
+    .key b{color:var(--text)}
+
+    @media (max-width: 720px){
+      .brand .sub{display:none}
+      .btn, .pill {padding:9px 10px}
       .content{padding:14px}
+      .grid{grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))}
     }
   </style>
 </head>
@@ -310,7 +414,7 @@
         <div class="s">Acceso protegido · Introduce el PIN</div>
       </div>
       <div class="lockBody">
-        <div class="small">🔒 PIN + bloqueo por intentos (sin auto-bloqueo)</div>
+        <div class="small">🔒 PIN + bloqueo por intentos · <b>sin auto-bloqueo</b></div>
 
         <div class="pinRow">
           <input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN"/>
@@ -319,6 +423,14 @@
 
         <div id="pinMsg" class="msg"></div>
         <div class="small" id="lockInfo"></div>
+
+        <div class="hintKeys">
+          <div class="key"><b>F</b> Facturas</div>
+          <div class="key"><b>L</b> Listas</div>
+          <div class="key"><b>B</b> B2B</div>
+          <div class="key"><b>G</b> GS</div>
+          <div class="key"><b>Esc</b> Bloquear</div>
+        </div>
       </div>
     </div>
   </div>
@@ -331,23 +443,41 @@
           <div class="logo"></div>
           <div>
             <h1>ARSLAN PRO</h1>
-            <div class="sub">Panel principal · Facturas · Listas · Contabilidad · Gestión</div>
+            <div class="sub">Panel principal · Todo en un solo sitio (Facturas · Listas · Contabilidad · Gestión)</div>
           </div>
         </div>
 
         <div class="actions">
           <div class="pill" id="themeBtn" title="Cambiar modo día/noche">🌓 <span id="themeTxt">Día</span></div>
           <div class="pill" id="openModeBtn" title="Abrir enlaces en nueva pestaña o en la misma">🔗 <span id="openModeTxt">Nueva pestaña</span></div>
+          <button class="btn" id="openMain">🚀 Abrir Facturas</button>
+          <button class="btn" id="settingsBtn">⚙️ Ajustes</button>
           <button class="btn" id="copyLinks">📋 Copiar enlaces</button>
           <button class="btn" id="lockBtn">🔒 Bloquear</button>
         </div>
       </div>
 
       <div class="content">
+
+        <div class="searchRow">
+          <input id="searchInput" type="text" placeholder="Buscar… (Facturas, Listas, B2B, GS)" />
+          <button class="btn" id="clearSearch">✖</button>
+        </div>
+
+        <div class="sectionTitle">
+          <h2>Favoritos</h2>
+          <span class="badge" id="favBadge">⭐ 0</span>
+        </div>
+        <div class="grid" id="favGrid" style="margin-bottom:14px"></div>
+
+        <div class="sectionTitle">
+          <h2>Todos los sistemas</h2>
+          <span class="badge" id="allBadge">📦 4</span>
+        </div>
         <div class="grid" id="grid"></div>
 
         <div class="footer">
-          <div>✅ Consejo: añade esta página a Favoritos / pantalla de inicio</div>
+          <div id="pwaHint">📲 Para instalar: en iPhone “Compartir → Añadir a pantalla de inicio” · En Android “Instalar app”</div>
           <div id="status">Listo</div>
         </div>
       </div>
@@ -357,47 +487,28 @@
 <script>
 /* ===============================
    ARSLAN HUB PRO (NO AUTO-LOCK)
-   - PIN 8410 (hash)
-   - Day/Night toggle
-   - Lockout after 3 fails
-   - Manual lock button
+   + Favoritos + Buscador + Teclas + Ajustes + PWA
 =============================== */
 
-/* ===== Links (tuyos) ===== */
+/* ===== Sistemas (tuyos) ===== */
 const SYSTEMS = [
-  {
-    icon:"🧾",
-    name:"Facturas (ARSLANPRO)",
-    desc:"Crear facturas y gestionar clientes/productos de facturación.",
-    url:"http://arslanpro.com/"
-  },
-  {
-    icon:"📝",
-    name:"Listas / Pedidos",
-    desc:"Hacer listas, pedidos, TXT, totales y proveedores.",
-    url:"https://shaniwaris80-crypto.github.io/pedidos/"
-  },
-  {
-    icon:"📚",
-    name:"Contabilidad (B2B)",
-    desc:"Trazabilidad, contabilidad y control por clientes/tags.",
-    url:"https://shaniwaris80-crypto.github.io/b2b/"
-  },
-  {
-    icon:"🏪",
-    name:"Ventas / Gestión (GS)",
-    desc:"Ventas, gestión y reportes generales.",
-    url:"https://shaniwaris80-crypto.github.io/GS/"
-  }
+  { id:"facturas", icon:"🧾", name:"Facturas (ARSLANPRO)", desc:"Crear facturas y gestionar facturación.", url:"http://arslanpro.com/" },
+  { id:"listas",   icon:"📝", name:"Listas / Pedidos",       desc:"Listas, pedidos, TXT, totales.",        url:"https://shaniwaris80-crypto.github.io/pedidos/" },
+  { id:"b2b",      icon:"📚", name:"Contabilidad (B2B)",     desc:"Trazabilidad y contabilidad B2B.",      url:"https://shaniwaris80-crypto.github.io/b2b/" },
+  { id:"gs",       icon:"🏪", name:"Ventas / Gestión (GS)",  desc:"Ventas, gestión y reportes.",           url:"https://shaniwaris80-crypto.github.io/GS/" }
 ];
 
-/* ===== Keys ===== */
-const K_THEME = "ARSLAN_HUB_THEME";         // day|night
-const K_OPENMODE = "ARSLAN_HUB_OPENMODE";   // new|same
-const K_SESSION = "ARSLAN_HUB_SESSION";     // 1|0
-const K_PINHASH = "ARSLAN_HUB_PINHASH";     // stored hash
-const K_FAILS = "ARSLAN_HUB_FAILS";         // count
-const K_LOCKUNTIL = "ARSLAN_HUB_LOCKUNTIL"; // timestamp
+/* ===== Storage keys ===== */
+const K_THEME = "ARSLAN_HUB_THEME";             // day|night
+const K_OPENMODE = "ARSLAN_HUB_OPENMODE";       // new|same
+const K_SESSION = "ARSLAN_HUB_SESSION";         // 1|0
+const K_PINHASH = "ARSLAN_HUB_PINHASH";         // stored hash
+const K_FAILS = "ARSLAN_HUB_FAILS";             // count
+const K_LOCKUNTIL = "ARSLAN_HUB_LOCKUNTIL";     // timestamp
+const K_FAVS = "ARSLAN_HUB_FAVORITES";           // json array of ids
+const K_CONFIRM_LOCK = "ARSLAN_HUB_CONFIRMLOCK"; // 1|0
+const K_CLEAR_ON_CLOSE = "ARSLAN_HUB_CLEARONCLOSE"; // 1|0
+const K_LAST_OPEN = "ARSLAN_HUB_LASTOPEN";      // last opened system id
 
 /* ===== Security params ===== */
 const MAX_FAILS = 3;
@@ -406,6 +517,10 @@ const LOCK_SECONDS = 60;
 /* ===== Helpers ===== */
 const $ = (s)=>document.querySelector(s);
 function now(){ return Date.now(); }
+
+function safeParse(json, fallback){
+  try{ return JSON.parse(json); } catch { return fallback; }
+}
 
 /* Hash simple */
 function simpleHash(str){
@@ -434,28 +549,47 @@ function setTheme(t){
   $("#themeTxt").textContent = (t==="night") ? "Noche" : "Día";
 }
 setTheme(getTheme());
-
-$("#themeBtn").addEventListener("click", ()=>{
-  setTheme(getTheme()==="night" ? "day" : "night");
-});
+$("#themeBtn").addEventListener("click", ()=> setTheme(getTheme()==="night" ? "day" : "night"));
 
 /* ===== Open mode ===== */
 function getOpenMode(){ return localStorage.getItem(K_OPENMODE) || "new"; }
 function setOpenMode(m){
   localStorage.setItem(K_OPENMODE, m);
   $("#openModeTxt").textContent = (m==="new") ? "Nueva pestaña" : "Misma pestaña";
-  renderGrid();
+  renderAll();
 }
 setOpenMode(getOpenMode());
-
-$("#openModeBtn").addEventListener("click", ()=>{
-  setOpenMode(getOpenMode()==="new" ? "same" : "new");
-});
+$("#openModeBtn").addEventListener("click", ()=> setOpenMode(getOpenMode()==="new" ? "same" : "new"));
 
 /* ===== Session ===== */
 function isSessionOn(){ return localStorage.getItem(K_SESSION)==="1"; }
 function setSession(on){ localStorage.setItem(K_SESSION, on ? "1" : "0"); }
 
+/* ===== Options ===== */
+function getConfirmLock(){ return localStorage.getItem(K_CONFIRM_LOCK) !== "0"; } // default true
+function setConfirmLock(v){ localStorage.setItem(K_CONFIRM_LOCK, v ? "1":"0"); }
+function getClearOnClose(){ return localStorage.getItem(K_CLEAR_ON_CLOSE) === "1"; }
+function setClearOnClose(v){ localStorage.setItem(K_CLEAR_ON_CLOSE, v ? "1":"0"); }
+
+/* ===== Favorites ===== */
+function getFavs(){
+  const arr = safeParse(localStorage.getItem(K_FAVS) || "[]", []);
+  const valid = arr.filter(id => SYSTEMS.some(s=>s.id===id));
+  return Array.from(new Set(valid));
+}
+function setFavs(arr){
+  const unique = Array.from(new Set(arr));
+  localStorage.setItem(K_FAVS, JSON.stringify(unique));
+  renderAll();
+}
+function isFav(id){ return getFavs().includes(id); }
+function toggleFav(id){
+  const f = getFavs();
+  if(f.includes(id)) setFavs(f.filter(x=>x!==id));
+  else setFavs([id, ...f]);
+}
+
+/* ===== Elements ===== */
 const lockEl = $("#lock");
 const appEl = $("#app");
 const pinInput = $("#pinInput");
@@ -464,22 +598,19 @@ const pinMsg = $("#pinMsg");
 const lockInfo = $("#lockInfo");
 const statusEl = $("#status");
 
-function showApp(){
-  lockEl.style.display="none";
-  appEl.style.display="block";
-  statusEl.textContent = "Acceso OK · " + new Date().toLocaleString();
-  setSession(true);
-  resetFails();
-}
-function showLock(){
-  setSession(false);
-  appEl.style.display="none";
-  lockEl.style.display="grid";
-  pinInput.value="";
-  pinMsg.textContent="";
-  pinMsg.className="msg";
-  updateLockInfo();
-}
+const openMainBtn = $("#openMain");
+const settingsBtn = $("#settingsBtn");
+const copyLinksBtn = $("#copyLinks");
+const lockBtn = $("#lockBtn");
+const searchInput = $("#searchInput");
+const clearSearchBtn = $("#clearSearch");
+
+const grid = $("#grid");
+const favGrid = $("#favGrid");
+const favBadge = $("#favBadge");
+const allBadge = $("#allBadge");
+
+let SEARCH = "";
 
 /* ===== Lockout control ===== */
 function getFails(){ return parseInt(localStorage.getItem(K_FAILS)||"0",10); }
@@ -501,8 +632,30 @@ function updateLockInfo(){
     const sec = Math.ceil((until - now())/1000);
     lockInfo.textContent = `⛔ Bloqueado ${sec}s por seguridad.`;
   }else{
-    lockInfo.textContent = fails>0 ? `Intentos fallidos: ${fails}/${MAX_FAILS}` : `Modo: ${getTheme()==="night" ? "Noche" : "Día"} · Sin auto-bloqueo`;
+    const modeTxt = getTheme()==="night" ? "Noche" : "Día";
+    lockInfo.textContent = fails>0
+      ? `Intentos fallidos: ${fails}/${MAX_FAILS}`
+      : `Modo: ${modeTxt} · Sin auto-bloqueo · Favoritos: ${getFavs().length}`;
   }
+}
+
+/* ===== Show/Hide ===== */
+function showApp(){
+  lockEl.style.display="none";
+  appEl.style.display="block";
+  setSession(true);
+  resetFails();
+  renderAll();
+  statusEl.textContent = "Acceso OK · " + new Date().toLocaleString();
+}
+function showLock(){
+  setSession(false);
+  appEl.style.display="none";
+  lockEl.style.display="grid";
+  pinInput.value="";
+  pinMsg.textContent="";
+  pinMsg.className="msg";
+  updateLockInfo();
 }
 
 /* ===== PIN attempt ===== */
@@ -542,52 +695,250 @@ function tryPin(){
 pinBtn.addEventListener("click", tryPin);
 pinInput.addEventListener("keydown", (e)=>{ if(e.key==="Enter") tryPin(); });
 
-/* ===== Buttons ===== */
-$("#lockBtn").addEventListener("click", showLock);
+/* ===== Open system ===== */
+function openSystemByIndex(i){
+  const mode = getOpenMode();
+  const sys = SYSTEMS[i];
+  if(!sys) return;
+  localStorage.setItem(K_LAST_OPEN, sys.id);
 
-$("#copyLinks").addEventListener("click", async ()=>{
-  const text = SYSTEMS.map(s => `${s.name}: ${s.url}`).join("\n");
-  try{
-    await navigator.clipboard.writeText(text);
-    $("#copyLinks").textContent = "✅ Copiado";
-    setTimeout(()=> $("#copyLinks").textContent = "📋 Copiar enlaces", 1200);
-  }catch{
-    alert(text);
-  }
+  if(mode === "new") window.open(sys.url, "_blank", "noopener");
+  else window.location.href = sys.url;
+}
+
+function openSystemById(id){
+  const idx = SYSTEMS.findIndex(s=>s.id===id);
+  if(idx >= 0) openSystemByIndex(idx);
+}
+
+/* Big quick button */
+openMainBtn.addEventListener("click", ()=> openSystemByIndex(0));
+
+/* ===== Search ===== */
+function setSearch(v){
+  SEARCH = (v || "").trim().toLowerCase();
+  renderAll();
+}
+searchInput.addEventListener("input", e=> setSearch(e.target.value));
+clearSearchBtn.addEventListener("click", ()=>{
+  searchInput.value = "";
+  setSearch("");
+  searchInput.focus();
 });
 
-/* ===== Grid render ===== */
-function renderGrid(){
-  const mode = getOpenMode();
-  const target = (mode==="new") ? "_blank" : "_self";
-  const rel = (mode==="new") ? "noopener noreferrer" : "";
+/* ===== Render cards ===== */
+function cardHTML(s){
+  const fav = isFav(s.id);
+  const last = localStorage.getItem(K_LAST_OPEN) === s.id;
+  const star = fav ? "⭐ Favorito" : "☆ Favorito";
 
-  $("#grid").innerHTML = SYSTEMS.map(s => `
-    <a class="card" href="${s.url}" target="${target}" rel="${rel}">
+  return `
+    <a class="card" href="${s.url}" data-open-id="${s.id}">
       <div class="row">
         <div class="title">
           <span class="icon">${s.icon}</span>
           <span>${s.name}</span>
         </div>
-        <div style="font-weight:950;color:var(--muted)">→</div>
+        <div style="font-weight:950;color:var(--muted)">${last ? "🟢" : "→"}</div>
       </div>
       <div class="desc">${s.desc}</div>
       <div class="url">${s.url}</div>
-    </a>
-  `).join("");
-}
-renderGrid();
 
-/* ===== Boot ===== */
-if(isSessionOn()){
-  showApp();
-}else{
+      <div class="chipRow">
+        <button class="starBtn ${fav ? "active":""}" data-fav-id="${s.id}" type="button">${star}</button>
+        <span class="badge">${s.id.toUpperCase()}</span>
+      </div>
+    </a>
+  `;
+}
+
+function applyCardHandlers(container){
+  // Open handling (respect openMode)
+  container.querySelectorAll("[data-open-id]").forEach(a=>{
+    a.addEventListener("click", (e)=>{
+      // If clicked star button, don't open
+      if(e.target && e.target.closest("[data-fav-id]")) return;
+      e.preventDefault();
+      openSystemById(a.getAttribute("data-open-id"));
+    });
+  });
+
+  // Favorite toggle
+  container.querySelectorAll("[data-fav-id]").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      const id = btn.getAttribute("data-fav-id");
+      toggleFav(id);
+    });
+  });
+}
+
+function filterSystems(arr){
+  if(!SEARCH) return arr;
+  return arr.filter(s=>{
+    const hay = (s.name + " " + s.desc + " " + s.url + " " + s.id).toLowerCase();
+    return hay.includes(SEARCH);
+  });
+}
+
+function renderAll(){
+  const favIds = getFavs();
+  const favSystems = SYSTEMS.filter(s => favIds.includes(s.id));
+  const filteredAll = filterSystems(SYSTEMS);
+  const filteredFav = filterSystems(favSystems);
+
+  favBadge.textContent = `⭐ ${favSystems.length}`;
+  allBadge.textContent = `📦 ${SYSTEMS.length}`;
+
+  // Favoritos
+  favGrid.innerHTML = filteredFav.length
+    ? filteredFav.map(cardHTML).join("")
+    : `<div class="card" style="grid-column:1/-1;cursor:default">
+         <div class="row">
+           <div class="title"><span class="icon">⭐</span><span>Sin favoritos</span></div>
+           <div style="font-weight:950;color:var(--muted)">Tip</div>
+         </div>
+         <div class="desc">Pulsa “☆ Favorito” en cualquier tarjeta para que aparezca aquí arriba.</div>
+         <div class="url">También puedes buscar usando el buscador.</div>
+       </div>`;
+
+  // Todos
+  grid.innerHTML = filteredAll.map(cardHTML).join("");
+
+  applyCardHandlers(favGrid);
+  applyCardHandlers(grid);
+
+  // Status line
+  const info = [];
+  if(SEARCH) info.push(`Filtro: "${SEARCH}"`);
+  info.push(`Favoritos: ${favSystems.length}`);
+  info.push(getOpenMode()==="new" ? "Abrir: nueva pestaña" : "Abrir: misma pestaña");
+  statusEl.textContent = info.join(" · ");
+}
+
+/* ===== Copy links ===== */
+copyLinksBtn.addEventListener("click", async ()=>{
+  const text = SYSTEMS.map(s => `${s.name}: ${s.url}`).join("\n");
+  try{
+    await navigator.clipboard.writeText(text);
+    copyLinksBtn.textContent = "✅ Copiado";
+    setTimeout(()=> copyLinksBtn.textContent = "📋 Copiar enlaces", 1200);
+  }catch{
+    alert(text);
+  }
+});
+
+/* ===== Manual lock (with optional confirmation) ===== */
+function doLock(){
+  if(getConfirmLock()){
+    const ok = confirm("¿Bloquear el HUB ahora?");
+    if(!ok) return;
+  }
   showLock();
 }
-updateLockInfo();
+lockBtn.addEventListener("click", doLock);
 
-/* Lockout countdown update */
+/* ===== Keyboard shortcuts ===== */
+window.addEventListener("keydown", (e)=>{
+  if(lockEl.style.display !== "none") return; // locked screen visible
+  if(e.target && ["INPUT","TEXTAREA"].includes(e.target.tagName)) return;
+
+  const k = e.key.toLowerCase();
+  if(k === "f") return openSystemById("facturas");
+  if(k === "l") return openSystemById("listas");
+  if(k === "b") return openSystemById("b2b");
+  if(k === "g") return openSystemById("gs");
+  if(e.key === "Escape") return doLock();
+});
+
+/* ===== Settings ===== */
+function changePinFlow(){
+  const current = prompt("PIN actual:");
+  if(current === null) return;
+
+  const ok = simpleHash(current.trim()) === localStorage.getItem(K_PINHASH);
+  if(!ok){
+    alert("PIN actual incorrecto ❌");
+    return;
+  }
+
+  const next = prompt("Nuevo PIN (4-10 dígitos):");
+  if(next === null) return;
+
+  const clean = next.trim();
+  if(!/^[0-9]{4,10}$/.test(clean)){
+    alert("PIN inválido. Usa 4 a 10 números.");
+    return;
+  }
+
+  localStorage.setItem(K_PINHASH, simpleHash(clean));
+  alert("PIN cambiado ✅");
+}
+
+function resetAttempts(){
+  localStorage.setItem(K_FAILS, "0");
+  localStorage.setItem(K_LOCKUNTIL, "0");
+  alert("Intentos reseteados ✅");
+  updateLockInfo();
+}
+
+function settingsMenu(){
+  const a = getConfirmLock() ? "ON" : "OFF";
+  const b = getClearOnClose() ? "ON" : "OFF";
+  const c = getOpenMode()==="new" ? "Nueva pestaña" : "Misma pestaña";
+
+  const choice = prompt(
+`AJUSTES:
+1 = Cambiar PIN
+2 = Reset intentos / bloqueo
+3 = Cambiar abrir enlaces (actual: ${c})
+4 = Confirmar al bloquear (actual: ${a})
+5 = Cerrar sesión al cerrar pestaña (actual: ${b})
+
+Escribe 1-5`
+  );
+  if(choice === "1") return changePinFlow();
+  if(choice === "2") return resetAttempts();
+  if(choice === "3") return setOpenMode(getOpenMode()==="new" ? "same" : "new");
+  if(choice === "4") {
+    const next = !getConfirmLock();
+    setConfirmLock(next);
+    alert(`Confirmación al bloquear: ${next ? "ON" : "OFF"}`);
+    return;
+  }
+  if(choice === "5") {
+    const next = !getClearOnClose();
+    setClearOnClose(next);
+    alert(`Cerrar sesión al cerrar pestaña: ${next ? "ON" : "OFF"}`);
+    return;
+  }
+}
+
+settingsBtn.addEventListener("click", settingsMenu);
+
+/* ===== Clear session on tab close (optional) ===== */
+window.addEventListener("beforeunload", ()=>{
+  if(getClearOnClose()){
+    localStorage.setItem(K_SESSION, "0");
+  }
+});
+
+/* ===== Boot ===== */
+if(isSessionOn()) showApp();
+else showLock();
+
+updateLockInfo();
 setInterval(()=>{ if(lockEl.style.display!=="none") updateLockInfo(); }, 250);
+
+/* ===============================
+   PWA: Service Worker register
+=============================== */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
