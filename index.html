@@ -5,13 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>ARSLAN PRO — HUB</title>
 
-  <!-- PWA -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0b0f14">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-  <!-- Icon (solo para pestaña/app, NO para DVD) -->
   <link rel="icon" type="image/png" href="icon-192.png">
 
   <style>
@@ -24,7 +21,6 @@
       --muted: rgba(11,18,32,.58);
       --shadow: 0 22px 70px rgba(2,6,23,.12);
       --shadow2: 0 10px 24px rgba(2,6,23,.10);
-      --r: 26px;
 
       --a1:#0ea5e9;
       --a2:#16a34a;
@@ -64,47 +60,37 @@
       min-height:100%;
       display:grid;
       place-items:center;
-      padding: 18px 18px calc(18px + var(--safeB));
+      padding: 16px 14px calc(16px + var(--safeB));
     }
 
     .app{
       width:min(980px, 100%);
       border:1px solid var(--line);
       background: var(--panel);
-      border-radius: 30px;
+      border-radius: 28px;
       box-shadow: var(--shadow);
       overflow:hidden;
       backdrop-filter: blur(14px);
       position:relative;
     }
-    .app::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(820px 160px at 20% 0%, rgba(14,165,233,.16), transparent 58%),
-        radial-gradient(820px 160px at 85% 0%, rgba(22,163,74,.12), transparent 58%);
-      pointer-events:none;
-      opacity:.9;
-    }
-    .app>*{position:relative; z-index:1;}
 
     .top{
-      padding: calc(16px + var(--safeT)) 16px 16px;
+      padding: calc(14px + var(--safeT)) 14px 12px;
       border-bottom: 1px solid var(--line);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
+      gap:10px;
       background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
     }
 
     .brand{
-      display:flex; align-items:center; gap:12px;
-      min-width: 220px;
+      display:flex; align-items:center; gap:10px;
+      min-width: 190px;
     }
     .logoBox{
-      width:46px; height:46px;
-      border-radius: 18px;
+      width:44px; height:44px;
+      border-radius: 16px;
       border:1px solid var(--line);
       background: var(--panel2);
       overflow:hidden;
@@ -116,67 +102,59 @@
     .logoBox img{width:100%;height:100%;object-fit:cover;display:block;}
     .logoFallback{
       width:100%;height:100%;
-      display:none;
-      place-items:center;
-      font-size:22px;
-      font-weight: 1000;
+      display:none; place-items:center;
+      font-size:22px; font-weight:1000;
     }
     .title{
-      display:flex; flex-direction:column;
-      gap:2px;
-      min-width:0;
+      display:flex; flex-direction:column; gap:2px; min-width:0;
     }
-    .title b{
-      font-size:15px;
-      letter-spacing:.2px;
-      font-weight: 1000;
-    }
-    .title span{
-      font-size:12px;
-      color: var(--muted);
-      font-weight: 850;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      max-width: 520px;
-    }
+    .title b{font-size:15px; letter-spacing:.2px; font-weight:1000;}
+    .title span{font-size:12px; color:var(--muted); font-weight:850; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width: 520px;}
 
+    /* acciones: en móvil se hace scroll horizontal */
     .actions{
-      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+      display:flex; gap:8px;
+      align-items:center;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px;
+      max-width: 56vw;
     }
+    .actions::-webkit-scrollbar{height:0}
+
     .btn{
       border:1px solid var(--line);
       background: var(--panel2);
       color: var(--text);
       padding: 10px 12px;
-      border-radius: 16px;
+      border-radius: 14px;
       font-weight: 950;
       font-size: 13px;
       cursor:pointer;
       user-select:none;
       transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
       box-shadow: var(--shadow2);
+      white-space: nowrap;
+      flex: 0 0 auto;
     }
     .btn:hover{opacity:.96; transform: translateY(-1px)}
     .btn:active{transform: translateY(0px)}
     .btn:focus{outline:none; box-shadow: var(--shadow2), var(--glow);}
-
     .btn.primary{
       border-color: transparent;
       background: linear-gradient(135deg, rgba(14,165,233,.96), rgba(22,163,74,.92));
       color: #041018;
-      box-shadow: 0 16px 50px rgba(14,165,233,.14), var(--shadow2);
     }
 
-    .content{ padding: 18px; }
+    .content{ padding: 14px; }
 
     .statusRow{
       display:flex;
-      gap:12px;
+      gap:10px;
       flex-wrap:wrap;
       align-items:center;
       justify-content:space-between;
-      margin: 2px 0 14px;
+      margin: 0 0 12px;
     }
 
     .statusPill{
@@ -192,52 +170,40 @@
       font-size: 13px;
       white-space:nowrap;
     }
-    .statusPill small{
-      color: var(--muted);
-      font-weight: 900;
-    }
+    .statusPill small{ color: var(--muted); font-weight: 900; }
     .dot{
       width:10px;height:10px;border-radius:999px;
       background: linear-gradient(135deg, var(--a1), var(--a2));
-      box-shadow: 0 10px 30px rgba(14,165,233,.18);
     }
 
     .center{
       display:grid;
-      gap:14px;
+      gap:12px;
       grid-template-columns: 1fr 1fr;
     }
-
     .big{
       border:1px solid var(--line);
       background: var(--panel2);
-      border-radius: 26px;
-      padding: 18px;
+      border-radius: 22px;
+      padding: 16px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:16px;
+      gap:14px;
       cursor:pointer;
       transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease, border-color .12s ease;
       box-shadow: var(--shadow2);
-      min-height: 92px;
+      min-height: 88px;
     }
-    .big:hover{
-      opacity:.97;
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-      border-color: rgba(14,165,233,.28);
-    }
+    .big:hover{opacity:.97; transform: translateY(-2px); box-shadow: var(--shadow); border-color: rgba(14,165,233,.28);}
     .big:active{transform: translateY(0px)}
     .big:focus{outline:none; box-shadow: var(--shadow2), var(--glow);}
 
-    .bigLeft{display:flex; align-items:center; gap:14px; min-width:0;}
+    .bigLeft{display:flex; align-items:center; gap:12px; min-width:0;}
     .bigIco{
-      width:54px;height:54px;
-      border-radius: 20px;
+      width:52px;height:52px;border-radius: 18px;
       border:1px solid var(--line);
-      display:grid;
-      place-items:center;
+      display:grid; place-items:center;
       background:
         radial-gradient(60px 60px at 30% 25%, rgba(14,165,233,.16), transparent 60%),
         radial-gradient(60px 60px at 85% 25%, rgba(22,163,74,.12), transparent 60%);
@@ -246,23 +212,8 @@
       flex:0 0 auto;
     }
     .bigTxt{min-width:0}
-    .bigTxt b{
-      display:block;
-      font-size:16px;
-      letter-spacing:.2px;
-      font-weight: 1000;
-    }
-    .bigTxt span{
-      display:block;
-      font-size:12px;
-      color: var(--muted);
-      font-weight: 850;
-      margin-top:4px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      max-width: 520px;
-    }
+    .bigTxt b{display:block; font-size:16px; letter-spacing:.2px; font-weight:1000;}
+    .bigTxt span{display:block; font-size:12px; color:var(--muted); font-weight:850; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width: 520px;}
     .chip{
       border:1px solid var(--line);
       padding: 8px 12px;
@@ -273,20 +224,17 @@
       white-space:nowrap;
       color: rgba(238,246,255,.88);
     }
-    [data-theme="day"] .chip{
-      background: rgba(0,0,0,.02);
-      color: rgba(11,18,32,.75);
-    }
+    [data-theme="day"] .chip{ background: rgba(0,0,0,.02); color: rgba(11,18,32,.75); }
 
     .foot{
-      margin-top: 14px;
+      margin-top: 12px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       align-items:center;
       justify-content:space-between;
       border-top:1px solid var(--line);
-      padding-top: 14px;
+      padding-top: 12px;
       color: var(--muted);
       font-weight: 850;
       font-size: 12px;
@@ -306,54 +254,50 @@
     .pause::before{
       content:"";
       position:absolute; inset:0;
-      backdrop-filter: blur(16px);
-      background: rgba(0,0,0,.20);
+      backdrop-filter: blur(14px);
+      background: rgba(0,0,0,.18);
     }
-    [data-theme="night"] .pause::before{ background: rgba(0,0,0,.40); }
+    [data-theme="night"] .pause::before{ background: rgba(0,0,0,.42); }
 
-    /* Fondo texto moviéndose (nombre) */
     .movingName{
       position:absolute;
-      left: 0;
-      top: 0;
+      left:0; top:0;
       font-weight: 1000;
       letter-spacing:.14em;
       text-transform: uppercase;
-      font-size: clamp(48px, 8vw, 110px);
+      font-size: clamp(44px, 8vw, 110px);
       opacity: .10;
       color: var(--text);
       pointer-events:none;
       user-select:none;
       white-space: nowrap;
       z-index: 1;
-      transform: translate3d(0,0,0);
       will-change: transform;
     }
 
-    /* Bloque central grande */
     .pauseCenter{
       position:absolute;
       inset:0;
       display:grid;
       place-items:center;
       z-index: 3;
-      padding: 18px;
+      padding: 14px;
       pointer-events:none;
     }
     .centerCard{
       width: min(900px, 100%);
       border:1px solid var(--line);
       background: rgba(255,255,255,.06);
-      border-radius: 30px;
+      border-radius: 26px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
-      padding: 18px;
+      padding: 16px;
       text-align:center;
     }
     [data-theme="day"] .centerCard{ background: rgba(255,255,255,.74); }
 
     .bigLine{
-      font-size: clamp(54px, 6.6vw, 88px);
+      font-size: clamp(52px, 6.6vw, 86px);
       font-weight: 1000;
       letter-spacing:-.02em;
       line-height: 1.05;
@@ -374,7 +318,6 @@
       letter-spacing:-.02em;
     }
 
-    /* Calendario */
     .calWrap{
       margin-top: 14px;
       border-top: 1px solid var(--line);
@@ -417,54 +360,54 @@
     .day{
       border:1px solid var(--line);
       background: rgba(255,255,255,.05);
-      border-radius: 14px;
-      min-height: 44px;
+      border-radius: 12px;
+      min-height: 42px;
       display:grid;
       place-items:center;
       font-weight: 950;
       position:relative;
     }
     [data-theme="day"] .day{ background: rgba(0,0,0,.02); }
-    .day.muted{
-      opacity:.35;
-    }
+    .day.muted{ opacity:.35; }
     .day.today{
       border-color: rgba(239,68,68,.70);
       box-shadow: 0 0 0 4px rgba(239,68,68,.14);
     }
     .heart{
       position:absolute;
-      right:8px;
+      right:7px;
       top:6px;
-      font-size: 14px;
+      font-size: 13px;
       color: rgb(239,68,68);
       line-height: 1;
     }
 
-    /* Frutas DVD */
+    /* FRUTAS: van dentro de pauseStage */
+    .pauseStage{
+      position:absolute;
+      inset:0;
+      z-index: 2;
+      pointer-events:none;
+      overflow:hidden;
+    }
     .fruit{
       position:absolute;
-      width: 54px;
-      height: 54px;
-      border-radius: 18px;
+      display:grid;
+      place-items:center;
+      user-select:none;
+      pointer-events:none;
       border:1px solid var(--line);
       background: rgba(255,255,255,.06);
       box-shadow: var(--shadow2);
-      display:grid;
-      place-items:center;
-      font-size: 28px;
-      user-select:none;
-      pointer-events:none;
-      z-index: 2;
-      will-change: transform;
       backdrop-filter: blur(10px);
+      will-change: transform;
     }
     [data-theme="day"] .fruit{ background: rgba(255,255,255,.70); }
 
     .pauseHint{
       position:absolute;
       left:0; right:0;
-      bottom: calc(16px + var(--safeB));
+      bottom: calc(14px + var(--safeB));
       display:flex;
       justify-content:center;
       z-index: 4;
@@ -493,9 +436,14 @@
       background: rgba(255,255,255,.05);
     }
 
+    /* ==== MOBILE ==== */
     @media (max-width: 820px){
       .center{ grid-template-columns: 1fr; }
       .title span{display:none}
+      .actions{ max-width: 58vw; }
+      .btn{ padding: 10px 10px; }
+      .bigTxt span{ max-width: 240px; }
+      .day{ min-height: 38px; }
     }
   </style>
 </head>
@@ -505,9 +453,10 @@
   <!-- PAUSA -->
   <div id="pause" class="pause" aria-hidden="true">
     <div id="movingName" class="movingName">ARSLAN PRO</div>
+    <div id="pauseStage" class="pauseStage"></div>
 
     <div class="pauseCenter">
-      <div class="centerCard">
+      <div class="centerCard" id="centerCard">
         <div class="bigLine" id="pTime">--:--</div>
         <div class="subLine" id="pDate">----</div>
         <div class="subLine" id="pPlace">BURGOS</div>
@@ -555,22 +504,19 @@
       </div>
 
       <div class="content">
-        <!-- Hora/fecha/lugar/temp en principal -->
         <div class="statusRow">
-          <div class="statusPill" id="mainClock">
+          <div class="statusPill">
             <span class="dot"></span>
             <span id="mTime">--:--</span>
             <small id="mDate">----</small>
           </div>
-
-          <div class="statusPill" id="mainWeather">
+          <div class="statusPill">
             <span class="dot"></span>
             <span id="mPlace">Burgos</span>
             <small id="mTemp">--°C</small>
           </div>
         </div>
 
-        <!-- 4 botones grandes -->
         <div class="center" id="grid"></div>
 
         <div class="foot">
@@ -583,12 +529,10 @@
 
 <script>
 /* ===============================
-   ARSLAN PRO — HUB (SIMPLE + PRO)
-   - Día por defecto
-   - Pausa 30s inactividad
-   - Pausa: reloj grande + Burgos + temp + calendario mes (hoy rojo ❤️)
-   - Pausa: frutas rebotando (DVD)
-   - Nombre ARSLAN PRO moviéndose detrás
+   HUB FINAL (MEJORADO)
+   - Frutas rebotando fluidas con delta-time
+   - Evita la tarjeta central (rebota alrededor)
+   - Móvil mejor (acciones scroll + grid 1 col)
 =============================== */
 
 const SYSTEMS = [
@@ -599,15 +543,15 @@ const SYSTEMS = [
 ];
 
 const PLACE_NAME = "Burgos";
-const BURGOS = { lat: 42.3439, lon: -3.6969, tz: "Europe/Madrid" }; // Burgos
+const BURGOS = { lat: 42.3439, lon: -3.6969, tz: "Europe/Madrid" };
 
 const K_THEME="ARSLAN_HUB_THEME";
 const K_OPENMODE="ARSLAN_HUB_OPENMODE";
 const K_LAST="ARSLAN_HUB_LAST";
 
-const INACTIVITY_MS = 30000; // 30s
+const INACTIVITY_MS = 30000;
 
-const FRUITS = ["🍎","🍏","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍑","🍒","🥭","🍍","🥝","🍅"];
+const FRUITS = ["🍎","🍏","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍑","🍒","🥭","🍍","🥝","🍅","🥑","🥕","🌽","🍈"];
 
 const $ = s => document.querySelector(s);
 
@@ -615,16 +559,13 @@ function getTheme(){ return localStorage.getItem(K_THEME) || "day"; }
 function setTheme(t){
   localStorage.setItem(K_THEME, t);
   document.body.setAttribute("data-theme", t);
-  const isNight = (t==="night");
-  $("#themeBtn").textContent = isNight ? "🌙 Noche" : "🌓 Día";
+  $("#themeBtn").textContent = (t==="night") ? "🌙 Noche" : "🌓 Día";
 }
-
 function getOpenMode(){ return localStorage.getItem(K_OPENMODE) || "new"; }
 function setOpenMode(m){
   localStorage.setItem(K_OPENMODE, m);
   $("#openModeBtn").textContent = (m==="new") ? "🔗 Nueva pestaña" : "🔗 Misma pestaña";
 }
-
 function openSystem(id){
   const s = SYSTEMS.find(x=>x.id===id);
   if(!s) return;
@@ -637,9 +578,8 @@ function openLast(){
   if(last && SYSTEMS.some(s=>s.id===last)) openSystem(last);
   else openSystem("facturas");
 }
-
-function cardHTML(s){
-  return `
+function render(){
+  $("#grid").innerHTML = SYSTEMS.map(s => `
     <div class="big" data-open="${s.id}" tabindex="0" role="button" aria-label="Abrir ${s.name}">
       <div class="bigLeft">
         <div class="bigIco">${s.icon}</div>
@@ -650,10 +590,8 @@ function cardHTML(s){
       </div>
       <div class="chip">Abrir →</div>
     </div>
-  `;
-}
-function render(){
-  $("#grid").innerHTML = SYSTEMS.map(cardHTML).join("");
+  `).join("");
+
   $("#grid").querySelectorAll("[data-open]").forEach(el=>{
     const id = el.getAttribute("data-open");
     el.addEventListener("click", ()=> openSystem(id));
@@ -661,17 +599,14 @@ function render(){
   });
 }
 
-/* ===== Logo robusto (principal) ===== */
+/* Logo robusto */
 function initLogo(){
   const img = $("#logo");
   const fb = $("#logoFallback");
-  img.onerror = () => {
-    img.style.display="none";
-    fb.style.display="grid";
-  };
+  img.onerror = () => { img.style.display="none"; fb.style.display="grid"; };
 }
 
-/* ===== Copiar links ===== */
+/* Copiar links */
 async function copyLinks(){
   const text = SYSTEMS.map(s => `${s.name}: ${s.url}`).join("\n");
   try{
@@ -682,121 +617,120 @@ async function copyLinks(){
   }
 }
 
-/* ===== Hora/Fecha (Burgos) ===== */
+/* Hora / Fecha (con zona Europe/Madrid) */
 function fmt2(n){ return String(n).padStart(2,"0"); }
-function formatDateLong(d){
-  const days=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
-  const months=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
-  return `${days[d.getDay()]} · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+function nowMadrid(){
+  const parts = new Intl.DateTimeFormat("es-ES", {
+    timeZone: BURGOS.tz,
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit", second:"2-digit",
+    weekday:"short"
+  }).formatToParts(new Date());
+
+  const map = {};
+  for(const p of parts) map[p.type]=p.value;
+
+  // weekday viene tipo "dom", "lun"…
+  return {
+    hh: map.hour, mm: map.minute,
+    weekday: (map.weekday||"").toUpperCase(),
+    day: map.day, month: map.month, year: map.year
+  };
 }
 function tickTime(){
-  const now = new Date();
-  // Hora local del navegador, pero en España será correcto normalmente.
-  // (Si quieres 100% Burgos, se puede usar Intl con timeZone: Europe/Madrid.)
-  $("#mTime").textContent = `${fmt2(now.getHours())}:${fmt2(now.getMinutes())}`;
-  $("#mDate").textContent = formatDateLong(now);
+  const t = nowMadrid();
+  $("#mTime").textContent = `${t.hh}:${t.mm}`;
+  $("#mDate").textContent = `${t.weekday} · ${t.day}/${t.month}/${t.year}`;
 
-  $("#pTime").textContent = `${fmt2(now.getHours())}:${fmt2(now.getMinutes())}`;
-  $("#pDate").textContent = formatDateLong(now);
+  $("#pTime").textContent = `${t.hh}:${t.mm}`;
+  $("#pDate").textContent = `${t.weekday} · ${t.day}/${t.month}/${t.year}`;
 }
 
-/* ===== Temperatura (Open-Meteo) ===== */
-let lastTempText = "--°C";
-
+/* Temperatura Open-Meteo */
+let lastTempText="--°C";
 async function refreshWeather(){
   try{
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${BURGOS.lat}&longitude=${BURGOS.lon}&current_weather=true&timezone=${encodeURIComponent(BURGOS.tz)}`;
-    const res = await fetch(url, { cache: "no-store" });
-    if(!res.ok) throw new Error("weather http");
+    const res = await fetch(url, { cache:"no-store" });
+    if(!res.ok) throw new Error("weather");
     const data = await res.json();
-    const t = data?.current_weather?.temperature;
-    if(typeof t === "number"){
-      lastTempText = `${Math.round(t)}°C`;
-      $("#mTemp").textContent = lastTempText;
-      $("#pTemp").textContent = lastTempText;
+    const temp = data?.current_weather?.temperature;
+    if(typeof temp === "number"){
+      lastTempText = `${Math.round(temp)}°C`;
     }
-  }catch{
-    // deja lo último o --
-    $("#mTemp").textContent = lastTempText;
-    $("#pTemp").textContent = lastTempText;
-  }
+  }catch{}
+  $("#mTemp").textContent = lastTempText;
+  $("#pTemp").textContent = lastTempText;
 }
 
-/* ===== Calendario del mes (hoy rojo + ❤️) ===== */
+/* Calendario */
 function buildCalendar(){
   const now = new Date();
-  const y = now.getFullYear();
-  const m = now.getMonth(); // 0-11
-  const today = now.getDate();
+  const dt = new Date(now.toLocaleString("en-US", { timeZone: BURGOS.tz }));
+  const y = dt.getFullYear();
+  const m = dt.getMonth();
+  const today = dt.getDate();
 
   const months=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
   $("#calTitle").textContent = `${months[m]} ${y}`;
 
   const grid = $("#calGrid");
   grid.innerHTML = "";
-
-  const dows = ["L","M","X","J","V","S","D"];
-  dows.forEach(x=>{
-    const el = document.createElement("div");
-    el.className = "dow";
-    el.textContent = x;
+  ["L","M","X","J","V","S","D"].forEach(x=>{
+    const el=document.createElement("div");
+    el.className="dow";
+    el.textContent=x;
     grid.appendChild(el);
   });
 
-  // first day of month
-  const first = new Date(y, m, 1);
-  let firstDow = first.getDay(); // 0 Sun - 6 Sat
-  // convert to Monday-first index (0..6)
-  firstDow = (firstDow + 6) % 7;
+  const first = new Date(y,m,1);
+  let firstDow = (first.getDay()+6)%7; // monday-first
+  const daysInMonth = new Date(y,m+1,0).getDate();
+  const prevDays = new Date(y,m,0).getDate();
 
-  const daysInMonth = new Date(y, m+1, 0).getDate();
-  const prevDays = new Date(y, m, 0).getDate();
-
-  // Fill 6 weeks (42 cells)
   for(let i=0;i<42;i++){
-    const cell = document.createElement("div");
-    cell.className = "day";
-
+    const cell=document.createElement("div");
+    cell.className="day";
     const dayNum = i - firstDow + 1;
-    if(dayNum <= 0){
+
+    if(dayNum<=0){
       cell.classList.add("muted");
       cell.textContent = String(prevDays + dayNum);
-    }else if(dayNum > daysInMonth){
+    } else if(dayNum>daysInMonth){
       cell.classList.add("muted");
       cell.textContent = String(dayNum - daysInMonth);
-    }else{
+    } else {
       cell.textContent = String(dayNum);
-      if(dayNum === today){
+      if(dayNum===today){
         cell.classList.add("today");
-        const h = document.createElement("div");
-        h.className = "heart";
-        h.textContent = "❤️";
+        const h=document.createElement("div");
+        h.className="heart";
+        h.textContent="❤️";
         cell.appendChild(h);
       }
     }
-
     grid.appendChild(cell);
   }
 }
 
-/* ===== PAUSA + Inactividad ===== */
-let pauseOn = false;
-let inactivityTimer = null;
+/* ===== PAUSA + INACTIVIDAD ===== */
+let pauseOn=false;
+let inactivityTimer=null;
 
 function showPause(){
   if(pauseOn) return;
-  pauseOn = true;
-  $("#pause").style.display = "block";
+  pauseOn=true;
+  $("#pause").style.display="block";
   $("#pause").setAttribute("aria-hidden","false");
-  $("#pPlace").textContent = PLACE_NAME;
-  spawnFruits(); // frutas DVD
+  $("#pPlace").textContent=PLACE_NAME;
+  startFruitSim();
 }
 function hidePause(){
   if(!pauseOn) return;
-  pauseOn = false;
-  $("#pause").style.display = "none";
+  pauseOn=false;
+  $("#pause").style.display="none";
   $("#pause").setAttribute("aria-hidden","true");
-  clearFruits();
+  stopFruitSim();
 }
 
 function resetInactivity(){
@@ -807,133 +741,173 @@ function resetInactivity(){
 $("#pauseBtn").addEventListener("click", showPause);
 $("#pause").addEventListener("click", hidePause);
 
-window.addEventListener("keydown",(e)=>{
-  // si está en pausa
+/* Fondo nombre moviéndose */
+const nameState={ x:10, y:40, vx:55, vy:28 }; // px/s
+let nameLast=0;
+function animateName(ts){
+  const el=$("#movingName");
+  if(!el) return requestAnimationFrame(animateName);
+  if(!nameLast) nameLast=ts;
+  const dt = Math.min(0.033, (ts-nameLast)/1000); // clamp
+  nameLast=ts;
+
   if(pauseOn){
-    if(e.key==="Escape" || e.key==="Enter") hidePause();
-    resetInactivity();
-    return;
+    const maxX = window.innerWidth - el.offsetWidth - 10;
+    const maxY = window.innerHeight - 120;
+
+    nameState.x += nameState.vx*dt;
+    nameState.y += nameState.vy*dt;
+
+    if(nameState.x < 10 || nameState.x > maxX) nameState.vx *= -1;
+    if(nameState.y < 10 || nameState.y > maxY) nameState.vy *= -1;
+
+    nameState.x = Math.max(10, Math.min(maxX, nameState.x));
+    nameState.y = Math.max(10, Math.min(maxY, nameState.y));
+
+    el.style.transform = `translate3d(${nameState.x}px, ${nameState.y}px, 0)`;
   }
 
-  const k = e.key.toLowerCase();
+  requestAnimationFrame(animateName);
+}
+
+/* ===== FRUTAS (MEJORADAS) ===== */
+let fruits=[];
+let fruitRAF=null;
+let fruitLast=0;
+
+function rectIntersects(a,b){
+  return !(a.x+a.w < b.x || a.x > b.x+b.w || a.y+a.h < b.y || a.y > b.y+b.h);
+}
+
+function clearStage(){
+  const stage=$("#pauseStage");
+  stage.innerHTML="";
+}
+
+function stopFruitSim(){
+  if(fruitRAF) cancelAnimationFrame(fruitRAF);
+  fruitRAF=null;
+  fruitLast=0;
+  fruits=[];
+  clearStage();
+}
+
+function startFruitSim(){
+  stopFruitSim();
+
+  const stage=$("#pauseStage");
+  const isMobile = window.innerWidth < 820;
+  const count = isMobile ? 12 : 22;            // menos en móvil para fluidez
+  const baseSize = isMobile ? 46 : 54;
+
+  for(let i=0;i<count;i++){
+    const el=document.createElement("div");
+    el.className="fruit";
+    el.textContent = FRUITS[i % FRUITS.length];
+
+    const size = baseSize + Math.floor(Math.random()*14);
+    el.style.width = size+"px";
+    el.style.height = size+"px";
+    el.style.borderRadius = Math.floor(size*0.35)+"px";
+    el.style.fontSize = Math.floor(size*0.55)+"px";
+
+    stage.appendChild(el);
+
+    const speed = isMobile ? 120 : 160; // px/s
+    const vx = (Math.random()>0.5?1:-1) * (speed*(0.6 + Math.random()*0.9));
+    const vy = (Math.random()>0.5?1:-1) * (speed*(0.6 + Math.random()*0.9));
+
+    fruits.push({
+      el, size,
+      x: 10 + Math.random()*(window.innerWidth - size - 20),
+      y: 10 + Math.random()*(window.innerHeight - size - 20),
+      vx, vy
+    });
+  }
+
+  fruitRAF = requestAnimationFrame(stepFruits);
+}
+
+function stepFruits(ts){
+  if(!pauseOn) return;
+  if(!fruitLast) fruitLast=ts;
+  const dt = Math.min(0.033, (ts-fruitLast)/1000);
+  fruitLast=ts;
+
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+
+  // “Zona prohibida” = la tarjeta central
+  const card = $("#centerCard");
+  const r = card.getBoundingClientRect();
+  const block = { x: r.left-14, y: r.top-14, w: r.width+28, h: r.height+28 };
+
+  for(const f of fruits){
+    // mover
+    f.x += f.vx*dt;
+    f.y += f.vy*dt;
+
+    // límites
+    const minX = 8, minY = 8;
+    const maxX = W - f.size - 8;
+    const maxY = H - f.size - 8;
+
+    if(f.x <= minX){ f.x=minX; f.vx*=-1; }
+    if(f.x >= maxX){ f.x=maxX; f.vx*=-1; }
+    if(f.y <= minY){ f.y=minY; f.vy*=-1; }
+    if(f.y >= maxY){ f.y=maxY; f.vy*=-1; }
+
+    // evitar pasar por la tarjeta central
+    const fr = { x:f.x, y:f.y, w:f.size, h:f.size };
+    if(rectIntersects(fr, block)){
+      // empuja hacia fuera según el lado más cercano
+      const cx = fr.x + fr.w/2, cy = fr.y + fr.h/2;
+      const bx = block.x + block.w/2, by = block.y + block.h/2;
+      const dx = cx - bx;
+      const dy = cy - by;
+
+      if(Math.abs(dx) > Math.abs(dy)){
+        // sale por izquierda/derecha
+        if(dx > 0) f.x = block.x + block.w + 10;
+        else f.x = block.x - fr.w - 10;
+        f.vx *= -1;
+      }else{
+        // sale por arriba/abajo
+        if(dy > 0) f.y = block.y + block.h + 10;
+        else f.y = block.y - fr.h - 10;
+        f.vy *= -1;
+      }
+    }
+
+    f.el.style.transform = `translate3d(${f.x}px, ${f.y}px, 0)`;
+  }
+
+  fruitRAF = requestAnimationFrame(stepFruits);
+}
+
+/* ===== EVENTS / BOOT ===== */
+["mousemove","mousedown","touchstart","touchmove","scroll","click","keydown"].forEach(evt=>{
+  window.addEventListener(evt, resetInactivity, { passive:true });
+});
+
+window.addEventListener("keydown",(e)=>{
+  if(pauseOn){
+    if(e.key==="Escape" || e.key==="Enter") hidePause();
+    return;
+  }
+  const k=e.key.toLowerCase();
   if(k==="f") openSystem("facturas");
   else if(k==="l") openSystem("listas");
   else if(k==="b") openSystem("b2b");
   else if(k==="g") openSystem("gs");
   else if(k==="r") openLast();
   else if(e.key==="Escape") showPause();
-
-  resetInactivity();
 });
 
-/* ===== Nombre moviéndose detrás ===== */
-const nameState = { x: 0, y: 40, vx: 0.55, vy: 0.28 };
-function animateName(){
-  const el = $("#movingName");
-  if(!el) return;
-
-  if(pauseOn){
-    const maxX = window.innerWidth - el.offsetWidth - 10;
-    const maxY = window.innerHeight - 120;
-
-    nameState.x += nameState.vx;
-    nameState.y += nameState.vy;
-
-    if(nameState.x < 10 || nameState.x > maxX) nameState.vx *= -1;
-    if(nameState.y < 10 || nameState.y > maxY) nameState.vy *= -1;
-
-    // clamp
-    nameState.x = Math.max(10, Math.min(maxX, nameState.x));
-    nameState.y = Math.max(10, Math.min(maxY, nameState.y));
-
-    el.style.transform = `translate(${nameState.x}px, ${nameState.y}px)`;
-  }
-
-  requestAnimationFrame(animateName);
-}
-
-/* ===== Frutas rebotando (muchas) ===== */
-let fruits = [];
-let fruitRAF = null;
-
-function clearFruits(){
-  fruits.forEach(f => f.el.remove());
-  fruits = [];
-  if(fruitRAF) cancelAnimationFrame(fruitRAF);
-  fruitRAF = null;
-}
-
-function spawnFruits(){
-  clearFruits();
-
-  // cantidad "abundante" adaptada
-  const count = Math.max(10, Math.min(22, Math.floor(window.innerWidth / 70)));
-
-  for(let i=0;i<count;i++){
-    const el = document.createElement("div");
-    el.className = "fruit";
-    el.textContent = FRUITS[i % FRUITS.length];
-
-    // random size slightly
-    const size = 48 + Math.floor(Math.random()*18);
-    el.style.width = size + "px";
-    el.style.height = size + "px";
-    el.style.fontSize = Math.floor(size*0.52) + "px";
-    el.style.borderRadius = Math.floor(size*0.35) + "px";
-
-    document.body.appendChild(el);
-
-    const vx = (Math.random()>0.5?1:-1) * (1.2 + Math.random()*2.0);
-    const vy = (Math.random()>0.5?1:-1) * (1.0 + Math.random()*1.8);
-
-    fruits.push({
-      el,
-      x: 10 + Math.random()*(window.innerWidth - size - 20),
-      y: 10 + Math.random()*(window.innerHeight - size - 20),
-      vx, vy,
-      size
-    });
-  }
-
-  const step = ()=>{
-    if(!pauseOn) return;
-
-    const W = window.innerWidth;
-    const H = window.innerHeight;
-
-    for(const f of fruits){
-      f.x += f.vx;
-      f.y += f.vy;
-
-      const maxX = W - f.size - 10;
-      const maxY = H - f.size - 10;
-
-      if(f.x <= 10 || f.x >= maxX) f.vx *= -1;
-      if(f.y <= 10 || f.y >= maxY) f.vy *= -1;
-
-      f.x = Math.max(10, Math.min(maxX, f.x));
-      f.y = Math.max(10, Math.min(maxY, f.y));
-
-      f.el.style.transform = `translate(${f.x}px, ${f.y}px)`;
-    }
-
-    fruitRAF = requestAnimationFrame(step);
-  };
-
-  fruitRAF = requestAnimationFrame(step);
-}
-
-/* ===== Inactividad listeners ===== */
-["mousemove","mousedown","touchstart","touchmove","scroll","click"].forEach(evt=>{
-  window.addEventListener(evt, ()=>{ resetInactivity(); }, { passive:true });
-});
-
-/* ===== BOOT ===== */
 (function init(){
   initLogo();
-  setTheme(getTheme());           // día por defecto si no hay storage
+  setTheme(getTheme());
   setOpenMode(getOpenMode());
-
   $("#mPlace").textContent = PLACE_NAME;
   $("#pPlace").textContent = PLACE_NAME;
 
@@ -944,35 +918,25 @@ function spawnFruits(){
   setInterval(tickTime, 1000);
 
   refreshWeather();
-  setInterval(refreshWeather, 10 * 60 * 1000); // cada 10 min
+  setInterval(refreshWeather, 10*60*1000);
 
   $("#themeBtn").addEventListener("click", ()=>{
     setTheme(getTheme()==="night" ? "day" : "night");
   });
-
   $("#openModeBtn").addEventListener("click", ()=>{
     setOpenMode(getOpenMode()==="new" ? "same" : "new");
   });
-
   $("#lastBtn").addEventListener("click", openLast);
   $("#copyBtn").addEventListener("click", copyLinks);
 
-  // salir pausa con Enter/Esc
-  window.addEventListener("keydown", resetInactivity);
   resetInactivity();
-
   requestAnimationFrame(animateName);
 })();
-</script>
 
-<script>
 /* SW */
 if("serviceWorker" in navigator){
-  window.addEventListener("load", ()=>{
-    navigator.serviceWorker.register("sw.js").catch(()=>{});
-  });
+  window.addEventListener("load", ()=> navigator.serviceWorker.register("sw.js").catch(()=>{}) );
 }
 </script>
-
 </body>
 </html>
