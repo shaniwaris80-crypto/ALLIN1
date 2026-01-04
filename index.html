@@ -3,58 +3,32 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
   <title>ARSLAN PRO — HUB</title>
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="./icon-192.png">
-
-  <!-- PWA -->
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#0b0f14">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
-    /* =========================
-       THEME (Day/Night)
-    ========================== */
     :root{
-      --bg:#f4f7fb;
-      --bg2:#eef3fb;
-      --card:#ffffffcc;
-      --cardSolid:#ffffff;
-      --text:#0d1b2a;
-      --muted:#4b627a;
-      --line:#d9e4f2;
-      --accent:#16a34a;
-      --accent2:#0ea5e9;
+      --bg:#f4f7fb; --bg2:#eef3fb; --card:#ffffffcc; --cardSolid:#ffffff;
+      --text:#0d1b2a; --muted:#4b627a; --line:#d9e4f2;
+      --accent:#16a34a; --accent2:#0ea5e9;
       --shadow: 0 18px 60px rgba(2, 6, 23, .12);
       --shadow2: 0 10px 30px rgba(2, 6, 23, .10);
-      --danger:#ef4444;
-      --warn:#f59e0b;
-      --ok:#16a34a;
-      --radius: 22px;
-      --radius2: 16px;
+      --danger:#ef4444; --warn:#f59e0b; --ok:#16a34a;
+      --radius: 22px; --radius2: 16px;
     }
-
     [data-theme="night"]{
-      --bg:#0b0f14;
-      --bg2:#0d1420;
-      --card:#101a28cc;
-      --cardSolid:#101a28;
-      --text:#e9f0f7;
-      --muted:#9fb0c3;
-      --line:#1f2a3a;
-      --accent:#6ee7b7;
-      --accent2:#38bdf8;
+      --bg:#0b0f14; --bg2:#0d1420; --card:#101a28cc; --cardSolid:#101a28;
+      --text:#e9f0f7; --muted:#9fb0c3; --line:#1f2a3a;
+      --accent:#6ee7b7; --accent2:#38bdf8;
       --shadow: 0 18px 60px rgba(0,0,0,.55);
       --shadow2: 0 10px 30px rgba(0,0,0,.35);
-      --danger:#ff5a5f;
-      --warn:#fbbf24;
-      --ok:#6ee7b7;
+      --danger:#ff5a5f; --warn:#fbbf24; --ok:#6ee7b7;
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -67,358 +41,87 @@
       color:var(--text);
     }
 
-    /* =========================
-       Layout
-    ========================== */
-    .wrap{
-      min-height:100%;
-      display:grid;
-      place-items:center;
-      padding:18px;
-    }
+    .wrap{min-height:100%;display:grid;place-items:center;padding:18px;}
+    .shell{width:min(1040px,100%);border:1px solid var(--line);border-radius:var(--radius);background:var(--card);backdrop-filter:blur(12px);box-shadow:var(--shadow);overflow:hidden;position:relative;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-bottom:1px solid var(--line);background:linear-gradient(90deg, rgba(14,165,233,.10), rgba(22,163,74,.10));}
+    .brand{display:flex;align-items:center;gap:10px;min-width:260px;}
+    .logo{width:38px;height:38px;border-radius:14px;background:linear-gradient(135deg,var(--accent2),var(--accent));box-shadow:var(--shadow2);overflow:hidden;flex:0 0 auto;border:1px solid rgba(255,255,255,.15);}
+    .logo img{width:100%;height:100%;object-fit:cover;display:block;}
+    .brand h1{font-size:16px;margin:0;font-weight:950;letter-spacing:.2px;}
+    .brand .sub{font-size:12px;margin-top:2px;color:var(--muted);font-weight:800;max-width:520px;}
 
-    .shell{
-      width:min(1040px, 100%);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
+    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+    .pill{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--cardSolid);padding:9px 12px;border-radius:999px;font-weight:900;font-size:12px;cursor:pointer;user-select:none;box-shadow:var(--shadow2);white-space:nowrap;}
+    .btn{border:1px solid var(--line);background:var(--cardSolid);color:var(--text);padding:10px 12px;border-radius:14px;font-weight:950;cursor:pointer;box-shadow:var(--shadow2);transition:transform .12s ease, opacity .12s ease;white-space:nowrap;}
+    .btn:hover{opacity:.95;transform:translateY(-1px)}
+    .btn.primary{border-color:transparent;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#06131b;}
 
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:16px 16px;
-      border-bottom:1px solid var(--line);
-      background: linear-gradient(90deg, rgba(14,165,233,.10), rgba(22,163,74,.10));
-    }
+    .content{padding:16px;}
+    .searchRow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+    .searchRow input{flex:1;min-width:240px;border:1px solid var(--line);background:var(--cardSolid);color:var(--text);padding:12px;border-radius:14px;font-weight:900;outline:none;}
+    .sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 12px;}
+    .sectionTitle h2{margin:0;font-size:13px;font-weight:950;letter-spacing:.3px;color:var(--muted);text-transform:uppercase;}
+    .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+    .card{border:1px solid var(--line);background:var(--cardSolid);border-radius:var(--radius2);padding:16px;box-shadow:var(--shadow2);text-decoration:none;color:inherit;position:relative;overflow:hidden;transition:transform .14s ease,border-color .14s ease,box-shadow .14s ease;}
+    .card:hover{transform:translateY(-3px);border-color:rgba(22,163,74,.5);box-shadow:var(--shadow);}
+    .card::before{content:"";position:absolute;inset:-2px;background:radial-gradient(500px 120px at 20% 0%, rgba(14,165,233,.18), transparent 60%), radial-gradient(500px 120px at 90% 0%, rgba(22,163,74,.18), transparent 55%);opacity:.6;pointer-events:none;}
+    .card > *{position:relative;z-index:1}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .title{font-size:15px;font-weight:950;display:flex;align-items:center;gap:10px;}
+    .icon{width:36px;height:36px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg, rgba(14,165,233,.18), rgba(22,163,74,.18));border:1px solid var(--line);font-size:18px;}
+    .desc{margin-top:8px;color:var(--muted);font-weight:800;font-size:13px;line-height:1.35;}
+    .url{margin-top:10px;font-size:12px;color:rgba(127,150,172,.9);word-break:break-all;font-weight:800;}
+    .chipRow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;}
+    .starBtn{border:1px solid var(--line);background:transparent;color:var(--text);padding:8px 10px;border-radius:999px;cursor:pointer;font-weight:950;display:flex;align-items:center;gap:8px;box-shadow:none;}
+    .starBtn.active{border-color:rgba(14,165,233,.5);background:linear-gradient(135deg, rgba(14,165,233,.12), rgba(22,163,74,.10));}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;font-weight:900;font-size:12px;color:var(--muted);}
+    .footer{margin-top:14px;border-top:1px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-weight:900;font-size:12px;}
 
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      min-width: 260px;
+    .lock{position:fixed;inset:0;display:grid;place-items:center;padding:18px;z-index:50;background:
+      radial-gradient(1200px 700px at 20% 10%, rgba(14,165,233,.22), transparent 60%),
+      radial-gradient(1100px 650px at 90% 15%, rgba(22,163,74,.22), transparent 55%),
+      linear-gradient(180deg,var(--bg),var(--bg2));
     }
+    .lockCard{width:min(520px,100%);border-radius:var(--radius);border:1px solid var(--line);background:var(--card);backdrop-filter:blur(12px);box-shadow:var(--shadow);overflow:hidden;}
+    .lockHeader{padding:18px;border-bottom:1px solid var(--line);background:linear-gradient(90deg, rgba(14,165,233,.12), rgba(22,163,74,.12));}
+    .lockHeader .t{display:flex;align-items:center;gap:10px;font-weight:950;font-size:18px;margin:0;}
+    .lockHeader .s{margin-top:6px;color:var(--muted);font-weight:900;font-size:12px;}
+    .lockBody{padding:18px}
+    .pinRow{display:flex;gap:10px;align-items:center;margin-top:12px;}
+    input[type="password"]{flex:1;border:1px solid var(--line);background:var(--cardSolid);color:var(--text);padding:12px;border-radius:14px;font-size:16px;font-weight:900;outline:none;}
+    .msg{margin-top:10px;font-weight:900;color:var(--muted);font-size:13px;}
+    .msg.bad{color:var(--danger)} .msg.ok{color:var(--ok)}
+    .small{margin-top:10px;color:var(--muted);font-weight:800;font-size:12px;line-height:1.35;}
+    .hintKeys{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;}
+    .key{border:1px solid var(--line);background:var(--cardSolid);border-radius:12px;padding:8px 10px;font-weight:950;font-size:12px;color:var(--muted);}
+    .key b{color:var(--text)}
 
-    .logo{
-      width:38px; height:38px;
-      border-radius:14px;
-      background: linear-gradient(135deg, var(--accent2), var(--accent));
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-      flex: 0 0 auto;
-      border:1px solid rgba(255,255,255,.15);
-    }
-    .logo img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .brand h1{
-      font-size:16px; margin:0; font-weight:950; letter-spacing:.2px;
-    }
-    .brand .sub{
-      font-size:12px; margin-top:2px; color:var(--muted); font-weight:800;
-      max-width: 520px;
-    }
-
-    .actions{
-      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-
-    .pill{
-      display:flex; align-items:center; gap:8px;
-      border:1px solid var(--line);
-      background: var(--cardSolid);
-      padding:9px 12px;
-      border-radius:999px;
-      font-weight:900;
-      font-size:12px;
-      cursor:pointer;
-      user-select:none;
-      box-shadow: var(--shadow2);
-      white-space: nowrap;
-    }
-
-    .btn{
-      border:1px solid var(--line);
-      background: var(--cardSolid);
-      color:var(--text);
+    /* DEBUG overlay visible if JS errors */
+    .debugBar{
+      position:fixed; left:12px; right:12px; bottom:12px;
+      background: rgba(239,68,68,.14);
+      border:1px solid rgba(239,68,68,.35);
+      color: var(--text);
       padding:10px 12px;
       border-radius: 14px;
       font-weight:950;
-      cursor:pointer;
+      display:none;
+      z-index:9999;
       box-shadow: var(--shadow2);
-      transition: transform .12s ease, opacity .12s ease;
-      white-space: nowrap;
+      white-space: pre-wrap;
     }
-    .btn:hover{opacity:.95; transform: translateY(-1px)}
-    .btn:active{transform: translateY(0px)}
-    .btn.primary{
-      border-color: transparent;
-      background: linear-gradient(135deg, var(--accent2), var(--accent));
-      color: #06131b;
-    }
-
-    .content{ padding:16px; }
-
-    .sectionTitle{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin: 2px 0 12px;
-    }
-    .sectionTitle h2{
-      margin:0;
-      font-size:13px;
-      font-weight:950;
-      letter-spacing:.3px;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-
-    .searchRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:12px;
-    }
-    .searchRow input{
-      flex:1;
-      min-width:240px;
-      border:1px solid var(--line);
-      background:var(--cardSolid);
-      color:var(--text);
-      padding:12px 12px;
-      border-radius:14px;
-      font-weight:900;
-      outline:none;
-    }
-
-    .grid{
-      display:grid;
-      gap:14px;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    }
-
-    .card{
-      border:1px solid var(--line);
-      background: var(--cardSolid);
-      border-radius: var(--radius2);
-      padding:16px;
-      box-shadow: var(--shadow2);
-      text-decoration:none;
-      color:inherit;
-      position:relative;
-      overflow:hidden;
-      transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease;
-    }
-    .card:hover{
-      transform: translateY(-3px);
-      border-color: rgba(22,163,74,.5);
-      box-shadow: var(--shadow);
-    }
-
-    .card::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(500px 120px at 20% 0%, rgba(14,165,233,.18), transparent 60%),
-                  radial-gradient(500px 120px at 90% 0%, rgba(22,163,74,.18), transparent 55%);
-      opacity:.6;
-      pointer-events:none;
-    }
-    .card > *{position:relative; z-index:1}
-
-    .row{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-    }
-
-    .title{
-      font-size:15px;
-      font-weight:950;
-      display:flex; align-items:center; gap:10px;
-    }
-    .icon{
-      width:36px; height:36px;
-      border-radius:14px;
-      display:grid; place-items:center;
-      background: linear-gradient(135deg, rgba(14,165,233,.18), rgba(22,163,74,.18));
-      border:1px solid var(--line);
-      font-size:18px;
-    }
-    .desc{
-      margin-top:8px;
-      color:var(--muted);
-      font-weight:800;
-      font-size:13px;
-      line-height:1.35;
-    }
-    .url{
-      margin-top:10px;
-      font-size:12px;
-      color: color-mix(in srgb, var(--muted) 80%, transparent);
-      word-break: break-all;
-      font-weight:800;
-    }
-
-    .chipRow{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:12px;
-    }
-
-    .starBtn{
-      border:1px solid var(--line);
-      background: transparent;
-      color: var(--text);
-      padding:8px 10px;
-      border-radius: 999px;
-      cursor:pointer;
-      font-weight:950;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      box-shadow: none;
-    }
-    .starBtn:hover{opacity:.95}
-    .starBtn.active{
-      border-color: rgba(14,165,233,.5);
-      background: linear-gradient(135deg, rgba(14,165,233,.12), rgba(22,163,74,.10));
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:7px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: transparent;
-      font-weight:900;
-      font-size:12px;
-      color: var(--muted);
-    }
-
-    .footer{
-      margin-top:14px;
-      border-top:1px solid var(--line);
-      padding-top:14px;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      color:var(--muted);
-      font-weight:900;
-      font-size:12px;
-    }
-
-    /* =========================
-       LOCK (PIN screen)
-    ========================== */
-    .lock{
-      position:fixed; inset:0;
-      display:grid; place-items:center;
-      padding:18px;
-      z-index:50;
-      background:
-        radial-gradient(1200px 700px at 20% 10%, rgba(14,165,233,.22), transparent 60%),
-        radial-gradient(1100px 650px at 90% 15%, rgba(22,163,74,.22), transparent 55%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-    }
-    .lockCard{
-      width:min(520px, 100%);
-      border-radius: var(--radius);
-      border:1px solid var(--line);
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .lockHeader{
-      padding:18px;
-      border-bottom:1px solid var(--line);
-      background: linear-gradient(90deg, rgba(14,165,233,.12), rgba(22,163,74,.12));
-    }
-    .lockHeader .t{
-      display:flex; align-items:center; gap:10px;
-      font-weight: 950;
-      font-size:18px;
-      margin:0;
-    }
-    .lockHeader .s{
-      margin-top:6px;
-      color:var(--muted);
-      font-weight:900;
-      font-size:12px;
-    }
-    .lockBody{padding:18px}
-    .pinRow{
-      display:flex; gap:10px; align-items:center;
-      margin-top:12px;
-    }
-    input[type="password"]{
-      flex:1;
-      border:1px solid var(--line);
-      background: var(--cardSolid);
-      color:var(--text);
-      padding:12px 12px;
-      border-radius:14px;
-      font-size:16px;
-      font-weight:900;
-      outline:none;
-    }
-    .msg{
-      margin-top:10px;
-      font-weight:900;
-      color:var(--muted);
-      font-size:13px;
-    }
-    .msg.bad{color:var(--danger)}
-    .msg.ok{color:var(--ok)}
-    .small{
-      margin-top:10px;
-      color:var(--muted);
-      font-weight:800;
-      font-size:12px;
-      line-height:1.35;
-    }
-
-    .hintKeys{
-      margin-top:12px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-    .key{
-      border:1px solid var(--line);
-      background: var(--cardSolid);
-      border-radius: 12px;
-      padding:8px 10px;
-      font-weight:950;
-      font-size:12px;
-      color: var(--muted);
-    }
-    .key b{color:var(--text)}
-
-    @media (max-width: 720px){
+    @media (max-width:720px){
       .brand .sub{display:none}
-      .btn, .pill {padding:9px 10px}
+      .btn,.pill{padding:9px 10px}
       .content{padding:14px}
-      .grid{grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))}
+      .grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
     }
   </style>
 </head>
 
 <body data-theme="day">
+
+  <div id="debugBar" class="debugBar"></div>
 
   <!-- LOCK SCREEN -->
   <div id="lock" class="lock" aria-hidden="false">
@@ -434,11 +137,11 @@
       </div>
       <div class="lockBody">
         <div class="small">🔒 PIN + bloqueo por intentos · <b>sin auto-bloqueo</b></div>
-        <div class="small">🔁 Si alguna vez no entra: mantén pulsado <b>Entrar</b> 3 segundos para resetear a <b>8410</b>.</div>
+        <div class="small">🔁 Si algún día no entra: mantén pulsado <b>Entrar</b> 3s → reset PIN a <b>8410</b>.</div>
 
         <div class="pinRow">
           <input id="pinInput" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN"/>
-          <button id="pinBtn" class="btn primary">Entrar</button>
+          <button id="pinBtn" class="btn primary" type="button">Entrar</button>
         </div>
 
         <div id="pinMsg" class="msg"></div>
@@ -472,18 +175,17 @@
         <div class="actions">
           <div class="pill" id="themeBtn" title="Cambiar modo día/noche">🌓 <span id="themeTxt">Día</span></div>
           <div class="pill" id="openModeBtn" title="Abrir enlaces en nueva pestaña o en la misma">🔗 <span id="openModeTxt">Nueva pestaña</span></div>
-          <button class="btn" id="openMain">🚀 Abrir Facturas</button>
-          <button class="btn" id="settingsBtn">⚙️ Ajustes</button>
-          <button class="btn" id="copyLinks">📋 Copiar enlaces</button>
-          <button class="btn" id="lockBtn">🔒 Bloquear</button>
+          <button class="btn" id="openMain" type="button">🚀 Abrir Facturas</button>
+          <button class="btn" id="settingsBtn" type="button">⚙️ Ajustes</button>
+          <button class="btn" id="copyLinks" type="button">📋 Copiar enlaces</button>
+          <button class="btn" id="lockBtn" type="button">🔒 Bloquear</button>
         </div>
       </div>
 
       <div class="content">
-
         <div class="searchRow">
           <input id="searchInput" type="text" placeholder="Buscar… (Facturas, Listas, B2B, GS)" />
-          <button class="btn" id="clearSearch">✖</button>
+          <button class="btn" id="clearSearch" type="button">✖</button>
         </div>
 
         <div class="sectionTitle">
@@ -508,12 +210,24 @@
 
 <script>
 /* ===============================
-   ARSLAN HUB PRO (NO AUTO-LOCK)
-   + Favoritos + Buscador + Teclas + Ajustes + PWA
-   + PIN ROBUSTO (auto-repair) + Reset manual (hold 3s)
+   ARSLAN HUB PRO (PIN FAIL-SAFE)
 =============================== */
 
-/* ===== Sistemas (tuyos) ===== */
+/* ===== Debug visible ===== */
+const debugBar = document.getElementById("debugBar");
+function showDebug(msg){
+  if(!debugBar) return;
+  debugBar.style.display = "block";
+  debugBar.textContent = "⚠️ ERROR / DEBUG:\n" + msg;
+}
+window.addEventListener("error", (e)=>{
+  showDebug((e && e.message ? e.message : "Error desconocido") + (e && e.filename ? ("\n" + e.filename + ":" + e.lineno) : ""));
+});
+window.addEventListener("unhandledrejection", (e)=>{
+  showDebug("Promise error: " + (e && e.reason ? String(e.reason) : "desconocido"));
+});
+
+/* ===== Sistemas ===== */
 const SYSTEMS = [
   { id:"facturas", icon:"🧾", name:"Facturas (ARSLANPRO)", desc:"Crear facturas y gestionar facturación.", url:"http://arslanpro.com/" },
   { id:"listas",   icon:"📝", name:"Listas / Pedidos",       desc:"Listas, pedidos, TXT, totales.",        url:"https://shaniwaris80-crypto.github.io/pedidos/" },
@@ -521,480 +235,381 @@ const SYSTEMS = [
   { id:"gs",       icon:"🏪", name:"Ventas / Gestión (GS)",  desc:"Ventas, gestión y reportes.",           url:"https://shaniwaris80-crypto.github.io/GS/" }
 ];
 
-/* ===== Storage keys ===== */
-const K_THEME = "ARSLAN_HUB_THEME";             // day|night
-const K_OPENMODE = "ARSLAN_HUB_OPENMODE";       // new|same
-const K_SESSION = "ARSLAN_HUB_SESSION";         // 1|0
-const K_PINHASH = "ARSLAN_HUB_PINHASH";         // stored hash (8 hex)
-const K_FAILS = "ARSLAN_HUB_FAILS";             // count
-const K_LOCKUNTIL = "ARSLAN_HUB_LOCKUNTIL";     // timestamp
-const K_FAVS = "ARSLAN_HUB_FAVORITES";          // json array of ids
-const K_CONFIRM_LOCK = "ARSLAN_HUB_CONFIRMLOCK";// 1|0
-const K_CLEAR_ON_CLOSE = "ARSLAN_HUB_CLEARONCLOSE"; // 1|0
-const K_LAST_OPEN = "ARSLAN_HUB_LASTOPEN";      // last opened system id
+/* ===== Keys ===== */
+const K_THEME="ARSLAN_HUB_THEME";
+const K_OPENMODE="ARSLAN_HUB_OPENMODE";
+const K_SESSION="ARSLAN_HUB_SESSION";
+const K_PINHASH="ARSLAN_HUB_PINHASH";
+const K_FAILS="ARSLAN_HUB_FAILS";
+const K_LOCKUNTIL="ARSLAN_HUB_LOCKUNTIL";
+const K_FAVS="ARSLAN_HUB_FAVORITES";
+const K_CONFIRM_LOCK="ARSLAN_HUB_CONFIRMLOCK";
+const K_CLEAR_ON_CLOSE="ARSLAN_HUB_CLEARONCLOSE";
+const K_LAST_OPEN="ARSLAN_HUB_LASTOPEN";
 
-/* ===== Security params ===== */
-const MAX_FAILS = 3;
-const LOCK_SECONDS = 60;
+const MAX_FAILS=3;
+const LOCK_SECONDS=60;
 
-/* ===== Helpers ===== */
-const $ = (s)=>document.querySelector(s);
-function now(){ return Date.now(); }
-function safeParse(json, fallback){
-  try{ return JSON.parse(json); } catch { return fallback; }
-}
+const $=(s)=>document.querySelector(s);
+function now(){return Date.now();}
+function safeParse(json, fallback){ try{return JSON.parse(json);}catch{return fallback;} }
 
 /* Hash simple */
 function simpleHash(str){
-  let h = 2166136261;
-  for (let i=0;i<str.length;i++){
-    h ^= str.charCodeAt(i);
-    h = Math.imul(h, 16777619);
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){
+    h^=str.charCodeAt(i);
+    h=Math.imul(h,16777619);
   }
   return ("00000000"+(h>>>0).toString(16)).slice(-8);
 }
 
-/* ===== Setup PIN (ROBUSTO) =====
-   - Si no existe -> crea 8410
-   - Si existe pero inválido -> resetea 8410 + limpia bloqueos
-*/
+/* PIN robusto */
 function ensurePin(){
   const current = localStorage.getItem(K_PINHASH);
-  const valid = (typeof current === "string" && /^[0-9a-f]{8}$/.test(current));
-
+  const valid = (typeof current==="string" && /^[0-9a-f]{8}$/.test(current));
   if(!valid){
-    const initialPin = "8410";
-    localStorage.setItem(K_PINHASH, simpleHash(initialPin));
-    localStorage.setItem(K_FAILS, "0");
-    localStorage.setItem(K_LOCKUNTIL, "0");
-    localStorage.setItem(K_SESSION, "0");
+    localStorage.setItem(K_PINHASH, simpleHash("8410"));
+    localStorage.setItem(K_FAILS,"0");
+    localStorage.setItem(K_LOCKUNTIL,"0");
+    localStorage.setItem(K_SESSION,"0");
   }
 }
 ensurePin();
 
-/* ===== Theme ===== */
-function getTheme(){ return localStorage.getItem(K_THEME) || "day"; }
+/* Theme */
+function getTheme(){return localStorage.getItem(K_THEME)||"day";}
 function setTheme(t){
-  localStorage.setItem(K_THEME, t);
-  document.body.setAttribute("data-theme", t);
-  $("#themeTxt").textContent = (t==="night") ? "Noche" : "Día";
+  localStorage.setItem(K_THEME,t);
+  document.body.setAttribute("data-theme",t);
+  const el=$("#themeTxt");
+  if(el) el.textContent = (t==="night") ? "Noche" : "Día";
 }
 setTheme(getTheme());
-$("#themeBtn").addEventListener("click", ()=> setTheme(getTheme()==="night" ? "day" : "night"));
 
-/* ===== Open mode ===== */
-function getOpenMode(){ return localStorage.getItem(K_OPENMODE) || "new"; }
+/* Open mode */
+function getOpenMode(){return localStorage.getItem(K_OPENMODE)||"new";}
 function setOpenMode(m){
-  localStorage.setItem(K_OPENMODE, m);
-  $("#openModeTxt").textContent = (m==="new") ? "Nueva pestaña" : "Misma pestaña";
+  localStorage.setItem(K_OPENMODE,m);
+  const el=$("#openModeTxt");
+  if(el) el.textContent=(m==="new")?"Nueva pestaña":"Misma pestaña";
   renderAll();
 }
 setOpenMode(getOpenMode());
-$("#openModeBtn").addEventListener("click", ()=> setOpenMode(getOpenMode()==="new" ? "same" : "new"));
 
-/* ===== Session ===== */
-function isSessionOn(){ return localStorage.getItem(K_SESSION)==="1"; }
-function setSession(on){ localStorage.setItem(K_SESSION, on ? "1" : "0"); }
+/* Session */
+function isSessionOn(){return localStorage.getItem(K_SESSION)==="1";}
+function setSession(on){localStorage.setItem(K_SESSION,on?"1":"0");}
 
-/* ===== Options ===== */
-function getConfirmLock(){ return localStorage.getItem(K_CONFIRM_LOCK) !== "0"; } // default true
-function setConfirmLock(v){ localStorage.setItem(K_CONFIRM_LOCK, v ? "1":"0"); }
-function getClearOnClose(){ return localStorage.getItem(K_CLEAR_ON_CLOSE) === "1"; }
-function setClearOnClose(v){ localStorage.setItem(K_CLEAR_ON_CLOSE, v ? "1":"0"); }
+/* Options */
+function getConfirmLock(){return localStorage.getItem(K_CONFIRM_LOCK)!=="0";}
+function setConfirmLock(v){localStorage.setItem(K_CONFIRM_LOCK,v?"1":"0");}
+function getClearOnClose(){return localStorage.getItem(K_CLEAR_ON_CLOSE)==="1";}
+function setClearOnClose(v){localStorage.setItem(K_CLEAR_ON_CLOSE,v?"1":"0");}
 
-/* ===== Favorites ===== */
+/* Fav */
 function getFavs(){
-  const arr = safeParse(localStorage.getItem(K_FAVS) || "[]", []);
-  const valid = arr.filter(id => SYSTEMS.some(s=>s.id===id));
+  const arr=safeParse(localStorage.getItem(K_FAVS)||"[]",[]);
+  const valid=arr.filter(id=>SYSTEMS.some(s=>s.id===id));
   return Array.from(new Set(valid));
 }
 function setFavs(arr){
-  const unique = Array.from(new Set(arr));
-  localStorage.setItem(K_FAVS, JSON.stringify(unique));
+  const unique=Array.from(new Set(arr));
+  localStorage.setItem(K_FAVS,JSON.stringify(unique));
   renderAll();
 }
-function isFav(id){ return getFavs().includes(id); }
+function isFav(id){return getFavs().includes(id);}
 function toggleFav(id){
-  const f = getFavs();
+  const f=getFavs();
   if(f.includes(id)) setFavs(f.filter(x=>x!==id));
-  else setFavs([id, ...f]);
+  else setFavs([id,...f]);
 }
 
-/* ===== Elements ===== */
-const lockEl = $("#lock");
-const appEl = $("#app");
-const pinInput = $("#pinInput");
-const pinBtn = $("#pinBtn");
-const pinMsg = $("#pinMsg");
-const lockInfo = $("#lockInfo");
-const statusEl = $("#status");
+/* Elements */
+const lockEl=$("#lock");
+const appEl=$("#app");
+const pinInput=$("#pinInput");
+const pinBtn=$("#pinBtn");
+const pinMsg=$("#pinMsg");
+const lockInfo=$("#lockInfo");
+const statusEl=$("#status");
 
-const openMainBtn = $("#openMain");
-const settingsBtn = $("#settingsBtn");
-const copyLinksBtn = $("#copyLinks");
-const lockBtn = $("#lockBtn");
-const searchInput = $("#searchInput");
-const clearSearchBtn = $("#clearSearch");
+const openMainBtn=$("#openMain");
+const settingsBtn=$("#settingsBtn");
+const copyLinksBtn=$("#copyLinks");
+const lockBtn=$("#lockBtn");
+const searchInput=$("#searchInput");
+const clearSearchBtn=$("#clearSearch");
+const themeBtn=$("#themeBtn");
+const openModeBtn=$("#openModeBtn");
 
-const grid = $("#grid");
-const favGrid = $("#favGrid");
-const favBadge = $("#favBadge");
-const allBadge = $("#allBadge");
+const grid=$("#grid");
+const favGrid=$("#favGrid");
+const favBadge=$("#favBadge");
+const allBadge=$("#allBadge");
 
-let SEARCH = "";
+let SEARCH="";
 
-/* ===== Lockout control ===== */
-function getFails(){ return parseInt(localStorage.getItem(K_FAILS)||"0",10); }
-function setFails(n){ localStorage.setItem(K_FAILS, String(n)); }
-function resetFails(){ setFails(0); }
-
-function getLockUntil(){ return parseInt(localStorage.getItem(K_LOCKUNTIL)||"0",10); }
-function setLockUntil(ts){ localStorage.setItem(K_LOCKUNTIL, String(ts)); }
-
-function isLockedOut(){
-  const until = getLockUntil();
-  return until && now() < until;
-}
+/* lockouts */
+function getFails(){return parseInt(localStorage.getItem(K_FAILS)||"0",10);}
+function setFails(n){localStorage.setItem(K_FAILS,String(n));}
+function getLockUntil(){return parseInt(localStorage.getItem(K_LOCKUNTIL)||"0",10);}
+function setLockUntil(ts){localStorage.setItem(K_LOCKUNTIL,String(ts));}
+function isLockedOut(){const until=getLockUntil();return until && now()<until;}
 
 function updateLockInfo(){
-  const fails = getFails();
-  const until = getLockUntil();
+  if(!lockInfo) return;
+  const fails=getFails();
+  const until=getLockUntil();
   if(isLockedOut()){
-    const sec = Math.ceil((until - now())/1000);
-    lockInfo.textContent = `⛔ Bloqueado ${sec}s por seguridad.`;
+    const sec=Math.ceil((until-now())/1000);
+    lockInfo.textContent=`⛔ Bloqueado ${sec}s por seguridad.`;
   }else{
-    const modeTxt = getTheme()==="night" ? "Noche" : "Día";
-    lockInfo.textContent = fails>0
-      ? `Intentos fallidos: ${fails}/${MAX_FAILS}`
-      : `Modo: ${modeTxt} · Sin auto-bloqueo · Favoritos: ${getFavs().length}`;
+    const modeTxt=(getTheme()==="night")?"Noche":"Día";
+    lockInfo.textContent = fails>0 ? `Intentos fallidos: ${fails}/${MAX_FAILS}` : `Modo: ${modeTxt} · Sin auto-bloqueo · Favoritos: ${getFavs().length}`;
   }
 }
 
-/* ===== Show/Hide ===== */
+/* show/hide */
 function showApp(){
-  lockEl.style.display="none";
-  appEl.style.display="block";
+  if(lockEl) lockEl.style.display="none";
+  if(appEl) appEl.style.display="block";
   setSession(true);
-  resetFails();
+  setFails(0);
   renderAll();
-  statusEl.textContent = "Acceso OK · " + new Date().toLocaleString();
+  if(statusEl) statusEl.textContent="Acceso OK · " + new Date().toLocaleString();
 }
 function showLock(){
   setSession(false);
-  appEl.style.display="none";
-  lockEl.style.display="grid";
-  pinInput.value="";
-  pinMsg.textContent="";
-  pinMsg.className="msg";
+  if(appEl) appEl.style.display="none";
+  if(lockEl) lockEl.style.display="grid";
+  if(pinInput) pinInput.value="";
+  if(pinMsg){ pinMsg.textContent=""; pinMsg.className="msg"; }
   updateLockInfo();
 }
 
-/* ===== PIN attempt ===== */
+/* PIN attempt */
 function tryPin(){
   ensurePin();
   updateLockInfo();
 
+  if(!pinInput || !pinMsg){
+    showDebug("No encuentro #pinInput o #pinMsg. Revisa IDs del HTML.");
+    return;
+  }
   if(isLockedOut()){
-    pinMsg.textContent = "Demasiados intentos. Espera un momento…";
-    pinMsg.className = "msg bad";
+    pinMsg.textContent="Demasiados intentos. Espera un momento…";
+    pinMsg.className="msg bad";
     return;
   }
 
-  const pin = (pinInput.value||"").trim();
-  const ok = simpleHash(pin) === localStorage.getItem(K_PINHASH);
+  const pin=(pinInput.value||"").trim();
+  const ok=simpleHash(pin)===localStorage.getItem(K_PINHASH);
 
   if(!ok){
-    const fails = getFails() + 1;
+    const fails=getFails()+1;
     setFails(fails);
-
-    if(fails >= MAX_FAILS){
-      setLockUntil(now() + LOCK_SECONDS*1000);
-      pinMsg.textContent = `PIN incorrecto. Bloqueado ${LOCK_SECONDS}s.`;
-      pinMsg.className = "msg bad";
+    if(fails>=MAX_FAILS){
+      setLockUntil(now()+LOCK_SECONDS*1000);
+      pinMsg.textContent=`PIN incorrecto. Bloqueado ${LOCK_SECONDS}s.`;
+      pinMsg.className="msg bad";
     }else{
-      pinMsg.textContent = "PIN incorrecto.";
-      pinMsg.className = "msg bad";
+      pinMsg.textContent="PIN incorrecto.";
+      pinMsg.className="msg bad";
     }
     updateLockInfo();
     return;
   }
 
-  pinMsg.textContent = "Acceso correcto ✅";
-  pinMsg.className = "msg ok";
+  pinMsg.textContent="Acceso correcto ✅";
+  pinMsg.className="msg ok";
   showApp();
 }
 
-pinBtn.addEventListener("click", tryPin);
-pinInput.addEventListener("keydown", (e)=>{ if(e.key==="Enter") tryPin(); });
-
-/* ===== Reset manual: mantener pulsado "Entrar" 3 segundos ===== */
-let __holdTimer = null;
-
+/* Reset manual hold 3s */
+let __holdTimer=null;
 function resetPinToDefault(){
-  const ok = confirm("¿Resetear PIN a 8410? (Esto borra bloqueos y sesión)");
+  const ok=confirm("¿Resetear PIN a 8410? (Borra bloqueos y sesión)");
   if(!ok) return;
-
   localStorage.removeItem(K_PINHASH);
-  localStorage.setItem(K_FAILS, "0");
-  localStorage.setItem(K_LOCKUNTIL, "0");
-  localStorage.setItem(K_SESSION, "0");
-
+  localStorage.setItem(K_FAILS,"0");
+  localStorage.setItem(K_LOCKUNTIL,"0");
+  localStorage.setItem(K_SESSION,"0");
   ensurePin();
-  pinMsg.textContent = "PIN reseteado ✅ (8410)";
-  pinMsg.className = "msg ok";
+  if(pinMsg){ pinMsg.textContent="PIN reseteado ✅ (8410)"; pinMsg.className="msg ok"; }
   updateLockInfo();
 }
 
-pinBtn.addEventListener("mousedown", ()=>{
-  __holdTimer = setTimeout(resetPinToDefault, 3000);
-});
-pinBtn.addEventListener("touchstart", ()=>{
-  __holdTimer = setTimeout(resetPinToDefault, 3000);
-}, {passive:true});
-
-["mouseup","mouseleave","touchend","touchcancel"].forEach(ev=>{
-  pinBtn.addEventListener(ev, ()=>{
-    if(__holdTimer){ clearTimeout(__holdTimer); __holdTimer = null; }
-  });
-});
-
-/* ===== Open system ===== */
+/* OPEN */
 function openSystemByIndex(i){
-  const mode = getOpenMode();
-  const sys = SYSTEMS[i];
+  const mode=getOpenMode();
+  const sys=SYSTEMS[i];
   if(!sys) return;
   localStorage.setItem(K_LAST_OPEN, sys.id);
-
-  if(mode === "new") window.open(sys.url, "_blank", "noopener");
-  else window.location.href = sys.url;
+  if(mode==="new") window.open(sys.url,"_blank","noopener");
+  else window.location.href=sys.url;
 }
-
 function openSystemById(id){
-  const idx = SYSTEMS.findIndex(s=>s.id===id);
-  if(idx >= 0) openSystemByIndex(idx);
+  const idx=SYSTEMS.findIndex(s=>s.id===id);
+  if(idx>=0) openSystemByIndex(idx);
 }
 
-/* Big quick button */
-openMainBtn.addEventListener("click", ()=> openSystemByIndex(0));
+/* Search */
+function setSearch(v){SEARCH=(v||"").trim().toLowerCase(); renderAll();}
 
-/* ===== Search ===== */
-function setSearch(v){
-  SEARCH = (v || "").trim().toLowerCase();
-  renderAll();
-}
-searchInput.addEventListener("input", e=> setSearch(e.target.value));
-clearSearchBtn.addEventListener("click", ()=>{
-  searchInput.value = "";
-  setSearch("");
-  searchInput.focus();
-});
-
-/* ===== Render cards ===== */
+/* Cards */
 function cardHTML(s){
-  const fav = isFav(s.id);
-  const last = localStorage.getItem(K_LAST_OPEN) === s.id;
-  const star = fav ? "⭐ Favorito" : "☆ Favorito";
-
+  const fav=isFav(s.id);
+  const last=localStorage.getItem(K_LAST_OPEN)===s.id;
+  const star=fav ? "⭐ Favorito" : "☆ Favorito";
   return `
     <a class="card" href="${s.url}" data-open-id="${s.id}">
       <div class="row">
-        <div class="title">
-          <span class="icon">${s.icon}</span>
-          <span>${s.name}</span>
-        </div>
-        <div style="font-weight:950;color:var(--muted)">${last ? "🟢" : "→"}</div>
+        <div class="title"><span class="icon">${s.icon}</span><span>${s.name}</span></div>
+        <div style="font-weight:950;color:var(--muted)">${last?"🟢":"→"}</div>
       </div>
       <div class="desc">${s.desc}</div>
       <div class="url">${s.url}</div>
-
       <div class="chipRow">
-        <button class="starBtn ${fav ? "active":""}" data-fav-id="${s.id}" type="button">${star}</button>
+        <button class="starBtn ${fav?"active":""}" data-fav-id="${s.id}" type="button">${star}</button>
         <span class="badge">${s.id.toUpperCase()}</span>
       </div>
     </a>
   `;
 }
-
 function applyCardHandlers(container){
+  if(!container) return;
   container.querySelectorAll("[data-open-id]").forEach(a=>{
-    a.addEventListener("click", (e)=>{
+    a.addEventListener("click",(e)=>{
       if(e.target && e.target.closest("[data-fav-id]")) return;
       e.preventDefault();
       openSystemById(a.getAttribute("data-open-id"));
     });
   });
-
   container.querySelectorAll("[data-fav-id]").forEach(btn=>{
-    btn.addEventListener("click", (e)=>{
-      e.preventDefault();
-      e.stopPropagation();
-      const id = btn.getAttribute("data-fav-id");
-      toggleFav(id);
+    btn.addEventListener("click",(e)=>{
+      e.preventDefault(); e.stopPropagation();
+      toggleFav(btn.getAttribute("data-fav-id"));
     });
   });
 }
-
 function filterSystems(arr){
   if(!SEARCH) return arr;
   return arr.filter(s=>{
-    const hay = (s.name + " " + s.desc + " " + s.url + " " + s.id).toLowerCase();
+    const hay=(s.name+" "+s.desc+" "+s.url+" "+s.id).toLowerCase();
     return hay.includes(SEARCH);
   });
 }
-
 function renderAll(){
-  const favIds = getFavs();
-  const favSystems = SYSTEMS.filter(s => favIds.includes(s.id));
-  const filteredAll = filterSystems(SYSTEMS);
-  const filteredFav = filterSystems(favSystems);
+  const favIds=getFavs();
+  const favSystems=SYSTEMS.filter(s=>favIds.includes(s.id));
+  const filteredAll=filterSystems(SYSTEMS);
+  const filteredFav=filterSystems(favSystems);
 
-  favBadge.textContent = `⭐ ${favSystems.length}`;
-  allBadge.textContent = `📦 ${SYSTEMS.length}`;
+  if(favBadge) favBadge.textContent=`⭐ ${favSystems.length}`;
+  if(allBadge) allBadge.textContent=`📦 ${SYSTEMS.length}`;
 
-  favGrid.innerHTML = filteredFav.length
-    ? filteredFav.map(cardHTML).join("")
-    : `<div class="card" style="grid-column:1/-1;cursor:default">
-         <div class="row">
-           <div class="title"><span class="icon">⭐</span><span>Sin favoritos</span></div>
-           <div style="font-weight:950;color:var(--muted)">Tip</div>
-         </div>
-         <div class="desc">Pulsa “☆ Favorito” en cualquier tarjeta para que aparezca aquí arriba.</div>
-         <div class="url">También puedes buscar usando el buscador.</div>
-       </div>`;
+  if(favGrid){
+    favGrid.innerHTML = filteredFav.length
+      ? filteredFav.map(cardHTML).join("")
+      : `<div class="card" style="grid-column:1/-1;cursor:default">
+           <div class="row">
+             <div class="title"><span class="icon">⭐</span><span>Sin favoritos</span></div>
+             <div style="font-weight:950;color:var(--muted)">Tip</div>
+           </div>
+           <div class="desc">Pulsa “☆ Favorito” en cualquier tarjeta para que aparezca aquí.</div>
+           <div class="url">Usa el buscador para filtrar.</div>
+         </div>`;
+  }
 
-  grid.innerHTML = filteredAll.map(cardHTML).join("");
+  if(grid) grid.innerHTML = filteredAll.map(cardHTML).join("");
 
   applyCardHandlers(favGrid);
   applyCardHandlers(grid);
 
-  const info = [];
-  if(SEARCH) info.push(`Filtro: "${SEARCH}"`);
-  info.push(`Favoritos: ${favSystems.length}`);
-  info.push(getOpenMode()==="new" ? "Abrir: nueva pestaña" : "Abrir: misma pestaña");
-  statusEl.textContent = info.join(" · ");
-}
-
-/* ===== Copy links ===== */
-copyLinksBtn.addEventListener("click", async ()=>{
-  const text = SYSTEMS.map(s => `${s.name}: ${s.url}`).join("\n");
-  try{
-    await navigator.clipboard.writeText(text);
-    copyLinksBtn.textContent = "✅ Copiado";
-    setTimeout(()=> copyLinksBtn.textContent = "📋 Copiar enlaces", 1200);
-  }catch{
-    alert(text);
-  }
-});
-
-/* ===== Manual lock (with optional confirmation) ===== */
-function doLock(){
-  if(getConfirmLock()){
-    const ok = confirm("¿Bloquear el HUB ahora?");
-    if(!ok) return;
-  }
-  showLock();
-}
-lockBtn.addEventListener("click", doLock);
-
-/* ===== Keyboard shortcuts ===== */
-window.addEventListener("keydown", (e)=>{
-  if(lockEl.style.display !== "none") return;
-  if(e.target && ["INPUT","TEXTAREA"].includes(e.target.tagName)) return;
-
-  const k = e.key.toLowerCase();
-  if(k === "f") return openSystemById("facturas");
-  if(k === "l") return openSystemById("listas");
-  if(k === "b") return openSystemById("b2b");
-  if(k === "g") return openSystemById("gs");
-  if(e.key === "Escape") return doLock();
-});
-
-/* ===== Settings ===== */
-function changePinFlow(){
-  ensurePin();
-  const current = prompt("PIN actual:");
-  if(current === null) return;
-
-  const ok = simpleHash(current.trim()) === localStorage.getItem(K_PINHASH);
-  if(!ok){
-    alert("PIN actual incorrecto ❌");
-    return;
-  }
-
-  const next = prompt("Nuevo PIN (4-10 dígitos):");
-  if(next === null) return;
-
-  const clean = next.trim();
-  if(!/^[0-9]{4,10}$/.test(clean)){
-    alert("PIN inválido. Usa 4 a 10 números.");
-    return;
-  }
-
-  localStorage.setItem(K_PINHASH, simpleHash(clean));
-  alert("PIN cambiado ✅");
-}
-
-function resetAttempts(){
-  localStorage.setItem(K_FAILS, "0");
-  localStorage.setItem(K_LOCKUNTIL, "0");
-  alert("Intentos reseteados ✅");
-  updateLockInfo();
-}
-
-function settingsMenu(){
-  const a = getConfirmLock() ? "ON" : "OFF";
-  const b = getClearOnClose() ? "ON" : "OFF";
-  const c = getOpenMode()==="new" ? "Nueva pestaña" : "Misma pestaña";
-
-  const choice = prompt(
-`AJUSTES:
-1 = Cambiar PIN
-2 = Reset intentos / bloqueo
-3 = Cambiar abrir enlaces (actual: ${c})
-4 = Confirmar al bloquear (actual: ${a})
-5 = Cerrar sesión al cerrar pestaña (actual: ${b})
-
-Escribe 1-5`
-  );
-  if(choice === "1") return changePinFlow();
-  if(choice === "2") return resetAttempts();
-  if(choice === "3") return setOpenMode(getOpenMode()==="new" ? "same" : "new");
-  if(choice === "4") {
-    const next = !getConfirmLock();
-    setConfirmLock(next);
-    alert(`Confirmación al bloquear: ${next ? "ON" : "OFF"}`);
-    return;
-  }
-  if(choice === "5") {
-    const next = !getClearOnClose();
-    setClearOnClose(next);
-    alert(`Cerrar sesión al cerrar pestaña: ${next ? "ON" : "OFF"}`);
-    return;
+  if(statusEl){
+    const info=[];
+    if(SEARCH) info.push(`Filtro: "${SEARCH}"`);
+    info.push(`Favoritos: ${favSystems.length}`);
+    info.push(getOpenMode()==="new" ? "Abrir: nueva pestaña" : "Abrir: misma pestaña");
+    statusEl.textContent = info.join(" · ");
   }
 }
-settingsBtn.addEventListener("click", settingsMenu);
 
-/* ===== Clear session on tab close (optional) ===== */
-window.addEventListener("beforeunload", ()=>{
-  if(getClearOnClose()){
-    localStorage.setItem(K_SESSION, "0");
-  }
-});
+/* Buttons wiring (DOUBLE SAFE) */
+function wire(){
+  if(!pinBtn){ showDebug("No existe #pinBtn en el HTML"); return; }
+  if(!pinInput){ showDebug("No existe #pinInput en el HTML"); return; }
 
-/* ===== Boot ===== */
-if(isSessionOn()) showApp();
-else showLock();
+  // doble: listener + handler directo
+  pinBtn.addEventListener("click", tryPin);
+  pinBtn.onclick = tryPin;
 
-updateLockInfo();
-setInterval(()=>{ if(lockEl.style.display!=="none") updateLockInfo(); }, 250);
+  pinInput.addEventListener("keydown",(e)=>{ if(e.key==="Enter") tryPin(); });
+  pinInput.onkeydown = (e)=>{ if(e.key==="Enter") tryPin(); };
 
-/* ===============================
-   PWA: Service Worker register
-=============================== */
-if("serviceWorker" in navigator){
-  window.addEventListener("load", ()=>{
-    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  pinBtn.addEventListener("mousedown", ()=>{ __holdTimer=setTimeout(resetPinToDefault,3000); });
+  pinBtn.addEventListener("touchstart", ()=>{ __holdTimer=setTimeout(resetPinToDefault,3000); }, {passive:true});
+  ["mouseup","mouseleave","touchend","touchcancel"].forEach(ev=>{
+    pinBtn.addEventListener(ev, ()=>{ if(__holdTimer){ clearTimeout(__holdTimer); __holdTimer=null; } });
   });
+
+  if(themeBtn) themeBtn.addEventListener("click", ()=> setTheme(getTheme()==="night" ? "day" : "night"));
+  if(openModeBtn) openModeBtn.addEventListener("click", ()=> setOpenMode(getOpenMode()==="new" ? "same" : "new"));
+  if(openMainBtn) openMainBtn.addEventListener("click", ()=> openSystemByIndex(0));
+  if(clearSearchBtn) clearSearchBtn.addEventListener("click", ()=>{ if(searchInput){ searchInput.value=""; setSearch(""); searchInput.focus(); } });
+  if(searchInput) searchInput.addEventListener("input",(e)=> setSearch(e.target.value));
+
+  if(copyLinksBtn){
+    copyLinksBtn.addEventListener("click", async ()=>{
+      const text = SYSTEMS.map(s=>`${s.name}: ${s.url}`).join("\n");
+      try{
+        await navigator.clipboard.writeText(text);
+        copyLinksBtn.textContent="✅ Copiado";
+        setTimeout(()=>copyLinksBtn.textContent="📋 Copiar enlaces",1200);
+      }catch{ alert(text); }
+    });
+  }
+
+  function doLock(){
+    if(getConfirmLock()){
+      const ok=confirm("¿Bloquear el HUB ahora?");
+      if(!ok) return;
+    }
+    showLock();
+  }
+  if(lockBtn) lockBtn.addEventListener("click", doLock);
+
+  window.addEventListener("keydown",(e)=>{
+    if(lockEl && lockEl.style.display !== "none") return;
+    if(e.target && ["INPUT","TEXTAREA"].includes(e.target.tagName)) return;
+    const k=e.key.toLowerCase();
+    if(k==="f") return openSystemById("facturas");
+    if(k==="l") return openSystemById("listas");
+    if(k==="b") return openSystemById("b2b");
+    if(k==="g") return openSystemById("gs");
+    if(e.key==="Escape") return doLock();
+  });
+
+  if(getClearOnClose()){
+    window.addEventListener("beforeunload", ()=> localStorage.setItem(K_SESSION,"0"));
+  }
+}
+
+/* Boot */
+try{
+  wire();
+  if(isSessionOn()) showApp();
+  else showLock();
+  updateLockInfo();
+  setInterval(()=>{ if(lockEl && lockEl.style.display!=="none") updateLockInfo(); }, 250);
+  renderAll();
+
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", ()=>{ navigator.serviceWorker.register("./sw.js").catch(()=>{}); });
+  }
+}catch(err){
+  showDebug("Fallo al iniciar: " + String(err));
 }
 </script>
 </body>
