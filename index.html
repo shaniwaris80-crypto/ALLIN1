@@ -10,40 +10,37 @@
   <meta name="theme-color" content="#0b0f14">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-  <!-- ICON -->
   <link rel="icon" type="image/png" href="icon-192.png">
 
   <style>
     :root{
-      /* Default = DAY */
       --bg:#f4f7fb;
-      --panel: rgba(255,255,255,.92);
-      --panel2: rgba(0,0,0,.02);
-      --line: rgba(12,18,32,.12);
+      --panel:#ffffff;
+      --soft: rgba(2,6,23,.04);
+      --line: rgba(2,6,23,.10);
       --text:#0b1220;
-      --muted: rgba(11,18,32,.58);
-      --shadow: 0 22px 70px rgba(2,6,23,.12);
-      --shadow2: 0 10px 24px rgba(2,6,23,.10);
-      --glow: 0 0 0 6px rgba(14,165,233,.14);
-
-      --a1:#0ea5e9;
-      --a2:#16a34a;
-      --r: 26px;
+      --muted: rgba(11,18,32,.60);
+      --shadow: 0 22px 70px rgba(2,6,23,.10);
+      --shadow2: 0 10px 28px rgba(2,6,23,.08);
+      --r: 24px;
       --safeB: env(safe-area-inset-bottom, 0px);
       --safeT: env(safe-area-inset-top, 0px);
-    }
 
+      --accent:#16a34a;
+      --accent2:#0ea5e9;
+      --danger:#ef4444;
+      --focus: 0 0 0 5px rgba(14,165,233,.16);
+    }
     [data-theme="night"]{
       --bg:#070b11;
       --panel: rgba(255,255,255,.06);
-      --panel2: rgba(255,255,255,.04);
+      --soft: rgba(255,255,255,.06);
       --line: rgba(255,255,255,.10);
       --text:#eef6ff;
       --muted: rgba(238,246,255,.62);
       --shadow: 0 22px 70px rgba(0,0,0,.55);
-      --shadow2: 0 10px 24px rgba(0,0,0,.30);
-      --glow: 0 0 0 6px rgba(14,165,233,.16);
+      --shadow2: 0 10px 28px rgba(0,0,0,.32);
+      --focus: 0 0 0 5px rgba(56,189,248,.18);
     }
 
     *{box-sizing:border-box}
@@ -53,8 +50,9 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color: var(--text);
       background:
-        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.18), transparent 62%),
-        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.16), transparent 62%),
+        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.14), transparent 60%),
+        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.12), transparent 60%),
+        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.10), transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg));
     }
 
@@ -64,7 +62,6 @@
       place-items:center;
       padding: 18px 18px calc(18px + var(--safeB));
     }
-
     .app{
       width:min(980px, 100%);
       border:1px solid var(--line);
@@ -75,7 +72,6 @@
       backdrop-filter: blur(14px);
       position:relative;
     }
-
     .top{
       padding: calc(16px + var(--safeT)) 16px 16px;
       border-bottom: 1px solid var(--line);
@@ -83,37 +79,57 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
     }
 
-    .brand{display:flex; align-items:center; gap:12px; min-width:220px;}
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      min-width:220px;
+    }
     .logoBox{
-      width:46px; height:46px;
+      width:46px;height:46px;
       border-radius: 18px;
       border:1px solid var(--line);
-      background: var(--panel2);
-      overflow:hidden;
-      display:grid; place-items:center;
+      background: var(--soft);
       box-shadow: var(--shadow2);
+      overflow:hidden;
+      display:grid;
+      place-items:center;
       flex:0 0 auto;
     }
     .logoBox img{width:100%;height:100%;object-fit:cover;display:block;}
-    .logoFallback{display:none; width:100%; height:100%; place-items:center; font-size:22px; font-weight:1000;}
+    .logoFallback{
+      width:100%;height:100%;
+      display:none;
+      place-items:center;
+      font-size:22px;
+      font-weight:1000;
+    }
 
-    .title{display:flex; flex-direction:column; gap:2px; min-width:0;}
-    .title b{font-size:15px; letter-spacing:.2px; font-weight:1000;}
+    .title{min-width:0}
+    .title b{
+      display:block;
+      font-size:15px;
+      font-weight:1000;
+      letter-spacing:.2px;
+      line-height:1.1;
+    }
     .title span{
+      display:block;
+      margin-top:4px;
       font-size:12px;
-      color: var(--muted);
       font-weight:850;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      color: var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
       max-width:520px;
     }
 
     .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
     .btn{
       border:1px solid var(--line);
-      background: var(--panel2);
+      background: var(--soft);
       color: var(--text);
       padding: 10px 12px;
       border-radius: 16px;
@@ -121,32 +137,69 @@
       font-size: 13px;
       cursor:pointer;
       user-select:none;
-      transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
       box-shadow: var(--shadow2);
+      transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
     }
     .btn:hover{opacity:.96; transform: translateY(-1px)}
     .btn:active{transform: translateY(0px)}
-    .btn:focus{outline:none; box-shadow: var(--shadow2), var(--glow);}
-
+    .btn:focus{outline:none; box-shadow: var(--shadow2), var(--focus);}
     .btn.primary{
       border-color: transparent;
-      background: linear-gradient(135deg, rgba(14,165,233,.96), rgba(22,163,74,.92));
-      color: #041018;
-      box-shadow: 0 16px 50px rgba(14,165,233,.18), var(--shadow2);
+      background: linear-gradient(135deg, rgba(14,165,233,.95), rgba(22,163,74,.92));
+      color:#041018;
     }
 
     .content{padding: 18px;}
+    .hero{
+      border:1px solid var(--line);
+      background: var(--soft);
+      border-radius: 24px;
+      box-shadow: var(--shadow2);
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 14px;
+    }
+
+    .heroLeft{min-width:0}
+    .heroLeft .big{
+      font-size:18px;
+      font-weight: 1000;
+      letter-spacing:.2px;
+    }
+    .heroLeft .sub{
+      margin-top:6px;
+      font-size:12px;
+      font-weight: 900;
+      color: var(--muted);
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-weight: 950;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    [data-theme="night"] .pill{ background: rgba(255,255,255,.06); }
+
     .grid{
       display:grid;
       gap:14px;
-      padding: 18px 6px 10px;
       grid-template-columns: 1fr 1fr;
     }
-
-    .big{
+    .card{
       border:1px solid var(--line);
-      background: var(--panel2);
+      background: var(--soft);
       border-radius: 26px;
+      box-shadow: var(--shadow2);
       padding: 18px;
       display:flex;
       align-items:center;
@@ -154,58 +207,46 @@
       gap:16px;
       cursor:pointer;
       transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease, border-color .12s ease;
-      box-shadow: var(--shadow2);
       min-height: 92px;
     }
-    .big:hover{
+    .card:hover{
       opacity:.97;
       transform: translateY(-2px);
       box-shadow: var(--shadow);
-      border-color: rgba(14,165,233,.28);
+      border-color: rgba(14,165,233,.25);
     }
-    .big:active{transform: translateY(0px)}
-    .big:focus{outline:none; box-shadow: var(--shadow2), var(--glow);}
+    .card:active{transform: translateY(0px)}
+    .card:focus{outline:none; box-shadow: var(--shadow2), var(--focus);}
 
-    .bigLeft{display:flex; align-items:center; gap:14px; min-width:0;}
-    .bigIco{
-      width:54px;height:54px;
-      border-radius: 20px;
+    .left{display:flex; align-items:center; gap:14px; min-width:0;}
+    .ico{
+      width:56px;height:56px;border-radius: 20px;
       border:1px solid var(--line);
       display:grid; place-items:center;
       background:
-        radial-gradient(60px 60px at 30% 25%, rgba(14,165,233,.18), transparent 60%),
-        radial-gradient(60px 60px at 85% 25%, rgba(22,163,74,.14), transparent 60%);
-      font-size: 24px;
+        radial-gradient(60px 60px at 30% 25%, rgba(14,165,233,.16), transparent 60%),
+        radial-gradient(60px 60px at 85% 25%, rgba(22,163,74,.12), transparent 60%);
       box-shadow: var(--shadow2);
+      font-size: 24px;
       flex:0 0 auto;
     }
-    .bigTxt{min-width:0}
-    .bigTxt b{display:block; font-size:16px; letter-spacing:.2px; font-weight:1000;}
-    .bigTxt span{
-      display:block;
-      font-size:12px;
-      color: var(--muted);
-      font-weight:850;
-      margin-top:4px;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      max-width:520px;
-    }
-
-    .chip{
+    .txt{min-width:0}
+    .txt b{display:block; font-size:16px; font-weight:1000;}
+    .txt span{display:block; margin-top:4px; font-size:12px; color:var(--muted); font-weight:900; white-space:nowrap; overflow:hidden; text-overflow: ellipsis;}
+    .go{
       border:1px solid var(--line);
+      background: rgba(255,255,255,.08);
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,.04);
       font-weight: 950;
       font-size: 12px;
+      color: var(--muted);
       white-space:nowrap;
-      color: rgba(238,246,255,.88);
     }
-    [data-theme="night"] .chip{ background: rgba(255,255,255,.04); color: rgba(238,246,255,.88); }
-    body:not([data-theme="night"]) .chip{ background: rgba(0,0,0,.02); color: rgba(11,18,32,.72); }
+    [data-theme="night"] .go{ background: rgba(255,255,255,.06); }
 
     .foot{
-      margin-top: 10px;
+      margin-top: 14px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
@@ -214,169 +255,209 @@
       border-top:1px solid var(--line);
       padding-top: 14px;
       color: var(--muted);
-      font-weight: 850;
+      font-weight: 900;
       font-size: 12px;
     }
 
-    /* ===== PAUSA (DVD) ===== */
+    /* ============ PAUSA ============ */
     .pause{
       position:fixed; inset:0;
       display:none;
       z-index: 999;
       background:
-        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.20), transparent 62%),
-        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.18), transparent 62%),
+        radial-gradient(1200px 720px at 18% 12%, rgba(14,165,233,.18), transparent 60%),
+        radial-gradient(1100px 700px at 88% 14%, rgba(22,163,74,.16), transparent 60%),
+        radial-gradient(900px 600px at 65% 88%, rgba(139,92,246,.12), transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg));
     }
     .pause::before{
       content:"";
       position:absolute; inset:0;
-      backdrop-filter: blur(16px);
-      background: rgba(255,255,255,.22);
+      backdrop-filter: blur(18px);
+      background: rgba(0,0,0,.18);
     }
-    [data-theme="night"] .pause::before{ background: rgba(0,0,0,.30); }
+    [data-theme="night"] .pause::before{ background: rgba(0,0,0,.34); }
 
-    .hud{
-      position:absolute;
-      left: 16px;
-      right: 16px;
-      top: calc(16px + var(--safeT));
-      z-index: 3;
-      display:flex;
-      justify-content:center;
+    .pauseName{
+      position:absolute; inset:0;
+      display:grid; place-items:center;
       pointer-events:none;
-    }
-    .hudCard{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.74);
-      border-radius: 999px;
-      padding: 12px 16px;
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(12px);
-      text-align:center;
-      min-width: 320px;
-    }
-    [data-theme="night"] .hudCard{ background: rgba(255,255,255,.08); }
-
-    .hudTop{
-      display:flex;
-      justify-content:center;
-      gap:14px;
-      align-items:baseline;
-      flex-wrap:wrap;
-    }
-    .bigTxtHUD{
-      font-size: 46px;
       font-weight: 1000;
-      letter-spacing:-.02em;
-      line-height: 1;
-    }
-    .tempHUD{
-      font-size: 46px;
-      font-weight: 1000;
-      letter-spacing:-.02em;
-      line-height: 1;
-      background: linear-gradient(135deg, rgba(14,165,233,.96), rgba(22,163,74,.92));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color: transparent;
-    }
-    .hudSub{
-      margin-top: 6px;
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 950;
-      letter-spacing:.22em;
+      letter-spacing:.14em;
       text-transform: uppercase;
+      font-size: clamp(56px, 9vw, 132px);
+      opacity: .10;
+      color: var(--text);
+      text-align:center;
+      padding: 0 16px;
+      transform: translateY(-10px);
     }
 
-    /* Moving kiwi */
-    .dvdKiwi{
+    .pauseCenter{
       position:absolute;
-      width: 140px;
-      height: 140px;
-      border-radius: 26px;
-      border:1px solid var(--line);
-      overflow:hidden;
-      background: rgba(255,255,255,.74);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      inset:0;
       display:grid;
       place-items:center;
       z-index: 2;
-      user-select:none;
-      -webkit-user-drag:none;
+      padding: 18px;
     }
-    [data-theme="night"] .dvdKiwi{ background: rgba(255,255,255,.10); }
-    .dvdKiwi img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      user-select:none;
-      -webkit-user-drag:none;
-      pointer-events:none;
+    .pausePanel{
+      width:min(980px, 100%);
+      border-radius: 30px;
+      border:1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .pauseTop{
+      border-bottom:1px solid var(--line);
+      padding: 18px;
+      background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      text-align:center;
+    }
+    .pauseTime{
+      font-size: clamp(52px, 6.5vw, 92px);
+      font-weight: 1000;
+      letter-spacing:-.02em;
+      line-height:1;
+    }
+    .pauseMeta{
+      margin-top:10px;
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      color: var(--muted);
+      font-weight: 950;
+      font-size: 13px;
+    }
+    .pauseMeta .p{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      padding: 8px 12px;
+      border-radius: 999px;
+    }
+    [data-theme="night"] .pauseMeta .p{ background: rgba(255,255,255,.06); }
+
+    .pauseBody{
+      padding: 18px;
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 16px;
+    }
+    .box{
+      border:1px solid var(--line);
+      background: var(--soft);
+      border-radius: 24px;
+      box-shadow: var(--shadow2);
+      padding: 14px;
     }
 
-    /* Moving text (NOT logo) */
-    .dvdText{
-      position:absolute;
-      padding: 12px 16px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.74);
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(10px);
+    /* Calendar */
+    .calHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 10px;
+    }
+    .calHead b{
+      font-size:14px;
       font-weight: 1000;
       letter-spacing:.18em;
       text-transform: uppercase;
-      z-index: 2;
-      user-select:none;
-      pointer-events:none;
-      white-space:nowrap;
-      opacity:.92;
+      color: var(--muted);
     }
-    [data-theme="night"] .dvdText{ background: rgba(255,255,255,.10); }
+    .calGrid{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap:8px;
+    }
+    .dow{
+      font-size:11px;
+      color: var(--muted);
+      font-weight: 1000;
+      text-align:center;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      padding: 6px 0;
+    }
+    .day{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.10);
+      border-radius: 14px;
+      min-height: 44px;
+      display:grid;
+      place-items:center;
+      font-weight: 1000;
+      color: var(--text);
+      position:relative;
+      user-select:none;
+    }
+    [data-theme="night"] .day{ background: rgba(255,255,255,.06); }
+    .day.muted{
+      opacity:.45;
+      font-weight: 900;
+    }
+    .day.today{
+      border-color: rgba(239,68,68,.55);
+      box-shadow: 0 0 0 4px rgba(239,68,68,.14);
+    }
+    .day.today .num{
+      color: var(--danger);
+    }
+    .heart{
+      position:absolute;
+      top:6px;
+      right:8px;
+      font-size: 14px;
+      line-height:1;
+    }
+
+    /* DVD fruits */
+    .dvdLayer{
+      position:fixed; inset:0;
+      z-index: 1;
+      pointer-events:none;
+    }
+    .dvdFruit{
+      position:absolute;
+      width: 70px;
+      height: 70px;
+      border-radius: 22px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.10);
+      box-shadow: var(--shadow2);
+      display:grid;
+      place-items:center;
+      font-size: 34px;
+      user-select:none;
+      backdrop-filter: blur(10px);
+    }
+    [data-theme="night"] .dvdFruit{ background: rgba(255,255,255,.06); }
 
     .pauseHint{
-      position:absolute;
-      left:0; right:0;
-      bottom: calc(16px + var(--safeB));
-      display:flex;
-      justify-content:center;
-      z-index: 3;
-      pointer-events:none;
-    }
-    .pauseHint .row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:center;
+      margin-top: 12px;
+      text-align:center;
       color: var(--muted);
       font-weight: 950;
       font-size: 12px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.74);
-      padding: 10px 12px;
-      border-radius: 999px;
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(12px);
     }
-    [data-theme="night"] .pauseHint .row{ background: rgba(255,255,255,.10); }
     .kbd{
       border:1px solid var(--line);
+      background: rgba(255,255,255,.08);
       padding: 7px 10px;
       border-radius: 12px;
-      background: rgba(255,255,255,.06);
+      display:inline-block;
+      margin: 0 6px;
     }
+    [data-theme="night"] .kbd{ background: rgba(255,255,255,.06); }
 
     @media (max-width: 820px){
       .grid{ grid-template-columns: 1fr; }
-      .title span{display:none}
-      .btn{ padding:10px 10px; }
-      .dvdKiwi{ width:120px; height:120px; border-radius: 24px; }
-      .bigTxtHUD, .tempHUD{ font-size: 40px; }
-      .hudCard{ min-width: 280px; }
+      .title span{ display:none; }
+      .pauseBody{ grid-template-columns: 1fr; }
+      .dvdFruit{ width: 62px; height: 62px; border-radius: 20px; font-size: 30px; }
     }
   </style>
 </head>
@@ -385,35 +466,61 @@
 
   <!-- PAUSA -->
   <div id="pause" class="pause" aria-hidden="true">
-    <div class="hud">
-      <div class="hudCard">
-        <div class="hudTop">
-          <div class="bigTxtHUD" id="pTime">--:--</div>
-          <div class="tempHUD" id="pTemp">--°</div>
+    <div class="pauseName">ARSLAN PRO</div>
+
+    <!-- DVD fruits behind the panel -->
+    <div id="dvdLayer" class="dvdLayer" aria-hidden="true"></div>
+
+    <div class="pauseCenter">
+      <div class="pausePanel">
+        <div class="pauseTop">
+          <div class="pauseTime" id="pTime">--:--</div>
+          <div class="pauseMeta">
+            <div class="p" id="pDate">--</div>
+            <div class="p" id="pPlace">📍 Burgos</div>
+            <div class="p" id="pTemp">🌡️ -- °C</div>
+          </div>
+          <div class="pauseHint">
+            <span class="kbd"><b>Enter</b></span> o <span class="kbd"><b>Esc</b></span> para volver
+          </div>
         </div>
-        <div class="hudSub" id="pSub">BURGOS · CARGANDO…</div>
-      </div>
-    </div>
 
-    <div id="dvdKiwi" class="dvdKiwi" aria-hidden="true">
-      <img id="dvdImg" src="icon-512.png" alt="Kiwi">
-    </div>
+        <div class="pauseBody">
+          <div class="box">
+            <div class="calHead">
+              <b id="calTitle">CALENDARIO</b>
+              <span class="pill" id="todayLabel">HOY</span>
+            </div>
+            <div class="calGrid" id="calGrid"></div>
+          </div>
 
-    <div id="dvdText" class="dvdText" aria-hidden="true">ARSLAN PRO</div>
+          <div class="box">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px;">
+              <b style="font-size:14px; font-weight:1000; letter-spacing:.18em; text-transform:uppercase; color:var(--muted);">Pausa</b>
+              <span class="pill">Frutas DVD</span>
+            </div>
+            <div style="color:var(--muted); font-weight:900; font-size:13px; line-height:1.45;">
+              Salvapantallas con frutas rebotando. <br/>
+              Mantiene privacidad sin PIN. <br/><br/>
+              Atajos activos:
+              <div style="margin-top:10px;">
+                <span class="kbd">F</span><span class="kbd">L</span><span class="kbd">B</span><span class="kbd">G</span><span class="kbd">R</span>
+                <span class="kbd">M</span><span class="kbd">O</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <div class="pauseHint">
-      <div class="row">
-        <span class="kbd"><b>Enter</b> volver</span>
-        <span class="kbd"><b>Esc</b> volver</span>
       </div>
     </div>
   </div>
 
+  <!-- APP -->
   <div class="wrap">
     <div class="app">
       <div class="top">
         <div class="brand">
-          <div class="logoBox">
+          <div class="logoBox" aria-hidden="true">
             <img id="logo" src="icon-192.png" alt="Kiwi">
             <div id="logoFallback" class="logoFallback">🥝</div>
           </div>
@@ -424,7 +531,7 @@
         </div>
 
         <div class="actions">
-          <button class="btn" id="themeBtn" type="button">🌓 Día</button>
+          <button class="btn" id="modeBtn" type="button">🌓 Noche</button>
           <button class="btn" id="openModeBtn" type="button">🔗 Nueva pestaña</button>
           <button class="btn primary" id="lastBtn" type="button">🟢 Abrir último</button>
           <button class="btn" id="copyBtn" type="button">📋 Copiar</button>
@@ -433,11 +540,23 @@
       </div>
 
       <div class="content">
+        <div class="hero">
+          <div class="heroLeft">
+            <div class="big" id="hTime">--:--</div>
+            <div class="sub">
+              <span class="pill" id="hDate">--</span>
+              <span class="pill" id="hPlace">📍 Burgos</span>
+              <span class="pill" id="hTemp">🌡️ -- °C</span>
+            </div>
+          </div>
+          <div class="pill" id="status">Listo</div>
+        </div>
+
         <div class="grid" id="grid"></div>
 
         <div class="foot">
-          <div>Atajos: F Facturas · L Listas · B B2B · G GS · R Último · Esc Pausa</div>
-          <div id="status">Listo</div>
+          <div>Atajos: F Facturas · L Listas · B B2B · G GS · R Último · M Modo · O Abrir · Esc Pausa</div>
+          <div>Sin PIN · Simple · Pro</div>
         </div>
       </div>
     </div>
@@ -445,44 +564,48 @@
 
 <script>
 /* ===============================
-   ARSLAN PRO — HUB (SIMPLE / NO PIN)
-   - Default DAY + toggle NIGHT
-   - Pause: time/date/place/temp big + kiwi DVD + moving text
-   - Short, robust, no errors
+   ARSLAN PRO — HUB (SIMPLE, SIN ERRORES)
+   - Día por defecto
+   - Hora/fecha/lugar/temperatura en Home y Pausa
+   - Pausa: panel centrado + calendario del mes (hoy rojo + ❤️)
+   - Pausa: DVD con frutas (no logo)
+   - Atajos: F/L/B/G/R/Esc/Enter + M (modo) + O (open mode)
 =============================== */
+
+/* ===== Config ===== */
+const PLACE_NAME = "Burgos";
+const BURGOS = { lat: 42.34106, lon: -3.70184, tz: "Europe/Madrid" }; // coords Burgos aprox :contentReference[oaicite:1]{index=1}
 
 const SYSTEMS = [
   { id:"facturas", icon:"🧾", name:"Facturas", sub:"arslanpro.com", url:"http://arslanpro.com/" },
-  { id:"listas",   icon:"📝", name:"Listas / Pedidos", sub:"GitHub · /pedidos", url:"https://shaniwaris80-crypto.github.io/pedidos/" },
-  { id:"b2b",      icon:"📚", name:"B2B Contabilidad", sub:"GitHub · /b2b", url:"https://shaniwaris80-crypto.github.io/b2b/" },
-  { id:"gs",       icon:"🏪", name:"GS Gestión / Ventas", sub:"GitHub · /GS", url:"https://shaniwaris80-crypto.github.io/GS/" }
+  { id:"listas",   icon:"📝", name:"Listas / Pedidos", sub:"/pedidos", url:"https://shaniwaris80-crypto.github.io/pedidos/" },
+  { id:"b2b",      icon:"📚", name:"B2B Contabilidad", sub:"/b2b", url:"https://shaniwaris80-crypto.github.io/b2b/" },
+  { id:"gs",       icon:"🏪", name:"GS Gestión / Ventas", sub:"/GS", url:"https://shaniwaris80-crypto.github.io/GS/" }
 ];
 
-const K_THEME="ARSLAN_HUB_THEME";
-const K_OPENMODE="ARSLAN_HUB_OPENMODE";
-const K_LAST="ARSLAN_HUB_LAST";
-
-const PLACE_NAME = "Burgos";
-const BURGOS_LAT = 42.34106;
-const BURGOS_LON = -3.70184;
+const K_THEME = "ARSLAN_HUB_THEME";      // day/night
+const K_OPEN  = "ARSLAN_HUB_OPENMODE";   // new/same
+const K_LAST  = "ARSLAN_HUB_LASTOPEN";   // id
 
 const $ = s => document.querySelector(s);
 
+/* ===== Theme & Open Mode ===== */
 function getTheme(){ return localStorage.getItem(K_THEME) || "day"; }
 function setTheme(t){
   localStorage.setItem(K_THEME, t);
   document.body.setAttribute("data-theme", t);
-  $("#themeBtn").textContent = (t==="night") ? "🌙 Noche" : "🌓 Día";
-  $("#status").textContent = `Modo: ${t.toUpperCase()}`;
+  $("#modeBtn").textContent = (t==="day") ? "🌓 Noche" : "☀️ Día";
 }
+function toggleTheme(){ setTheme(getTheme()==="day" ? "night" : "day"); }
 
-function getOpenMode(){ return localStorage.getItem(K_OPENMODE) || "new"; }
+function getOpenMode(){ return localStorage.getItem(K_OPEN) || "new"; }
 function setOpenMode(m){
-  localStorage.setItem(K_OPENMODE, m);
+  localStorage.setItem(K_OPEN, m);
   $("#openModeBtn").textContent = (m==="new") ? "🔗 Nueva pestaña" : "🔗 Misma pestaña";
-  $("#status").textContent = `Abrir: ${(m==="new")?"Nueva pestaña":"Misma pestaña"}`;
 }
+function toggleOpenMode(){ setOpenMode(getOpenMode()==="new" ? "same" : "new"); }
 
+/* ===== Open Systems ===== */
 function openSystem(id){
   const s = SYSTEMS.find(x=>x.id===id);
   if(!s) return;
@@ -491,28 +614,27 @@ function openSystem(id){
   if(mode==="new") window.open(s.url, "_blank", "noopener");
   else window.location.href = s.url;
 }
-
 function openLast(){
   const last = localStorage.getItem(K_LAST);
   if(last && SYSTEMS.some(s=>s.id===last)) openSystem(last);
   else openSystem("facturas");
 }
 
+/* ===== Render cards ===== */
 function cardHTML(s){
   return `
-    <div class="big" data-open="${s.id}" tabindex="0" role="button" aria-label="Abrir ${s.name}">
-      <div class="bigLeft">
-        <div class="bigIco">${s.icon}</div>
-        <div class="bigTxt">
+    <div class="card" data-open="${s.id}" tabindex="0" role="button" aria-label="Abrir ${s.name}">
+      <div class="left">
+        <div class="ico">${s.icon}</div>
+        <div class="txt">
           <b>${s.name}</b>
           <span>${s.sub}</span>
         </div>
       </div>
-      <div class="chip">Abrir →</div>
+      <div class="go">Abrir →</div>
     </div>
   `;
 }
-
 function render(){
   $("#grid").innerHTML = SYSTEMS.map(cardHTML).join("");
   $("#grid").querySelectorAll("[data-open]").forEach(el=>{
@@ -522,126 +644,134 @@ function render(){
   });
 
   const last = localStorage.getItem(K_LAST) || "—";
-  $("#status").textContent = `Último: ${last.toUpperCase()} · Abrir: ${(getOpenMode()==="new")?"Nueva pestaña":"Misma pestaña"}`;
+  $("#status").textContent = `Último: ${String(last).toUpperCase()}`;
 }
 
-/* Copy links */
+/* ===== Copy links ===== */
 async function copyLinks(){
   const text = SYSTEMS.map(s => `${s.name}: ${s.url}`).join("\n");
   try{
     await navigator.clipboard.writeText(text);
-    $("#status").textContent = "Links copiados ✅";
+    $("#status").textContent = "Copiado ✅";
+    setTimeout(()=>$("#status").textContent="Listo", 900);
   }catch{
     alert(text);
   }
 }
 
-/* Logo robusto */
-function initLogo(){
-  const img = $("#logo");
-  const fb = $("#logoFallback");
-  img.onerror = () => {
-    img.style.display="none";
-    fb.style.display="grid";
-  };
-}
-
-/* ===== Weather (Open-Meteo) ===== */
-let LAST_TEMP_C = null;
-let LAST_WEATHER_AT = 0;
-
-async function fetchWeather(){
-  // refresh max every 10 min
-  const now = Date.now();
-  if(now - LAST_WEATHER_AT < 10 * 60 * 1000 && LAST_TEMP_C !== null) return LAST_TEMP_C;
-
-  const url =
-    `https://api.open-meteo.com/v1/forecast` +
-    `?latitude=${encodeURIComponent(BURGOS_LAT)}` +
-    `&longitude=${encodeURIComponent(BURGOS_LON)}` +
-    `&current=temperature_2m` +
-    `&temperature_unit=celsius` +
-    `&timezone=Europe%2FMadrid`;
-
-  try{
-    const res = await fetch(url, { cache: "no-store" });
-    if(!res.ok) throw new Error("Weather HTTP " + res.status);
-    const data = await res.json();
-    const t = data?.current?.temperature_2m;
-    if(typeof t !== "number") throw new Error("No temp");
-    LAST_TEMP_C = Math.round(t);
-    LAST_WEATHER_AT = now;
-    return LAST_TEMP_C;
-  }catch{
-    // keep last known (if any)
-    return LAST_TEMP_C;
-  }
-}
-
-/* ===== Pause / Screensaver ===== */
-let pauseOn = false;
-let clockInt = null;
-let animRAF = null;
-
-const kiwi = { x: 40, y: 140, vx: 2.2, vy: 1.8 };
-const text = { x: 80, y: 320, vx: 2.0, vy: 1.6 };
-
+/* ===== Clock + Date ===== */
 function fmt2(n){ return String(n).padStart(2,"0"); }
-
-function formatDateLine(d){
+function formatDateES(d){
   const days=["DOM","LUN","MAR","MIÉ","JUE","VIE","SÁB"];
   const months=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"];
   return `${days[d.getDay()]} · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
-
-async function tickHUD(){
+function tickClock(){
   const d = new Date();
-  $("#pTime").textContent = `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`;
+  const time = `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`;
+  const date = formatDateES(d);
 
-  const t = await fetchWeather();
-  $("#pTemp").textContent = (t === null) ? "--°" : `${t}°`;
+  $("#hTime").textContent = time;
+  $("#hDate").textContent = date;
 
-  const dateLine = formatDateLine(d);
-  const tempLine = (t === null) ? "SIN DATOS" : `${t}°C`;
-  $("#pSub").textContent = `${PLACE_NAME.toUpperCase()} · ${dateLine} · ${tempLine}`;
+  $("#pTime").textContent = time;
+  $("#pDate").textContent = date;
 }
 
-function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+/* ===== Weather (Open-Meteo current temperature) ===== */
+let lastTemp = null;
 
-function animateDVD(){
-  if(!pauseOn) return;
+async function fetchWeather(){
+  const url =
+    `https://api.open-meteo.com/v1/forecast` +
+    `?latitude=${encodeURIComponent(BURGOS.lat)}` +
+    `&longitude=${encodeURIComponent(BURGOS.lon)}` +
+    `&current=temperature_2m` +
+    `&timezone=${encodeURIComponent(BURGOS.tz)}`;
 
-  const dvdKiwi = $("#dvdKiwi");
-  const dvdText = $("#dvdText");
+  try{
+    const r = await fetch(url, { cache: "no-store" });
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    const j = await r.json();
+    const t = j && j.current ? j.current.temperature_2m : null;
+    if(typeof t !== "number") throw new Error("No temp");
+    lastTemp = t;
 
-  // bounds
-  const kW = dvdKiwi.offsetWidth || 140;
-  const kH = dvdKiwi.offsetHeight || 140;
-
-  const tW = dvdText.offsetWidth || 220;
-  const tH = dvdText.offsetHeight || 46;
-
-  const maxX = window.innerWidth - 10;
-  const maxY = window.innerHeight - 10;
-
-  // kiwi move
-  kiwi.x += kiwi.vx; kiwi.y += kiwi.vy;
-  if(kiwi.x <= 10 || kiwi.x + kW >= maxX) kiwi.vx *= -1;
-  if(kiwi.y <= 10 || kiwi.y + kH >= maxY) kiwi.vy *= -1;
-  kiwi.x = clamp(kiwi.x, 10, maxX - kW);
-  kiwi.y = clamp(kiwi.y, 10, maxY - kH);
-  dvdKiwi.style.transform = `translate(${kiwi.x}px, ${kiwi.y}px)`;
-
-  // text move (different speed)
-  text.x += text.vx; text.y += text.vy;
-  if(text.x <= 10 || text.x + tW >= maxX) text.vx *= -1;
-  if(text.y <= 10 || text.y + tH >= maxY) text.vy *= -1;
-  text.x = clamp(text.x, 10, maxX - tW);
-  text.y = clamp(text.y, 10, maxY - tH);
-  dvdText.style.transform = `translate(${text.x}px, ${text.y}px)`;
-
-  animRAF = requestAnimationFrame(animateDVD);
+    const txt = `🌡️ ${Math.round(t)} °C`;
+    $("#hTemp").textContent = txt;
+    $("#pTemp").textContent = txt;
+  }catch{
+    const txt = lastTemp==null ? "🌡️ -- °C" : `🌡️ ${Math.round(lastTemp)} °C`;
+    $("#hTemp").textContent = txt;
+    $("#pTemp").textContent = txt;
+  }
 }
+
+/* ===== Place ===== */
+function setPlace(){
+  $("#hPlace").textContent = `📍 ${PLACE_NAME}`;
+  $("#pPlace").textContent = `📍 ${PLACE_NAME}`;
+}
+
+/* ===== Calendar (month view + today red + ❤️) ===== */
+function buildCalendar(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const monthsFull = ["ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"];
+  $("#calTitle").textContent = `${monthsFull[month]} ${year}`;
+
+  $("#todayLabel").textContent = `HOY: ${now.getDate()}`;
+
+  const first = new Date(year, month, 1);
+  const last  = new Date(year, month + 1, 0);
+
+  // Start week on Monday (ES): convert JS (Sun=0) -> Mon=0
+  const startIndex = (first.getDay() + 6) % 7;
+
+  const daysInMonth = last.getDate();
+
+  // previous month days to fill
+  const prevLast = new Date(year, month, 0).getDate();
+
+  const dow = ["L","M","X","J","V","S","D"];
+  const grid = $("#calGrid");
+  grid.innerHTML = dow.map(x=>`<div class="dow">${x}</div>`).join("");
+
+  // total cells = 7*6 (42) for stable layout (nice)
+  const totalCells = 42;
+
+  for(let i=0; i<totalCells; i++){
+    const cellIndex = i - startIndex + 1;
+    let num, cls = "day", isToday=false;
+
+    if(cellIndex <= 0){
+      // prev month
+      num = prevLast + cellIndex;
+      cls += " muted";
+    } else if(cellIndex > daysInMonth){
+      // next month
+      num = cellIndex - daysInMonth;
+      cls += " muted";
+    } else {
+      num = cellIndex;
+      if(num === now.getDate()){
+        isToday = true;
+        cls += " today";
+      }
+    }
+
+    const heart = isToday ? `<span class="heart">❤️</span>` : "";
+    const numSpan = `<span class="num">${num}</span>`;
+    grid.insertAdjacentHTML("beforeend", `<div class="${cls}">${heart}${numSpan}</div>`);
+  }
+}
+
+/* ===== Pause ===== */
+let pauseOn = false;
+let clockInt = null;
+let dvdRAF = null;
 
 function showPause(){
   if(pauseOn) return;
@@ -649,74 +779,111 @@ function showPause(){
   $("#pause").style.display = "block";
   $("#pause").setAttribute("aria-hidden","false");
 
-  // Kiwi image fallback
-  const di = $("#dvdImg");
-  di.onerror = () => {
-    // if icon-512 missing, fallback to icon-192
-    if(di.src.includes("icon-512.png")){
-      di.src = "icon-192.png";
-      return;
-    }
-    // final fallback
-    di.style.display = "none";
-    $("#dvdKiwi").textContent = "🥝";
-    $("#dvdKiwi").style.fontSize = "64px";
-  };
+  tickClock();
+  buildCalendar();
 
-  // random start
-  kiwi.x = Math.floor(20 + Math.random()*(window.innerWidth-220));
-  kiwi.y = Math.floor(80 + Math.random()*(window.innerHeight-260));
-  kiwi.vx = (Math.random()>0.5 ? 2.2 : -2.2);
-  kiwi.vy = (Math.random()>0.5 ? 1.8 : -1.8);
+  clockInt = setInterval(tickClock, 1000);
 
-  text.x = Math.floor(20 + Math.random()*(window.innerWidth-280));
-  text.y = Math.floor(120 + Math.random()*(window.innerHeight-320));
-  text.vx = (Math.random()>0.5 ? 2.0 : -2.0);
-  text.vy = (Math.random()>0.5 ? 1.6 : -1.6);
-
-  tickHUD();
-  clockInt = setInterval(tickHUD, 30000); // refresh HUD every 30s
-  cancelAnimationFrame(animRAF);
-  animRAF = requestAnimationFrame(animateDVD);
+  startDVD();
 }
-
 function hidePause(){
   if(!pauseOn) return;
   pauseOn = false;
   $("#pause").style.display = "none";
   $("#pause").setAttribute("aria-hidden","true");
-  if(clockInt){ clearInterval(clockInt); clockInt=null; }
-  if(animRAF){ cancelAnimationFrame(animRAF); animRAF=null; }
+  if(clockInt){ clearInterval(clockInt); clockInt = null; }
+  stopDVD();
 }
 
-/* Boot */
-(function init(){
-  initLogo();
-  setTheme(getTheme());        // default day if empty
-  setOpenMode(getOpenMode());
-  render();
+/* ===== DVD Fruits (no logo) ===== */
+const FRUITS = ["🍓","🍌","🍍","🍉","🍎","🍊","🍇","🥭","🍒","🍐","🥝","🍑"];
+const dvdState = [];
 
-  $("#themeBtn").addEventListener("click", ()=>{
-    setTheme(getTheme()==="night" ? "day" : "night");
-  });
+function rand(min,max){ return Math.random()*(max-min)+min; }
+function pickFruit(){ return FRUITS[Math.floor(Math.random()*FRUITS.length)]; }
 
-  $("#openModeBtn").addEventListener("click", ()=>{
-    setOpenMode(getOpenMode()==="new" ? "same" : "new");
-  });
+function createFruitEl(){
+  const el = document.createElement("div");
+  el.className = "dvdFruit";
+  el.textContent = pickFruit();
+  return el;
+}
 
-  $("#lastBtn").addEventListener("click", openLast);
-  $("#copyBtn").addEventListener("click", copyLinks);
-  $("#pauseBtn").addEventListener("click", showPause);
+function startDVD(){
+  const layer = $("#dvdLayer");
+  layer.innerHTML = "";
+  dvdState.length = 0;
 
-  // click pause screen to exit
-  $("#pause").addEventListener("click", hidePause);
+  // how many fruits bounce
+  const count = 5;
 
-  // Keyboard shortcuts
+  for(let i=0;i<count;i++){
+    const el = createFruitEl();
+    layer.appendChild(el);
+
+    dvdState.push({
+      el,
+      x: rand(20, window.innerWidth - 120),
+      y: rand(20, window.innerHeight - 120),
+      vx: (Math.random() > .5 ? 1 : -1) * rand(1.8, 2.8),
+      vy: (Math.random() > .5 ? 1 : -1) * rand(1.6, 2.6),
+      lastHit: 0
+    });
+  }
+
+  cancelAnimationFrame(dvdRAF);
+  dvdRAF = requestAnimationFrame(animateDVD);
+}
+
+function stopDVD(){
+  cancelAnimationFrame(dvdRAF);
+  dvdRAF = null;
+  const layer = $("#dvdLayer");
+  layer.innerHTML = "";
+}
+
+function animateDVD(ts){
+  if(!pauseOn) return;
+
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+
+  for(const s of dvdState){
+    const el = s.el;
+    const bw = el.offsetWidth || 70;
+    const bh = el.offsetHeight || 70;
+    const maxX = w - bw - 10;
+    const maxY = h - bh - 10;
+
+    s.x += s.vx;
+    s.y += s.vy;
+
+    let hit = false;
+
+    if(s.x <= 10){ s.x = 10; s.vx *= -1; hit = true; }
+    if(s.x >= maxX){ s.x = maxX; s.vx *= -1; hit = true; }
+    if(s.y <= 10){ s.y = 10; s.vy *= -1; hit = true; }
+    if(s.y >= maxY){ s.y = maxY; s.vy *= -1; hit = true; }
+
+    if(hit && ts - s.lastHit > 180){
+      s.el.textContent = pickFruit();
+      s.lastHit = ts;
+    }
+
+    el.style.transform = `translate(${s.x}px, ${s.y}px)`;
+  }
+
+  dvdRAF = requestAnimationFrame(animateDVD);
+}
+
+/* ===== Keyboard shortcuts ===== */
+function wireShortcuts(){
   window.addEventListener("keydown",(e)=>{
     const k = e.key.toLowerCase();
 
+    // pause open
     if(pauseOn){
-      if(e.key==="Escape" || e.key==="Enter") hidePause();
+      if(e.key === "Escape" || e.key === "Enter") hidePause();
       return;
     }
 
@@ -725,16 +892,60 @@ function hidePause(){
     if(k==="b") return openSystem("b2b");
     if(k==="g") return openSystem("gs");
     if(k==="r") return openLast();
+
+    if(k==="m") return toggleTheme();
+    if(k==="o") return toggleOpenMode();
+
     if(e.key==="Escape") return showPause();
   });
+}
 
-  // Weather warm-up (non-blocking)
-  fetchWeather().catch(()=>{});
+/* ===== Init ===== */
+(function init(){
+  // logo fallback
+  const img = $("#logo");
+  const fb  = $("#logoFallback");
+  img.onerror = () => { img.style.display="none"; fb.style.display="grid"; };
+
+  // defaults
+  setTheme(getTheme());             // default day if not stored
+  setOpenMode(getOpenMode());       // default new if not stored
+  setPlace();
+
+  // render systems
+  render();
+
+  // time
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  // weather
+  fetchWeather();
+  setInterval(fetchWeather, 10 * 60 * 1000);
+
+  // buttons
+  $("#modeBtn").addEventListener("click", toggleTheme);
+  $("#openModeBtn").addEventListener("click", toggleOpenMode);
+  $("#lastBtn").addEventListener("click", openLast);
+  $("#copyBtn").addEventListener("click", copyLinks);
+  $("#pauseBtn").addEventListener("click", showPause);
+
+  // click pause to exit
+  $("#pause").addEventListener("click", hidePause);
+
+  // shortcuts
+  wireShortcuts();
+
+  // build calendar once for home->pause initial
+  buildCalendar();
+
+  // status
+  $("#status").textContent = "Listo";
 })();
 </script>
 
 <script>
-/* SW */
+/* Service Worker */
 if("serviceWorker" in navigator){
   window.addEventListener("load", ()=>{
     navigator.serviceWorker.register("sw.js").catch(()=>{});
